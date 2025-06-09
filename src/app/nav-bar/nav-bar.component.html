@@ -1,0 +1,14 @@
+<nav class="mat-primary">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <span >Libreta Digital</span>
+    <span *ngIf="!(auth.isAuthenticated$ | async)">
+      <button matButton="filled"(click)="login()"> Login</button>
+    </span>
+    <span *ngIf="auth.isAuthenticated$ | async">
+      <button matButton="filled"(click)="logout()">Logout</button>
+    </span>
+    <span>
+       <button matButton="filled"(click)="llamarApi()">Llamar Api</button>
+    </span>
+  </div>
+</nav>

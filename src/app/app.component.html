@@ -1,15 +1,1 @@
-<div style="text-align:center; margin-top: 2rem">
-      <h1>Libreta Digital</h1>
-
-      <button *ngIf="!(auth.isAuthenticated$ | async)" (click)="login()">
-        Login
-      </button>
-
-      <button *ngIf="auth.isAuthenticated$ | async" (click)="logout()">
-  Logout
-</button>
- <button  (click)="llamarApi()">
-        Llamar Api
-      </button>
-
-    </div>
+<app-nav-bar></app-nav-bar>

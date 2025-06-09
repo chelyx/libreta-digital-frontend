@@ -1,0 +1,79 @@
+@use '@angular/material' as mat;
+@use 'sass:map'; // necesario para manipular mapas de colores si lo necesitás
+
+// Tipografía personalizada con Poppins
+$my-typography: mat.define-typography-config(
+  $font-family: 'Poppins, sans-serif',
+);
+
+// Colores base
+$primary-color: #a82a19;
+$secondary-color: #f5eedc;
+
+// Paleta primaria personalizada
+$my-primary-palette: mat.define-palette((
+  50:  #fbe9e7,
+  100: #f2c8c3,
+  200: #eaa49c,
+  300: #e17f75,
+  400: #d96656,
+  500: #a82a19, // base
+  600: #8f2315,
+  700: #751c11,
+  800: #5c150d,
+  900: #420e08,
+  contrast: (
+    50:  black,
+    100: black,
+    200: black,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
+));
+
+
+// Paleta de acento personalizada
+$my-accent-palette: mat.define-palette((
+  50:  #fefdf9,
+  100: #fcf9ef,
+  200: #fbf5e6,
+  300: #f9f1dc,
+  400: #f7edd3,
+  500: #f5eedc, // base
+  600: #e6dfcd,
+  700: #d8d1bf,
+  800: #cac2b0,
+  900: #bcb3a2,
+  contrast: (
+    50:  black,
+    100: black,
+    200: black,
+    300: black,
+    400: black,
+    500: black,
+    600: black,
+    700: black,
+    800: black,
+    900: black,
+  ),
+));
+
+
+// Tema personalizado
+$my-theme: mat.define-light-theme((
+  color: (
+    primary: $my-primary-palette,
+    accent: $my-accent-palette,
+    warn: mat.define-palette(mat.$red-palette), // importante para errores
+  ),
+  typography: $my-typography,
+));
+
+// Aplicar el tema
+@include mat.core();
+@include mat.all-component-themes($my-theme);

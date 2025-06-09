@@ -7,11 +7,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthModule } from '@auth0/auth0-angular';
 import { HttpClientModule } from '@angular/common/http';
-
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import {MatListModule} from '@angular/material/list';
 // Remove the dynamic assignment and use a string literal for redirect_uri
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
@@ -20,12 +22,14 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     FlexLayoutModule,
     MatButtonModule,
+    MatListModule,
     AuthModule.forRoot({
       domain: 'dev-7tciizrz7pk84r8q.us.auth0.com',
       clientId: '0mGm99P2Jv3LhUKXOWPGDcYrhn3upEdg',
       authorizationParams: {
         redirect_uri: 'http://localhost:4200',
         audience: 'http://localhost:8080',
+        scope: 'openid profile email'
     }}),
   ],
   providers: [],
