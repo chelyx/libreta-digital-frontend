@@ -1,14 +1,22 @@
 <nav class="mat-primary">
-  <div fxLayout="row" fxLayoutAlign="space-between center">
-    <span >Libreta Digital</span>
-    <span *ngIf="!(auth.isAuthenticated$ | async)">
-      <button matButton="filled"(click)="login()"> Login</button>
-    </span>
-    <span *ngIf="auth.isAuthenticated$ | async">
-      <button matButton="filled"(click)="logout()">Logout</button>
-    </span>
+  <div class="navbar">
     <span>
-       <button matButton="filled"(click)="llamarApi()">Llamar Api</button>
-    </span>
+      <mat-icon svgIcon="logo"></mat-icon>
+     </span>
+    <div class="nav-buttons">
+      <span  *ngIf="!(auth.isAuthenticated$ | async)">
+        <button mat-raised-button color="primary" (click)="login()">
+        Login
+        </button>
+      </span>
+      <span *ngIf="auth.isAuthenticated$ | async">
+        <button mat-raised-button color="primary" (click)="logout()">
+           Logout
+          </button>
+      </span>
+      <span>
+        <button mat-raised-button color="primary"(click)="llamarApi()">Llamar Api</button>
+      </span>
+    </div>
   </div>
 </nav>

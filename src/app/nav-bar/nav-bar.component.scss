@@ -1,0 +1,23 @@
+.navbar {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+    align-items: center;
+
+    mat-icon {
+      height: 48px;
+      width: 48px;
+    }
+}
+
+.nav-buttons{
+  display: flex;
+  justify-content: flex-end;
+  button {
+    margin-left:5px;
+    display: inline-flex;
+    align-items: center; /* centra verticalmente */
+    gap: 6px;
+  }
+}

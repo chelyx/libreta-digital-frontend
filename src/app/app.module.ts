@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthModule } from '@auth0/auth0-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import {MatListModule} from '@angular/material/list';
-// Remove the dynamic assignment and use a string literal for redirect_uri
+import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,9 +20,9 @@ import {MatListModule} from '@angular/material/list';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    FlexLayoutModule,
     MatButtonModule,
     MatListModule,
+    MatIconModule,
     AuthModule.forRoot({
       domain: 'dev-7tciizrz7pk84r8q.us.auth0.com',
       clientId: '0mGm99P2Jv3LhUKXOWPGDcYrhn3upEdg',
@@ -35,4 +35,14 @@ import {MatListModule} from '@angular/material/list';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+   constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {
+    matIconRegistry.addSvgIcon(
+      'logo',
+      domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/logo.svg')
+    );
+    matIconRegistry.registerFontClassAlias('material-symbols-outlined', 'material-symbols-outlined');
+    matIconRegistry.setDefaultFontSetClass('material-symbols-outlined');
+  }
+ }
