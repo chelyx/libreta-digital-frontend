@@ -1,0 +1,27 @@
+<div *ngIf="loading">Cargando...</div>
+
+<table class="table table-striped" *ngIf="!loading">
+  <thead>
+    <tr>
+      <th>Legajo</th>
+      <th>Alumno</th>
+      <th>Email</th>
+      <th style="width:130px">Nota (0-10)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let r of rows">
+      <td>{{ r.legajo }}</td>
+      <td>{{ r.nombre }}</td>
+      <td>{{ r.email }}</td>
+      <td>
+        <input type="number" min="0" max="10" step="0.1" [(ngModel)]="r.nota" class="form-control">
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div style="display:flex; gap:.5rem; align-items:center; margin-top:.75rem;">
+  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="loading">Guardar y notificar</button>
+  <span *ngIf="feedback">{{ feedback }}</span>
+</div>

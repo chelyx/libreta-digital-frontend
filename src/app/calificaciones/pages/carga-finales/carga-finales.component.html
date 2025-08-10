@@ -1,0 +1,10 @@
+<section class="container">
+  <h1>Carga de calificaciones (Finales)</h1>
+
+  <app-selector-materia-mesa (selected)="onSelected($event)"></app-selector-materia-mesa>
+
+  <ng-container *ngIf="mesaId">
+    <hr>
+    <app-tabla-carga-notas [mesaId]="mesaId!"></app-tabla-carga-notas>
+  </ng-container>
+</section>
