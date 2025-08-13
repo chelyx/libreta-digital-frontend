@@ -1,0 +1,94 @@
+@use '../shared/theme' as *;     // importa tus paletas desde src/app/shared/theme.scss
+@use '@angular/material' as mat; // utilidades de Angular Material
+
+.asistencia-card {
+  padding: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: mat.get-color-from-palette($my-accent-palette, 50);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.asistencia-toolbar {
+  color: mat.get-contrast-color-from-palette($my-accent-palette, 500);
+
+  .toolbar-content {
+    width: 100%;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 12px;
+  }
+
+  .titulo {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .acciones-der {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    .buscador {
+      width: 220px;
+      min-width: 200px;
+      background: white;
+      border-radius: 8px;
+    }
+  }
+}
+
+.contenido {
+  padding: 16px;
+}
+
+.lista-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid mat.get-color-from-palette($my-primary-palette, 50);
+}
+
+.lista-alumnos {
+  display: grid;
+  gap: 6px;
+  padding: 12px 12px 0;
+
+  .fila {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr auto;
+    align-items: center;
+    padding: 10px 12px;
+    border: 1px solid mat.get-color-from-palette($my-accent-palette, 200);
+    border-radius: 10px;
+    background: mat.get-color-from-palette($my-accent-palette, 50);
+
+    &:hover {
+      border-color: mat.get-color-from-palette($my-primary-palette, 300);
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+
+    .nombre { font-weight: 500; }
+    .dni { opacity: 0.8; }
+  }
+}
+
+.acciones-inferiores {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid mat.get-color-from-palette($my-accent-palette, 200);
+}
+
+/* Botón accent hover */
+button[mat-stroked-button][color="accent"]:hover {
+  background: mat.get-color-from-palette($my-accent-palette, 100);
+}
+
+/* Resaltado al enfocar */
+:focus-visible {
+  outline: 2px solid mat.get-color-from-palette($my-primary-palette, 400);
+  outline-offset: 2px;
+}
