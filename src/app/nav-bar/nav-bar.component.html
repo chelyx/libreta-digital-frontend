@@ -10,6 +10,9 @@
         </button>
       </span>
       <span *ngIf="auth.isAuthenticated$ | async">
+          <a mat-raised-button color="primary" routerLink="/calificaciones" routerLinkActive="active">
+    Calificaciones
+          </a>
         <button mat-raised-button color="primary" (click)="logout()">
            Logout
           </button>
