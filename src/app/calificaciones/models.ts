@@ -28,7 +28,9 @@ export interface CalificacionFinal {
   id: string;
   mesaId: string;
   alumnoId: string;
-  nota: number;              // 0..10
-  fechaCargaISO: string;     // ISO
-  notificadoEmail?: boolean; // mock de envío
+  nota: number | null;      // <-- ahora puede ser null si está ausente
+  ausente?: boolean;        // <-- flag explícito
+  fechaCargaISO: string;
+  notificadoEmail?: boolean;
 }
+
