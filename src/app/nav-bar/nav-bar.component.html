@@ -2,20 +2,39 @@
   <div class="navbar">
     <span>
       <mat-icon svgIcon="logo"></mat-icon>
-     </span>
+    </span>
+
     <div class="nav-buttons">
-      <span  *ngIf="!(auth.isAuthenticated$ | async)">
+      <!-- Botón de login -->
+      <span *ngIf="!(auth.isAuthenticated$ | async)">
         <button mat-raised-button color="primary" (click)="login()">
-        Login
+          Login
         </button>
       </span>
+
+      <!-- Botón de logout -->
       <span *ngIf="auth.isAuthenticated$ | async">
         <button mat-raised-button color="primary" (click)="logout()">
-           Logout
-          </button>
+          Logout
+        </button>
       </span>
+
+      <!-- Botón común (llamar API) -->
       <span>
-        <button mat-raised-button color="primary"(click)="llamarApi()">Llamar Api</button>
+        <button mat-raised-button color="primary" (click)="llamarApi()">Llamar Api</button>
+      </span>
+
+      <!-- 🔐 Botones según rol -->
+      <span *appHasRole="'ADMIN'">
+        <button mat-raised-button color="accent" routerLink="/admin">Panel Admin</button>
+      </span>
+
+      <span *appHasRole="['ADMIN','PROFESOR']">
+        <button mat-raised-button color="accent" routerLink="/asistencia">Asistencia</button>
+      </span>
+
+      <span *appHasRole="'ALUMNO'">
+        <button mat-raised-button color="accent" routerLink="/mi-curso">Mi Curso</button>
       </span>
     </div>
   </div>

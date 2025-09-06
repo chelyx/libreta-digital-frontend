@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { Subscription } from 'rxjs';
+import { AuthService as AppAuth } from '../../core/services/auth.service';
 
 interface Curso { id: string; nombre: string; }
 
@@ -17,19 +18,25 @@ interface Alumno {
   templateUrl: './toma-de-asistencia.component.html',
   styleUrls: ['./toma-de-asistencia.component.scss'],
 })
-export class TomaDeAsistenciaComponent {
+export class TomaDeAsistenciaComponent implements OnInit, OnDestroy {
+  private sub?: Subscription;
+
   filtro = '';
   saving = false;
 
-  cursos: Curso[] = [
+  // 🔁 Copia inmutable de TODOS los cursos
+  private allCursos: Curso[] = [
     { id: '1A', nombre: 'Redes de información' },
     { id: '2B', nombre: 'Técnicas Avanzadas de Programación' },
     { id: '3C', nombre: 'Proyecto Final' },
     { id: '4C', nombre: 'Neurociencia' },
     { id: '5C', nombre: 'Laboratorio Física 1' },
-    { id: '5C', nombre: 'Sistemas de Gestión' },
+    { id: '6C', nombre: 'Sistemas de Gestión' },
   ];
-  cursoSeleccionado: string = ''; // '' = Todos
+
+  // 👇 Lista visible (se filtra según rol)
+  cursos: Curso[] = [...this.allCursos];
+  cursoSeleccionado: string = ''; // '' = Todos (solo Admin)
 
   alumnos: Alumno[] = [
     { nombre: 'Ezequiel', apellido: 'Castiglione',  dni: '43234567', presente: false, cursoId: ['4C','3C'] },
@@ -39,10 +46,51 @@ export class TomaDeAsistenciaComponent {
     { nombre: 'Luis',    apellido: 'Pérez',  dni: '28999888', presente: true,  cursoId: ['2B'] },
     { nombre: 'Cecilia', apellido: 'Rocca',  dni: '32123456', presente: false, cursoId: ['1A','3C','2B'] },
     { nombre: 'Araceli', apellido: 'Soffulto',  dni: '33133557', presente: true, cursoId: ['2B'] },
-
   ];
 
-  constructor(private snack: MatSnackBar) {}
+  constructor(private snack: MatSnackBar, private appAuth: AppAuth) {}
+
+  // ✅ helpers de rol para usar en TS/HTML
+  get isAdmin(): boolean   { return this.appAuth.hasRole('BEDEL'); }
+  get isProfesor(): boolean { return this.appAuth.hasRole('PROFESOR') ; }
+
+  ngOnInit(): void {
+    // 🔔 REACTIVO: cada cambio de usuario/roles vuelve a filtrar
+    this.sub = this.appAuth.user$.subscribe(() => this.aplicarFiltroPorRol());
+    // y una vez de arranque
+    this.aplicarFiltroPorRol();
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+  }
+
+  private aplicarFiltroPorRol(): void {
+    // reset a todos
+    this.cursos = [...this.allCursos];
+
+    // Si es PROFESOR (y no Admin), filtrar por allowedCourseIds
+    if (this.isProfesor) {
+      const permitidos = this.appAuth.user?.allowedCourseIds ?? [];
+      this.cursos = this.cursos.filter(c => permitidos.includes(c.id));
+
+      // Selección coherente
+      if (this.cursos.length === 1) {
+        this.cursoSeleccionado = this.cursos[0].id;
+      } else if (this.cursos.length > 1) {
+        if (!this.cursoSeleccionado || !permitidos.includes(this.cursoSeleccionado)) {
+          this.cursoSeleccionado = this.cursos[0].id;
+        }
+      } else {
+        // Sin cursos permitidos
+        this.cursoSeleccionado = '';
+      }
+
+      // Debug útil:
+      console.log('Cursos permitidos:', permitidos, 'Cursos visibles:', this.cursos);
+    }
+    // Admin: ve todos, cursoSeleccionado queda como esté ('' = Todos válido solo para Admin)
+  }
 
   get alumnosFiltrados(): Alumno[] {
     const q = this.filtro?.toLowerCase().trim() || '';
@@ -54,6 +102,16 @@ export class TomaDeAsistenciaComponent {
   }
 
   trackByDni = (_: number, a: Alumno) => a.dni;
+
+  onCursoChange(id: string) {
+    // ⛑️ PROFESOR: no permitir 'Todos' ('') ni cursos no asignados
+    if (this.isProfesor) {
+      if (!id) return; // evita 'Todos'
+      const permitidos = this.appAuth.user?.allowedCourseIds ?? [];
+      if (!permitidos.includes(id)) return;
+    }
+    this.cursoSeleccionado = id;
+  }
 
   marcar(_a: Alumno) {}
 

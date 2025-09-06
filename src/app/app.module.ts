@@ -9,10 +9,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { TomaDeAsistenciaComponent } from './toma-de-asistencia/toma-de-asistencia.component';
 
+// Material
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -22,13 +22,22 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 
+// Auth0
 import { AuthModule } from '@auth0/auth0-angular';
+
+// ⬇️ NUEVO: 403 y directiva por rol
+import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
+import { HasRoleDirective } from './shared/directives/has-role.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
-    TomaDeAsistenciaComponent
+    TomaDeAsistenciaComponent,
+
+    // ⬇️ NUEVO
+    ForbiddenComponent,
+    HasRoleDirective
   ],
   imports: [
     BrowserModule,
@@ -50,6 +59,7 @@ import { AuthModule } from '@auth0/auth0-angular';
     MatProgressSpinnerModule,
     MatSelectModule,
 
+    // Auth0 (tu configuración actual)
     AuthModule.forRoot({
       domain: 'dev-7tciizrz7pk84r8q.us.auth0.com',
       clientId: '0mGm99P2Jv3LhUKXOWPGDcYrhn3upEdg',

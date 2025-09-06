@@ -7,14 +7,28 @@
         <!-- Selección de curso -->
         <mat-form-field appearance="outline" class="buscador">
           <mat-label>Curso</mat-label>
-          <mat-select [(value)]="cursoSeleccionado">
-            <mat-option [value]="''">Todos</mat-option>
+
+          <mat-select
+            [(ngModel)]="cursoSeleccionado"
+            (selectionChange)="onCursoChange($event.value)"
+            [disabled]="isProfesor && cursos.length === 1"
+          >
+            <!-- “Todos” SOLO para ADMIN -->
+            <mat-option *ngIf="isAdmin" [value]="">Todos</mat-option>
+
             <mat-option *ngFor="let c of cursos" [value]="c.id">
               {{ c.nombre }}
             </mat-option>
           </mat-select>
-          <button mat-icon-button matSuffix aria-label="Limpiar curso"
-                  *ngIf="cursoSeleccionado" (click)="cursoSeleccionado = ''">
+
+          <!-- Botón de limpiar SOLO si es Admin -->
+          <button
+            mat-icon-button
+            matSuffix
+            aria-label="Limpiar curso"
+            *ngIf="isAdmin && cursoSeleccionado"
+            (click)="onCursoChange('')"
+          >
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>
