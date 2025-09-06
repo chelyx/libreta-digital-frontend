@@ -14,7 +14,7 @@
             [disabled]="isProfesor && cursos.length === 1"
           >
             <!-- “Todos” SOLO para ADMIN -->
-            <mat-option *ngIf="isAdmin" [value]="">Todos</mat-option>
+            <mat-option *ngIf="isBedel" [value]="">Todos</mat-option>
 
             <mat-option *ngFor="let c of cursos" [value]="c.id">
               {{ c.nombre }}

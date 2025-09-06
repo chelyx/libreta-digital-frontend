@@ -53,6 +53,7 @@ export class TomaDeAsistenciaComponent implements OnInit, OnDestroy {
   // ✅ helpers de rol para usar en TS/HTML
   get isAdmin(): boolean   { return this.appAuth.hasRole('BEDEL'); }
   get isProfesor(): boolean { return this.appAuth.hasRole('PROFESOR') ; }
+  get isBedel(): boolean   { return this.appAuth.hasRole('BEDEL'); }
 
   ngOnInit(): void {
     // 🔔 REACTIVO: cada cambio de usuario/roles vuelve a filtrar
