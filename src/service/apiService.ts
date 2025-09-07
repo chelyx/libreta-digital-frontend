@@ -21,7 +21,9 @@ export class ApiService {
   }
 
   postProtegido(endpoint: string, data: any): Observable<any> {
-    return this.auth.getAccessTokenSilently().pipe(
+    return this.auth.getAccessTokenSilently({
+   authorizationParams: {  audience: 'http://localhost:8080'}
+}).pipe(
       switchMap(token => {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
         return this.http.post(`${this.apiUrl}/${endpoint}`, data, { headers });

@@ -31,7 +31,11 @@ export class CodeGeneratorComponent {
       next: (res) => {
         this.result = res ? `✅ ${res.name}` : '❌ Código inválido';
       },
-      error: () => this.result = 'Error en la validación'
+      error: (err) =>{
+        if (err.status === 403) {
+          alert('Solo los profesores pueden validar códigos.');
+        }
+        this.result = 'Error en la validación'}
     });
   }
 }
