@@ -9,11 +9,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import {MatListModule} from '@angular/material/list';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
+import { CodeGeneratorComponent } from './code-generator/code-generator.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavBarComponent
+    NavBarComponent,
+    CodeGeneratorComponent
   ],
   imports: [
     BrowserModule,
@@ -22,6 +25,7 @@ import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
     HttpClientModule,
     MatButtonModule,
     MatListModule,
+    FormsModule,
     MatIconModule,
     AuthModule.forRoot({
       domain: 'dev-7tciizrz7pk84r8q.us.auth0.com',

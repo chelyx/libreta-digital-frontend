@@ -1,0 +1,16 @@
+<div class="p-4">
+  <h2>Generar y Validar Código</h2>
+
+  <button (click)="onGenerate()">Generar Código</button>
+  <br /><br />
+
+  <label>
+    Código:
+    <input [(ngModel)]="code" placeholder="Ingresa código" />
+  </label>
+  <br />
+
+  <button (click)="onValidate()">Validar Código</button>
+
+  <p><strong>Resultado:</strong> {{ result }}</p>
+</div>
