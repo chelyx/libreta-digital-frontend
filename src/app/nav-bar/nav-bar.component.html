@@ -19,11 +19,6 @@
         </button>
       </span>
 
-      <!-- Botón común (llamar API) -->
-      <span>
-        <button mat-raised-button color="primary" (click)="llamarApi()">Llamar Api</button>
-      </span>
-
       <!-- 🔐 Botones según rol -->
       <span *appHasRole="'ADMIN'">
         <button mat-raised-button color="accent" routerLink="/admin">Panel Admin</button>
@@ -36,6 +31,7 @@
       <span *appHasRole="'ALUMNO'">
         <button mat-raised-button color="accent" routerLink="/mi-curso">Mi Curso</button>
       </span>
+
     </div>
   </div>
 </nav>
