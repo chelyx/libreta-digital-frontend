@@ -1,4 +1,5 @@
 import { Component, Inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { ApiService } from 'src/service/apiService';
 
@@ -9,8 +10,31 @@ import { ApiService } from 'src/service/apiService';
 })
 export class AppComponent {
 
-  constructor() {
+     constructor(@Inject(AuthService) public auth: AuthService, private api: ApiService, private router: Router) {
+        this.auth.user$.subscribe(user => {
+      if (user) {
+        console.log('User logged in:', user);
+      } else {
+        console.log('No user logged in');
+      }
+    });
+    }
+    title = 'libreta-digital';
+    returnTo = window.location.origin;
 
+    llamarApi() {
+      this.api.getProtegido('/api/hello').subscribe(
+        res => console.log('✅ Respuesta:', res),
+        err => console.error('❌ Error:', err)
+      );
+    }
+    logout(): void {
+    this.auth.logout({ logoutParams: { returnTo: window.location.origin } });
+  }
+
+  login(){
+    this.auth.loginWithRedirect();
+    //this.router.navigate(['/pagina-opciones']);
   }
 
 }

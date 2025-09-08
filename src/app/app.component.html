@@ -1,2 +1,13 @@
-<app-nav-bar></app-nav-bar>
+<app-nav-bar *ngIf="auth.isAuthenticated$ | async"></app-nav-bar>
+<div class="contenedor">
+  <div class="mensajes">
+    <h1>Bienvenido a SIRCA</h1>
+  </div>
+  <div class="seccion-blanca">
+    <img src="assets/logo.png" alt="Logo de SIRCA" class="logo">
+     <button class="boton-rojo" (click)="login()">ACCEDER</button>
+    <button class="boton-rojo"(click)="llamarApi()">Llamar Api</button>
+    <p>Acceso para usuarios con cuenta Institucional</p>
+  </div>
+</div>
 <router-outlet></router-outlet>
