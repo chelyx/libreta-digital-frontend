@@ -1,16 +1,21 @@
 <div class="p-4">
-  <h2>Generar y Validar Código</h2>
+  <div *ngIf="userService.isStudent()">
+    <h2>Generar y Validar Código</h2>
 
-  <button (click)="onGenerate()">Generar Código</button>
-  <br /><br />
+    <button (click)="onGenerate()">Generar Código</button>
+    <br /><br />
+    <p><strong>Resultado:</strong> {{ genaratedCode }}</p>
+  </div>
 
-  <label>
-    Código:
-    <input [(ngModel)]="code" placeholder="Ingresa código" />
-  </label>
-  <br />
+  <div *ngIf="userService.isProfessor()">
+    <label>
+      Código:
+      <input [(ngModel)]="code" placeholder="Ingresa código" />
+    </label>
+    <br />
 
-  <button (click)="onValidate()">Validar Código</button>
+    <button (click)="onValidate()">Validar Código</button>
+     <p><strong>Alumno:</strong> {{ result }}</p>
+  </div>
 
-  <p><strong>Resultado:</strong> {{ result }}</p>
 </div>

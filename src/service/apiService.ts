@@ -14,21 +14,24 @@ export class ApiService {
   getProtegido(endpoint: string): Observable<any> {
     return this.auth.getAccessTokenSilently().pipe(
       switchMap(token => {
+        console.log('Access Token:', token); // Para depuración
         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        return this.http.get(`${this.apiUrl}${endpoint}`, { headers });
+        return this.http.get(`${this.apiUrl}/${endpoint}`, { headers });
       })
     );
   }
 
   postProtegido(endpoint: string, data: any): Observable<any> {
-    return this.auth.getAccessTokenSilently({
-   authorizationParams: {  audience: 'http://localhost:8080'}
-}).pipe(
+    return this.auth.getAccessTokenSilently().pipe(
       switchMap(token => {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
         return this.http.post(`${this.apiUrl}/${endpoint}`, data, { headers });
       })
     );
+  }
+
+  getRoles(): Observable<any> {
+    return this.getProtegido('api/roles');
   }
 
   generateCode(): Observable<any> {

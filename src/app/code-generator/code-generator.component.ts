@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService, User } from '@auth0/auth0-angular';
 import { ApiService } from 'src/service/apiService';
+import { UserService } from 'src/service/userService';
 
 @Component({
   selector: 'app-code-generator',
@@ -10,9 +11,10 @@ import { ApiService } from 'src/service/apiService';
 export class CodeGeneratorComponent {
   code: string = '';
   result: string = '';
-  User: User | undefined;
+  genaratedCode: string = '';
  constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    public userService: UserService
   ) {
 
   }
@@ -20,9 +22,9 @@ export class CodeGeneratorComponent {
   onGenerate() {
     this.apiService.generateCode().subscribe({
       next: (res) => {
-        this.result = `Código generado ${res.code}`;
+        this.genaratedCode = `${res.code}`;
       },
-      error: () => this.result = 'Error al generar el código'
+      error: () => this.genaratedCode = 'Error al generar el código'
     });
   }
 
