@@ -2,7 +2,11 @@ import { Component } from '@angular/core';
 import { AuthService as Auth0Auth } from '@auth0/auth0-angular';
 import { AuthService as AppAuth } from '../../core/services/auth.service';
 import { ApiService } from 'src/service/apiService';
+import emailjs from '@emailjs/browser';
+import { environment } from 'src/environments/environment';
+
 import { UserService } from 'src/service/userService';
+
 
 @Component({
   selector: 'app-nav-bar',
@@ -10,7 +14,6 @@ import { UserService } from 'src/service/userService';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent {
-
 
   title = 'libreta-digital';
   returnTo = window.location.origin;
@@ -56,6 +59,26 @@ export class NavBarComponent {
         this.userService.setRoles([]);
         console.error('Error al obtener roles:', err);
       }
+    });
+  }
+
+  probarEmail() {
+    emailjs.init({ publicKey: environment.emailjs.publicKey });
+
+    emailjs.send(
+      environment.emailjs.serviceId,
+      environment.emailjs.templateId,
+      {
+        to_email: 'TU_CORREO_DE_PRUEBA@gmail.com',
+        to_name: 'Alumno de prueba',
+        materia: 'Base de Datos',
+        mesa_fecha: '2025-12-19',
+        nota: '9'
+      }
+    ).then(() => {
+      console.log('✅ Email enviado');
+    }, (e:any) => {
+      console.error('❌ Error EmailJS', e);
     });
   }
 

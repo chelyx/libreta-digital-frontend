@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 // Guard de Auth0 (si querés chequear sesión básica)
 import { AuthGuard } from '@auth0/auth0-angular';
 
@@ -19,6 +18,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'asistencia', pathMatch: 'full' },
+  { path: 'calificaciones', loadChildren: () => import('./calificaciones/calificaciones.module').then(m => m.CalificacionesModule) },
 
   // Solo ADMIN y PROFESOR pueden ver la toma de asistencia
   {
