@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+.contenedor {
+  background-color:  #a82a19; /* fondo rojo */
+  height: 100vh; /* altura de la pantalla */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mensajes {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.mensajes h1 {
+  font-size: 24px;
+  color: #ffffff; /* texto blanco */
+}
+
+.seccion-blanca {
+  background-color: #ffffff; /* fondo blanco */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  text-align: center;
+}
+
+.boton-rojo {
+  background-color: #a82a19; /* fondo rojo */
+  color: #ffffff; /* texto blanco */
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 10px;
+  display: inline-block;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.logo {
+  width: 250px; /* ancho del logo */
+  height: 250px; /* alto del logo */
+  margin-bottom: 20px; /* margen inferior */
+  border-radius: 10px; /* esquinas redondeadas */
+}
+
+.boton-rojo:hover {
+  background-color: #cc0000; /* efecto hover */
+}
+
+.seccion-blanca p {
+  font-size: 14px;
+  color: #666666; /* texto gris */
+  margin-top: 10px;
+}

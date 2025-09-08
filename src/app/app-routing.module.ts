@@ -19,6 +19,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 const routes: Routes = [
   { path: '', redirectTo: 'asistencia', pathMatch: 'full' },
   { path: 'calificaciones', loadChildren: () => import('./calificaciones/calificaciones.module').then(m => m.CalificacionesModule) },
+  { path: 'pagina-opciones', component: PaginaOpcionesComponent }
 
   // Solo ADMIN y PROFESOR pueden ver la toma de asistencia
   {
@@ -49,10 +50,12 @@ const routes: Routes = [
 
   // Wildcard
   { path: '**', redirectTo: 'asistencia' },
+
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
+
 export class AppRoutingModule {}
