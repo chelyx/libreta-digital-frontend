@@ -1,4 +1,4 @@
-<app-nav-bar *ngIf="auth.isAuthenticated$ | async"></app-nav-bar>
+<app-nav-bar></app-nav-bar>
 
 <router-outlet></router-outlet>
 
@@ -9,6 +9,7 @@
 <app-code-generator></app-code-generator>
 
 <!--
+<app-nav-bar *ngIf="auth.isAuthenticated$ | async"></app-nav-bar>
 <div class="contenedor">
   <div class="mensajes">
     <h1>Bienvenido a SIRCA</h1>

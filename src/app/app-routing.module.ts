@@ -12,6 +12,7 @@ import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 
 // 🚀 Podés agregar otros componentes (Admin, MiCurso, etc.)
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { PaginaOpcionesComponent } from './pagina-opciones/pagina-opciones.component';
 // *ejemplo* — reemplazá por tu Admin real si lo tenés
 // import { AdminComponent } from './admin/admin.component';
 // import { MiCursoComponent } from './mi-curso/mi-curso.component';
@@ -19,7 +20,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 const routes: Routes = [
   { path: '', redirectTo: 'asistencia', pathMatch: 'full' },
   { path: 'calificaciones', loadChildren: () => import('./calificaciones/calificaciones.module').then(m => m.CalificacionesModule) },
-  { path: 'pagina-opciones', component: PaginaOpcionesComponent }
+  { path: 'pagina-opciones', component: PaginaOpcionesComponent },
 
   // Solo ADMIN y PROFESOR pueden ver la toma de asistencia
   {
