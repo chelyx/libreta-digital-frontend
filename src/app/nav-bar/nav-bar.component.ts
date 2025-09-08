@@ -77,7 +77,7 @@ export class NavBarComponent {
       }
     ).then(() => {
       console.log('✅ Email enviado');
-    }, (e) => {
+    }, (e:any) => {
       console.error('❌ Error EmailJS', e);
     });
   }

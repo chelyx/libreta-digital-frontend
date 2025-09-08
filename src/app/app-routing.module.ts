@@ -18,7 +18,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'asistencia', pathMatch: 'full' },
-  { path: 'calificaciones', loadChildren: () => import('./calificaciones/calificaciones.module').then(m => m.CalificacionesModule) }
+  { path: 'calificaciones', loadChildren: () => import('./calificaciones/calificaciones.module').then(m => m.CalificacionesModule) },
 
   // Solo ADMIN y PROFESOR pueden ver la toma de asistencia
   {
