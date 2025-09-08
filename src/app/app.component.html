@@ -1,4 +1,14 @@
 <app-nav-bar *ngIf="auth.isAuthenticated$ | async"></app-nav-bar>
+
+<router-outlet></router-outlet>
+
+<div class="app-container">
+  <app-toma-de-asistencia></app-toma-de-asistencia>
+</div>
+
+<app-code-generator></app-code-generator>
+
+<!--
 <div class="contenedor">
   <div class="mensajes">
     <h1>Bienvenido a SIRCA</h1>
@@ -9,5 +19,4 @@
     <button class="boton-rojo"(click)="llamarApi()">Llamar Api</button>
     <p>Acceso para usuarios con cuenta Institucional</p>
   </div>
-</div>
-<router-outlet></router-outlet>
+</div>-->
