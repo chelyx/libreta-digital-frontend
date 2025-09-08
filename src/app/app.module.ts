@@ -28,10 +28,8 @@ import { AuthModule } from '@auth0/auth0-angular';
 // ⬇️ NUEVO: 403 y directiva por rol
 import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 import { HasRoleDirective } from './shared/directives/has-role.directive';
-import {MatListModule} from '@angular/material/list';
-import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import { CodeGeneratorComponent } from './code-generator/code-generator.component';
-import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -41,7 +39,7 @@ import { FormsModule } from '@angular/forms';
 
     // ⬇️ NUEVO
     ForbiddenComponent,
-    HasRoleDirective
+    HasRoleDirective,
 
     CodeGeneratorComponent
 

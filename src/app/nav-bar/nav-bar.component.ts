@@ -18,7 +18,8 @@ export class NavBarComponent {
   constructor(
     public auth: Auth0Auth,   // servicio de Auth0 para login/logout
     private appAuth: AppAuth, // servicio que guarda usuario/roles
-    private api: ApiService
+    private api: ApiService,
+    private userService: UserService
   ) {
     // mostrar info del usuario en consola y setear roles locales
     this.auth.user$.subscribe(user => {
@@ -34,7 +35,7 @@ export class NavBarComponent {
         this.appAuth.logout();
       }
     });
-    
+
   }
 
 
@@ -44,11 +45,10 @@ export class NavBarComponent {
 
   login(): void {
     this.auth.loginWithRedirect();
-
+  }
   getRoles(): void {
     this.api.getRoles().subscribe({
       next: (res) => {
-
         this.userService.setRoles(res.roles);
         console.log('Roles obtenidos:', res.roles);
       },
