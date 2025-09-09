@@ -29,6 +29,10 @@ import { AuthModule } from '@auth0/auth0-angular';
 import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 import { HasRoleDirective } from './shared/directives/has-role.directive';
 import { CodeGeneratorComponent } from './code-generator/code-generator.component';
+import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
+import { CodeValidatorComponent } from './code-validator/code-validator.component';
+import { MisMateriasComponent } from './mis-materias/mis-materias.component';
 
 
 @NgModule({
@@ -41,7 +45,11 @@ import { CodeGeneratorComponent } from './code-generator/code-generator.componen
     ForbiddenComponent,
     HasRoleDirective,
 
-    CodeGeneratorComponent
+    CodeGeneratorComponent,
+      HomeComponent,
+      LoginComponent,
+      CodeValidatorComponent,
+      MisMateriasComponent
 
   ],
   imports: [
@@ -70,7 +78,7 @@ import { CodeGeneratorComponent } from './code-generator/code-generator.componen
       domain: 'dev-7tciizrz7pk84r8q.us.auth0.com',
       clientId: '0mGm99P2Jv3LhUKXOWPGDcYrhn3upEdg',
       authorizationParams: {
-        redirect_uri: 'http://localhost:4200',
+        redirect_uri: window.location.origin,
         audience: 'http://localhost:8080',
         scope: 'openid profile email'
       }

@@ -10,11 +10,9 @@ import { UserService } from 'src/service/userService';
 })
 export class CodeGeneratorComponent {
   code: string = '';
-  result: string = '';
   genaratedCode: string = '';
  constructor(
     private apiService: ApiService,
-    public userService: UserService
   ) {
 
   }
@@ -28,16 +26,5 @@ export class CodeGeneratorComponent {
     });
   }
 
-  onValidate() {
-    this.apiService.validateCode(this.code).subscribe({
-      next: (res) => {
-        this.result = res ? `✅ ${res.name}` : '❌ Código inválido';
-      },
-      error: (err) =>{
-        if (err.status === 403) {
-          alert('Solo los profesores pueden validar códigos.');
-        }
-        this.result = 'Error en la validación'}
-    });
-  }
+
 }

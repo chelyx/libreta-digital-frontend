@@ -1,40 +1,37 @@
-<nav class="mat-primary">
-  <div class="navbar">
-    <span>
-      <mat-icon svgIcon="logo"></mat-icon>
-    </span>
-
-    <div class="nav-buttons">
-      <!-- Botón de login -->
-      <span *ngIf="!(auth.isAuthenticated$ | async)">
-        <button mat-raised-button color="primary" (click)="login()">
-          Login
-        </button>
-      </span>
-
-      <!-- Botón de logout -->
-      <span *ngIf="auth.isAuthenticated$ | async">
-          <a mat-raised-button color="primary" routerLink="/calificaciones" routerLinkActive="active">
-    Calificaciones
-          </a>
-        <button mat-raised-button color="primary" (click)="logout()">
-          Logout
-        </button>
-      </span>
-
-      <!-- 🔐 Botones según rol -->
-      <span *appHasRole="'ADMIN'">
-        <button mat-raised-button color="accent" routerLink="/admin">Panel Admin</button>
-      </span>
-
-      <span *appHasRole="['ADMIN','PROFESOR']">
-        <button mat-raised-button color="accent" routerLink="/asistencia">Asistencia</button>
-      </span>
-
-      <span *appHasRole="'ALUMNO'">
-        <button mat-raised-button color="accent" routerLink="/mi-curso">Mi Curso</button>
-      </span>
-
-    </div>
+<nav class="navbar">
+  <div class="logo">
+    <img src="assets/logo.png" alt="Logo SIRCA">
   </div>
+
+  <ul class="menu">
+    <!-- Profesor -->
+     <span *ngIf="role === 'PROFESOR'" class="nav-group">
+      <span class="nav-item">
+        <a (click)="show('asistencia')">Toma de asistencia</a>
+      </span>
+      <span  class="nav-item">
+        <a (click)="show('code-validator')">Válidar códigos</a>
+      </span>
+      <span  class="nav-item">
+        <a (click)="show('calificaciones')">Calificaciones</a>
+      </span>
+     </span>
+
+
+    <!-- Alumno -->
+     <span *ngIf="role === 'ALUMNO'" class="nav-group">
+      <span class="nav-item">
+        <a (click)="show('code-generator')">Generar código</a>
+      </span>
+      <span  class="nav-item">
+        <a (click)="show('materias')">Mis materias</a>
+      </span>
+     </span>
+
+
+    <!-- Opción común a todos -->
+    <span class="nav-item">
+      <a (click)="logout()">Cerrar sesión</a>
+    </span>
+  </ul>
 </nav>

@@ -1,62 +1,34 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// Guard de Auth0 (si querés chequear sesión básica)
-import { AuthGuard } from '@auth0/auth0-angular';
-
-// Nuestro guard por roles
-import { RoleGuard } from 'src/core/guards/role.guard';
-
-// Componentes
+import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './home/home.component';
 import { TomaDeAsistenciaComponent } from './toma-de-asistencia/toma-de-asistencia.component';
-import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
-
-// 🚀 Podés agregar otros componentes (Admin, MiCurso, etc.)
-import { NavBarComponent } from './nav-bar/nav-bar.component';
-import { PaginaOpcionesComponent } from './pagina-opciones/pagina-opciones.component';
-// *ejemplo* — reemplazá por tu Admin real si lo tenés
-// import { AdminComponent } from './admin/admin.component';
-// import { MiCursoComponent } from './mi-curso/mi-curso.component';
+import { CodeValidatorComponent } from './code-validator/code-validator.component';
+import { CodeGeneratorComponent } from './code-generator/code-generator.component';
+import { MisMateriasComponent } from './mis-materias/mis-materias.component';
+import { CalificacionesComponent } from './calificaciones/calificaciones.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'asistencia', pathMatch: 'full' },
-  { path: 'calificaciones', loadChildren: () => import('./calificaciones/calificaciones.module').then(m => m.CalificacionesModule) },
-  { path: 'pagina-opciones', component: PaginaOpcionesComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }, // pantalla inicial → login
+  { path: 'login', component: LoginComponent },
+  { path: 'home', component: HomeComponent }, // aquí meterías nav-bar, asistencia, etc.
 
-  // Solo ADMIN y PROFESOR pueden ver la toma de asistencia
-  {
-    path: 'asistencia',
-    component: TomaDeAsistenciaComponent,
-    canActivate: [AuthGuard, RoleGuard],   // chequea login + rol
-    data: { roles: ['BEDEL', 'PROFESOR'] }
-  },
 
-  // Ejemplo: ruta Admin
-  // {
-  //   path: 'admin',
-  //   component: AdminComponent,
-  //   canActivate: [AuthGuard, RoleGuard],
-  //   data: { roles: ['ADMIN'] }
-  // },
+  // Acciones de profesor
+  // { path: 'toma-asistencia', component: TomaDeAsistenciaComponent },
+  // { path: 'validar-codigos', component: CodeValidatorComponent },
+  //{path: 'calificaciones', component: CalificacionesComponent},
 
-  // Ejemplo: ruta Alumno
-  // {
-  //   path: 'mi-curso',
-  //   component: MiCursoComponent,
-  //   canActivate: [AuthGuard, RoleGuard],
-  //   data: { roles: ['ALUMNO'] }
-  // },
+  // Acciones de alumno
+  // { path: 'generar-codigo', component: CodeGeneratorComponent },
+  // { path: 'mis-materias', component: MisMateriasComponent },
 
-  // Página 403
-  { path: '403', component: ForbiddenComponent },
 
-  // Wildcard
-  { path: '**', redirectTo: 'asistencia' },
-
+  { path: '**', redirectTo: 'login' }, // fallback
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-
 export class AppRoutingModule {}
