@@ -1,0 +1,29 @@
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #f5f5f5;
+}
+
+.mensajes h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.seccion-blanca {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+}
+
+.logo {
+  max-width: 150px;
+  margin-bottom: 20px;
+}

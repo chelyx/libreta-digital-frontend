@@ -6,6 +6,7 @@ import emailjs from '@emailjs/browser';
 import { environment } from 'src/environments/environment';
 
 import { UserService } from 'src/service/userService';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -14,53 +15,30 @@ import { UserService } from 'src/service/userService';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent {
-
+  role ="";
   title = 'libreta-digital';
   returnTo = window.location.origin;
 
   constructor(
-    public auth: Auth0Auth,   // servicio de Auth0 para login/logout
-    private appAuth: AppAuth, // servicio que guarda usuario/roles
-    private api: ApiService,
-    private userService: UserService
+    public auth: Auth0Auth,
+    private router: Router,
+    private userService: UserService,
   ) {
-    // mostrar info del usuario en consola y setear roles locales
-    this.auth.user$.subscribe(user => {
-      if (user) {
-        console.log('✅ User logged in (Auth0):', user);
-         this.getRoles();
-        const email = (user.email || user.preferred_username || user.name || '').toString();
-        this.appAuth.loginFromEmail(email, user.name || undefined);
-        console.log('➡️ Roles asignados:', this.appAuth.roles);
-
-      } else {
-        console.log('⛔ No user logged in');
-        this.appAuth.logout();
-      }
+   this.auth.idTokenClaims$.subscribe(claims => {
+      this.role = claims?.['https://sirca.com/roles'][0] || null;
     });
 
   }
 
+  show(link: string): void {
+  //  this.router.navigateByUrl(link);
+  this.userService.setPanel(link);
+  }
 
   logout(): void {
     this.auth.logout({ logoutParams: { returnTo: this.returnTo } });
   }
 
-  login(): void {
-    this.auth.loginWithRedirect();
-  }
-  getRoles(): void {
-    this.api.getRoles().subscribe({
-      next: (res) => {
-        this.userService.setRoles(res.roles);
-        console.log('Roles obtenidos:', res.roles);
-      },
-      error: (err) => {
-        this.userService.setRoles([]);
-        console.error('Error al obtener roles:', err);
-      }
-    });
-  }
 
   probarEmail() {
     emailjs.init({ publicKey: environment.emailjs.publicKey });

@@ -1,0 +1,15 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="app-container">
+  <!-- Profesor -->
+  <ng-container *ngIf="role === 'PROFESOR'">
+    <app-toma-de-asistencia *ngIf="currentPanel === 'asistencia'"></app-toma-de-asistencia>
+    <app-code-validator *ngIf="currentPanel === 'code-validator'"></app-code-validator>
+  </ng-container>
+
+  <!-- Alumno -->
+  <ng-container *ngIf="role === 'ALUMNO'">
+    <app-code-generator  *ngIf="currentPanel === 'code-generator'"></app-code-generator>
+    <app-mis-materias *ngIf="currentPanel === 'materias'"></app-mis-materias>
+  </ng-container>
+</div>
