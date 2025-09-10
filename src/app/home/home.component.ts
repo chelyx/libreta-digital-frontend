@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { UserService } from 'src/service/userService';
+import { UserService } from 'src/core/service/userService';
 
 @Component({
   selector: 'app-home',

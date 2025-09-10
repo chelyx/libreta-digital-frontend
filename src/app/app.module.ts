@@ -25,14 +25,14 @@ import { MatSelectModule } from '@angular/material/select';
 // Auth0
 import { AuthModule } from '@auth0/auth0-angular';
 
-// ⬇️ NUEVO: 403 y directiva por rol
-import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
-import { HasRoleDirective } from './shared/directives/has-role.directive';
 import { CodeGeneratorComponent } from './code-generator/code-generator.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { CodeValidatorComponent } from './code-validator/code-validator.component';
 import { MisMateriasComponent } from './mis-materias/mis-materias.component';
+import { SelectorMateriaMesaComponent } from './carga-finales/selector-materia-mesa/selector-materia-mesa.component';
+import { CargaFinalesComponent } from './carga-finales/carga-finales.component';
+import { TablaCargaNotasComponent } from './carga-finales/tabla-carga-notas/tabla-carga-notas.component';
 
 
 @NgModule({
@@ -40,16 +40,14 @@ import { MisMateriasComponent } from './mis-materias/mis-materias.component';
     AppComponent,
     NavBarComponent,
     TomaDeAsistenciaComponent,
-
-    // ⬇️ NUEVO
-    ForbiddenComponent,
-    HasRoleDirective,
-
     CodeGeneratorComponent,
-      HomeComponent,
-      LoginComponent,
-      CodeValidatorComponent,
-      MisMateriasComponent
+    HomeComponent,
+    LoginComponent,
+    CodeValidatorComponent,
+    MisMateriasComponent,
+    SelectorMateriaMesaComponent,
+    CargaFinalesComponent,
+    TablaCargaNotasComponent
 
   ],
   imports: [

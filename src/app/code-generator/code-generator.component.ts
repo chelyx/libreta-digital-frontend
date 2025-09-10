@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService, User } from '@auth0/auth0-angular';
-import { ApiService } from 'src/service/apiService';
-import { UserService } from 'src/service/userService';
+import { ApiService } from 'src/core/service/apiService';
+import { UserService } from 'src/core/service/userService';
 
 @Component({
   selector: 'app-code-generator',

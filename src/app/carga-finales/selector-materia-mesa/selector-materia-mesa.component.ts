@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FinalesService } from '../../services/finales.service';
-import { Materia, MesaFinal } from '../../models';
+import { Materia, MesaFinal } from 'src/core/models/models';
+
+
+import { FinalesService } from 'src/core/service/finales.service';
 
 @Component({
   selector: 'app-selector-materia-mesa',

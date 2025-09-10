@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { AuthService as AppAuth } from '../../core/services/auth.service';
+import { AuthService } from 'src/core/service/auth.service';
+
 
 interface Curso { id: string; nombre: string; }
 
@@ -48,7 +49,7 @@ export class TomaDeAsistenciaComponent implements OnInit, OnDestroy {
     { nombre: 'Araceli', apellido: 'Soffulto',  dni: '33133557', presente: true, cursoId: ['2B'] },
   ];
 
-  constructor(private snack: MatSnackBar, private appAuth: AppAuth) {}
+  constructor(private snack: MatSnackBar, private appAuth: AuthService) {}
 
   // ✅ helpers de rol para usar en TS/HTML
   get isAdmin(): boolean   { return this.appAuth.hasRole('BEDEL'); }

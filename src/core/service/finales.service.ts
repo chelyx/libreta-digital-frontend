@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, delay, map, from, catchError, forkJoin } from 'rxjs';
-import { Alumno, Materia, MesaFinal, InscripcionFinal, CalificacionFinal } from '../models';
-import { MOCK_ALUMNOS, MOCK_MATERIAS, MOCK_MESAS, MOCK_INSCRIPTOS, MOCK_CALIFICACIONES_INICIALES } from '../mocks/calificaciones.mock';
-import { EmailService } from '../../core/services/email.service';
+import { Alumno, Materia, MesaFinal, InscripcionFinal, CalificacionFinal } from '../models/models';
+import { MOCK_ALUMNOS, MOCK_MATERIAS, MOCK_MESAS, MOCK_INSCRIPTOS, MOCK_CALIFICACIONES_INICIALES } from '../../app/mocks/calificaciones.mock';
+import { EmailService } from './email.service';
+
 const LS_KEY = 'calificaciones-finales';
 
 @Injectable({ providedIn: 'root' })
@@ -14,7 +15,7 @@ export class FinalesService {
 
   private califs$   = new BehaviorSubject<CalificacionFinal[]>(this.loadFromLS());
   constructor(private emailSvc: EmailService) {}
-  
+
   // ==== GETTERS (mocks con pequeño delay para simular red) ====
   getMaterias(): Observable<Materia[]> { return this.materias$.pipe(delay(150)); }
 

@@ -1,4 +1,4 @@
-import { Alumno, Materia, MesaFinal, InscripcionFinal, CalificacionFinal } from '../models';
+import { Alumno, Materia, MesaFinal, InscripcionFinal, CalificacionFinal } from '../../core/models/models';
 
 // Materias
 export const MOCK_MATERIAS: Materia[] = [
