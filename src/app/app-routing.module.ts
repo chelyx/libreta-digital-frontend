@@ -2,11 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-import { TomaDeAsistenciaComponent } from './toma-de-asistencia/toma-de-asistencia.component';
-import { CodeValidatorComponent } from './code-validator/code-validator.component';
-import { CodeGeneratorComponent } from './code-generator/code-generator.component';
-import { MisMateriasComponent } from './mis-materias/mis-materias.component';
-import { CalificacionesComponent } from './calificaciones/calificaciones.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // pantalla inicial → login

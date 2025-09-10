@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FinalesService } from '../../services/finales.service';
+import { FinalesService } from 'src/core/service/finales.service';
+
 
 type Row = {
   alumnoId: string;

@@ -7,6 +7,20 @@
     align-items: center; /* centra verticalmente */
     gap: 6px;
   }
+
+  a {
+    color: #c62828;
+    font-weight: 400;
+    cursor: pointer;
+  }
+
+  a.selected {
+   font-weight: 700;
+  }
+
+  a:hover {
+   font-weight: 700;
+  }
 }
 
 .nav-group {
@@ -36,13 +50,4 @@
   margin: 0;
 }
 
-.menu .nav-item a {
-  color: #c62828;
-  text-decoration: none;
-  font-weight: bold;
-  cursor: pointer;
-}
 
-.menu .nav-item a:hover {
-  text-decoration: underline;
-}

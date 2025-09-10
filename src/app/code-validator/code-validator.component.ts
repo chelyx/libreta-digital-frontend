@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ApiService } from 'src/service/apiService';
+import { ApiService } from 'src/core/service/apiService';
 
 @Component({
   selector: 'app-code-validator',

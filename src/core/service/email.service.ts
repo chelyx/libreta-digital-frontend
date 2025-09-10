@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class EmailService {
@@ -16,7 +16,7 @@ export class EmailService {
   /**
    * Envía notificación de nota de final al alumno.
    * Los nombres de variables deben coincidir con los de tu Template en EmailJS.
- 
+
   sendGrade(to_email: string, to_name: string, materia: string, mesaFecha: string, nota: number) {
     this.ensureInit();
     const params = {

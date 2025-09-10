@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { AuthService as Auth0Auth } from '@auth0/auth0-angular';
-import { AuthService as AppAuth } from '../../core/services/auth.service';
-import { ApiService } from 'src/service/apiService';
 import emailjs from '@emailjs/browser';
 import { environment } from 'src/environments/environment';
 
-import { UserService } from 'src/service/userService';
+import { UserService } from 'src/core/service/userService';
 import { Router } from '@angular/router';
 
 
@@ -18,7 +16,7 @@ export class NavBarComponent {
   role ="";
   title = 'libreta-digital';
   returnTo = window.location.origin;
-
+  currentPanel = "";
   constructor(
     public auth: Auth0Auth,
     private router: Router,
@@ -31,8 +29,8 @@ export class NavBarComponent {
   }
 
   show(link: string): void {
-  //  this.router.navigateByUrl(link);
   this.userService.setPanel(link);
+  this.currentPanel = link;
   }
 
   logout(): void {

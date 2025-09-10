@@ -5,6 +5,7 @@
   <ng-container *ngIf="role === 'PROFESOR'">
     <app-toma-de-asistencia *ngIf="currentPanel === 'asistencia'"></app-toma-de-asistencia>
     <app-code-validator *ngIf="currentPanel === 'code-validator'"></app-code-validator>
+    <app-carga-finales *ngIf="currentPanel === 'calificaciones'"></app-carga-finales>
   </ng-container>
 
   <!-- Alumno -->

@@ -2,14 +2,13 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 // Auth0 SDK
-import { AuthService as Auth0Auth } from '@auth0/auth0-angular';
+import { AuthService } from '@auth0/auth0-angular';
 
-// Tu servicio de sesión/roles (el que creamos con loginFromEmail)
-import { AuthService as AppAuth } from '../core/services/auth.service';
+
 
 // Si lo usás en otros lados, lo dejo inyectado
 
-import { ApiService } from 'src/service/apiService';
+import { ApiService } from 'src/core/service/apiService';
 import { filter, tap } from 'rxjs';
 
 @Component({
@@ -20,10 +19,8 @@ import { filter, tap } from 'rxjs';
 export class AppComponent implements OnInit {
 
   constructor(
-    private auth0: Auth0Auth,   // servicio de Auth0
-    private appAuth: AppAuth,   // tu servicio que guarda email/roles
+    private auth0: AuthService,   // servicio de Auth0
     private router: Router,
-    private api: ApiService
   ) {}
 
   ngOnInit(): void {
