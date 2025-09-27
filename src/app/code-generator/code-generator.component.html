@@ -1,8 +1,47 @@
-<div class="p-4">
 
-    <h2>Generar y Validar Código</h2>
+<div class="container">
+  <mat-card class="qr-card">
+    <mat-card-header class="text-center">
+      <mat-card-title>Código QR de Validación</mat-card-title>
+      <mat-card-subtitle>
+        Genera tu código QR para validar tu asistencia o completar actividades
+      </mat-card-subtitle>
+    </mat-card-header>
 
-    <button (click)="onGenerate()">Generar Código</button>
-    <br /><br />
-    <p><strong>Resultado:</strong> {{ genaratedCode }}</p>
+    <mat-card-content>
+      <div *ngIf="!qrGenerated" class="qr-placeholder">
+        <div class="qr-box">
+          <mat-icon class="qr-icon">qr_code</mat-icon>
+        </div>
+        <button mat-raised-button color="primary" (click)="onGenerate()" [disabled]="loading">
+          {{ loading ? 'Generando...' : 'Generar QR de Validación' }}
+        </button>
+      </div>
+
+      <div *ngIf="qrGenerated" class="qr-result">
+        <div class="qr-display">
+          <qrcode [qrdata]="qrUrl" [width]="192" [errorCorrectionLevel]="'M'"></qrcode>
+        </div>
+
+        <div class="qr-url">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Código de validación</mat-label>
+            <input matInput [value]="genaratedCode" readonly>
+            <button mat-icon-button matSuffix (click)="copyToClipboard()">
+              <mat-icon>content_copy</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div class="qr-success">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <span>QR generado exitosamente</span>
+        </div>
+
+        <button mat-stroked-button color="primary" class="full-width" (click)="onGenerate()">
+          Generar Nuevo QR
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

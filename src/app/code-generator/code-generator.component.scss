@@ -1,0 +1,61 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.qr-card {
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.qr-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.qr-box {
+  width: 192px;
+  height: 192px;
+  border: 2px dashed rgba(0,0,0,0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.05);
+}
+
+.qr-icon {
+  font-size: 48px;
+  color: rgba(0,0,0,0.3);
+}
+
+.qr-result {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.qr-display {
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.qr-url {
+  width: 100%;
+}
+
+.qr-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: primary;
+}

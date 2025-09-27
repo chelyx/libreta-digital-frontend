@@ -17,7 +17,6 @@ export class HomeComponent {
     this.auth.idTokenClaims$.subscribe(claims => {
       this.role = claims?.['https://sirca.com/roles'][0] || null;
       console.log(this.role)
-     // this.userService.setRoles(this.role || "");
     });
 
     this.userService.panel$.subscribe(panel => {
@@ -25,6 +24,16 @@ export class HomeComponent {
       this.currentPanel = panel;
     });
 
+    this.validatePendingCode();
+  }
+
+   validatePendingCode(): void {
+    const code = sessionStorage.getItem('pendingCode');
+    if (code) {
+      // Aquí llamás al modulo para validar
+      console.log('Token a validar:', code);
+      this.userService.setPanel('code-validator');
+    }
   }
 
 }

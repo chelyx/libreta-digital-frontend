@@ -6,7 +6,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
-  // Guardamos roles como BehaviorSubject para que otros componentes puedan suscribirse
   private panel = new BehaviorSubject<string>("");
   panel$ = this.panel.asObservable();
 

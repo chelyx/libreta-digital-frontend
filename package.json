@@ -22,6 +22,7 @@
     "@angular/router": "^15.2.10",
     "@auth0/auth0-angular": "^2.2.3",
     "@emailjs/browser": "^4.4.1",
+    "angularx-qrcode": "^15.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -32,6 +33,7 @@
     "@angular/compiler-cli": "^15.2.10",
     "@types/jasmine": "~4.0.0",
     "@types/node": "^16.18.126",
+    "@types/qrcode": "^1.5.5",
     "jasmine-core": "~4.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",

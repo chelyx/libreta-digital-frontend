@@ -33,8 +33,7 @@ import { MisMateriasComponent } from './mis-materias/mis-materias.component';
 import { SelectorMateriaMesaComponent } from './carga-finales/selector-materia-mesa/selector-materia-mesa.component';
 import { CargaFinalesComponent } from './carga-finales/carga-finales.component';
 import { TablaCargaNotasComponent } from './carga-finales/tabla-carga-notas/tabla-carga-notas.component';
-
-
+import { QRCodeModule } from 'angularx-qrcode';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +50,7 @@ import { TablaCargaNotasComponent } from './carga-finales/tabla-carga-notas/tabl
 
   ],
   imports: [
+    QRCodeModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
