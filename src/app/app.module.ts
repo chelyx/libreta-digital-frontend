@@ -33,8 +33,9 @@ import { MisMateriasComponent } from './mis-materias/mis-materias.component';
 import { SelectorMateriaMesaComponent } from './carga-finales/selector-materia-mesa/selector-materia-mesa.component';
 import { CargaFinalesComponent } from './carga-finales/carga-finales.component';
 import { TablaCargaNotasComponent } from './carga-finales/tabla-carga-notas/tabla-carga-notas.component';
-
-
+import { QRCodeModule } from 'angularx-qrcode';
+import { environment } from '../environments/environment';
+import { env } from 'process';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +52,7 @@ import { TablaCargaNotasComponent } from './carga-finales/tabla-carga-notas/tabl
 
   ],
   imports: [
+    QRCodeModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -73,13 +75,15 @@ import { TablaCargaNotasComponent } from './carga-finales/tabla-carga-notas/tabl
 
     // Auth0 (tu configuración actual)
     AuthModule.forRoot({
-      domain: 'dev-7tciizrz7pk84r8q.us.auth0.com',
-      clientId: '0mGm99P2Jv3LhUKXOWPGDcYrhn3upEdg',
+      domain: environment.auth0Domain,
+      clientId: environment.auth0ClientId,
       authorizationParams: {
-        redirect_uri: window.location.origin,
-        audience: 'http://localhost:8080',
-        scope: 'openid profile email'
-      }
+        redirect_uri: environment.redirectUri,
+        audience: environment.auth0Audience,
+        scope: environment.auth0Scope
+      },
+      cacheLocation: 'localstorage', // útil para mantener sesión después de reload
+      useRefreshTokens: true
     }),
   ],
   providers: [],

@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/core/service/auth.service';
+import { AuthService as Auth0Auth } from '@auth0/auth0-angular';
+import { ROLES, UserService } from 'src/core/service/userService';
 
 
 interface Curso { id: string; nombre: string; }
@@ -21,7 +22,7 @@ interface Alumno {
 })
 export class TomaDeAsistenciaComponent implements OnInit, OnDestroy {
   private sub?: Subscription;
-
+  role = '';
   filtro = '';
   saving = false;
 
@@ -49,16 +50,14 @@ export class TomaDeAsistenciaComponent implements OnInit, OnDestroy {
     { nombre: 'Araceli', apellido: 'Soffulto',  dni: '33133557', presente: true, cursoId: ['2B'] },
   ];
 
-  constructor(private snack: MatSnackBar, private appAuth: AuthService) {}
+  constructor(private snack: MatSnackBar, private userService: UserService) {
 
-  // ✅ helpers de rol para usar en TS/HTML
-  get isAdmin(): boolean   { return this.appAuth.hasRole('BEDEL'); }
-  get isProfesor(): boolean { return this.appAuth.hasRole('PROFESOR') ; }
-  get isBedel(): boolean   { return this.appAuth.hasRole('BEDEL'); }
+  }
 
   ngOnInit(): void {
-    // 🔔 REACTIVO: cada cambio de usuario/roles vuelve a filtrar
-    this.sub = this.appAuth.user$.subscribe(() => this.aplicarFiltroPorRol());
+    this.userService.currentRole().subscribe(role => {
+      this.role = role;
+    });
     // y una vez de arranque
     this.aplicarFiltroPorRol();
   }
@@ -72,24 +71,24 @@ export class TomaDeAsistenciaComponent implements OnInit, OnDestroy {
     this.cursos = [...this.allCursos];
 
     // Si es PROFESOR (y no Admin), filtrar por allowedCourseIds
-    if (this.isProfesor) {
-      const permitidos = this.appAuth.user?.allowedCourseIds ?? [];
-      this.cursos = this.cursos.filter(c => permitidos.includes(c.id));
+    if (this.role === ROLES.PROFESOR) {
+      // const permitidos = this.appAuth.user?.allowedCourseIds ?? [];
+      // this.cursos = this.cursos.filter(c => permitidos.includes(c.id));
 
-      // Selección coherente
-      if (this.cursos.length === 1) {
-        this.cursoSeleccionado = this.cursos[0].id;
-      } else if (this.cursos.length > 1) {
-        if (!this.cursoSeleccionado || !permitidos.includes(this.cursoSeleccionado)) {
-          this.cursoSeleccionado = this.cursos[0].id;
-        }
-      } else {
-        // Sin cursos permitidos
-        this.cursoSeleccionado = '';
-      }
+      // // Selección coherente
+      // if (this.cursos.length === 1) {
+      //   this.cursoSeleccionado = this.cursos[0].id;
+      // } else if (this.cursos.length > 1) {
+      //   if (!this.cursoSeleccionado || !permitidos.includes(this.cursoSeleccionado)) {
+      //     this.cursoSeleccionado = this.cursos[0].id;
+      //   }
+      // } else {
+      //   // Sin cursos permitidos
+      //   this.cursoSeleccionado = '';
+      // }
 
       // Debug útil:
-      console.log('Cursos permitidos:', permitidos, 'Cursos visibles:', this.cursos);
+      // console.log('Cursos permitidos:', permitidos, 'Cursos visibles:', this.cursos);
     }
     // Admin: ve todos, cursoSeleccionado queda como esté ('' = Todos válido solo para Admin)
   }
@@ -107,10 +106,10 @@ export class TomaDeAsistenciaComponent implements OnInit, OnDestroy {
 
   onCursoChange(id: string) {
     // ⛑️ PROFESOR: no permitir 'Todos' ('') ni cursos no asignados
-    if (this.isProfesor) {
-      if (!id) return; // evita 'Todos'
-      const permitidos = this.appAuth.user?.allowedCourseIds ?? [];
-      if (!permitidos.includes(id)) return;
+    if (this.role === ROLES.PROFESOR) {
+      // if (!id) return; // evita 'Todos'
+      // const permitidos = this.appAuth.user?.allowedCourseIds ?? [];
+      // if (!permitidos.includes(id)) return;
     }
     this.cursoSeleccionado = id;
   }

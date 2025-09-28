@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { UserService } from 'src/core/service/userService';
+import { UserService, PANELES, ROLES } from 'src/core/service/userService';
 
 @Component({
   selector: 'app-home',
@@ -10,21 +10,34 @@ import { UserService } from 'src/core/service/userService';
 export class HomeComponent {
   currentPanel: string = "";
   role: string | null = null;
+  sircaRoles = 'https://sirca.com/roles';
 
   constructor(private auth: AuthService, public userService: UserService) {}
 
   ngOnInit(): void {
     this.auth.idTokenClaims$.subscribe(claims => {
-      this.role = claims?.['https://sirca.com/roles'][0] || null;
+      this.role = claims?.[this.sircaRoles][0] || null;
+      this.userService.setRole(this.role!);
       console.log(this.role)
-     // this.userService.setRoles(this.role || "");
+      if (this.role === ROLES.ALUMNO) {
+        this.userService.setPanel(PANELES.CODE_GENERATOR);
+      } else if (this.role === ROLES.PROFESOR) {
+        this.userService.setPanel(PANELES.CODE_VALIDATOR);
+      }
     });
 
-    this.userService.panel$.subscribe(panel => {
-      console.log("Panel cambiado a:", panel);
+    this.userService.currentPanel().subscribe(panel => {
       this.currentPanel = panel;
     });
 
+    this.validatePendingCode();
+  }
+
+   validatePendingCode(): void {
+    const code = sessionStorage.getItem('pendingCode');
+    if (code && this.role === ROLES.PROFESOR) {
+      this.userService.setPanel(PANELES.CODE_VALIDATOR);
+    }
   }
 
 }

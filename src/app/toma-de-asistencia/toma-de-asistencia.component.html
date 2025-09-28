@@ -11,10 +11,10 @@
           <mat-select
             [(ngModel)]="cursoSeleccionado"
             (selectionChange)="onCursoChange($event.value)"
-            [disabled]="isProfesor && cursos.length === 1"
+            [disabled]="cursos.length === 1"
           >
             <!-- “Todos” SOLO para ADMIN -->
-            <mat-option *ngIf="isBedel" [value]="">Todos</mat-option>
+            <mat-option  [value]="">Todos</mat-option>
 
             <mat-option *ngFor="let c of cursos" [value]="c.id">
               {{ c.nombre }}
@@ -26,7 +26,7 @@
             mat-icon-button
             matSuffix
             aria-label="Limpiar curso"
-            *ngIf="isAdmin && cursoSeleccionado"
+            *ngIf=" cursoSeleccionado"
             (click)="onCursoChange('')"
           >
             <mat-icon>close</mat-icon>

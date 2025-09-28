@@ -1,10 +1,30 @@
-<div>
-    <label>
-      Código:
-      <input [(ngModel)]="code" placeholder="Ingresa código" />
-    </label>
-    <br />
+<div class="container">
+  <mat-card class="qr-card">
+    <mat-card-header class="text-center">
+      <mat-card-title>Validar Código</mat-card-title>
+      <mat-card-subtitle>Escanea el código QR con tu cámara o ingresa el token manualmente</mat-card-subtitle>
+    </mat-card-header>
 
-    <button (click)="onValidate()">Validar Código</button>
-     <p><strong>Alumno:</strong> {{ result }}</p>
-  </div>
+    <mat-card-content>
+      <!-- Manual Token -->
+      <div class="manual-token">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Ingresar token manualmente</mat-label>
+          <input matInput [(ngModel)]="manualToken">
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="submitManualToken()">
+          Validar Token
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+   <mat-card class="profile-card" *ngIf="user && tokenValidated">
+      <mat-card-header  class="qr-success">
+        <mat-icon color="primary">check_circle</mat-icon>
+        <mat-card-title>Token validado</mat-card-title>
+      </mat-card-header>
+      <img mat-card-avatar [src]="user.picture" alt="{{ user.name }}">
+      <mat-card-title>{{ user.name }}</mat-card-title>
+      <mat-card-subtitle>{{ user.nickname }}</mat-card-subtitle>
+    </mat-card>
+</div>

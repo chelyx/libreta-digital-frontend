@@ -1,0 +1,65 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.qr-card {
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.scanner-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.scanner {
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+  border: 1px dashed rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+.scanner-result {
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.manual-token {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.qr-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: primary;
+  margin-bottom: 16px;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.profile-card img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
+}

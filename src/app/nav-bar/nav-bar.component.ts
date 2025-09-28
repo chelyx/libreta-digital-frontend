@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 
 import { UserService } from 'src/core/service/userService';
 import { Router } from '@angular/router';
-
+import { PANELES } from 'src/core/service/userService';
 
 @Component({
   selector: 'app-nav-bar',
@@ -13,24 +13,26 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent {
+  PANELES = PANELES; // Hacemos accesible el enum en el template
   role ="";
-  title = 'libreta-digital';
-  returnTo = window.location.origin;
+  returnTo = environment.redirectUri;
   currentPanel = "";
   constructor(
     public auth: Auth0Auth,
-    private router: Router,
     private userService: UserService,
   ) {
-   this.auth.idTokenClaims$.subscribe(claims => {
-      this.role = claims?.['https://sirca.com/roles'][0] || null;
+
+    this.userService.currentPanel().subscribe(panel => {
+      this.currentPanel = panel;
+    });
+    this.userService.currentRole().subscribe(role => {
+      this.role = role;
     });
 
   }
 
   show(link: string): void {
-  this.userService.setPanel(link);
-  this.currentPanel = link;
+    this.userService.setPanel(link);
   }
 
   logout(): void {
@@ -40,7 +42,6 @@ export class NavBarComponent {
 
   probarEmail() {
     emailjs.init({ publicKey: environment.emailjs.publicKey });
-
     emailjs.send(
       environment.emailjs.serviceId,
       environment.emailjs.templateId,

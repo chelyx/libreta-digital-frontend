@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService as Auth0Auth } from '@auth0/auth0-angular';
 
 @Component({
@@ -7,10 +8,23 @@ import { AuthService as Auth0Auth } from '@auth0/auth0-angular';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  constructor( public auth: Auth0Auth, ) { }
+  constructor( public auth: Auth0Auth, private route: ActivatedRoute,) {
+   }
  login(): void {
-     this.auth.loginWithRedirect({
-      appState: { target: '/home' }  // 👈 después de loguearse, redirige al /home
+   this.route.queryParams.subscribe(params => {
+      const code = params['code'];
+      if (code) {
+        // 2️⃣ Guardar en sessionStorage temporalmente
+        sessionStorage.setItem('pendingCode', code);
+      }
+    });
+
+    this.auth.loginWithRedirect({
+      appState: { target: '/home' },
+      //TODO: esto te saca la page de login y te manda directo a google
+     // authorizationParams: {
+       // connection: 'google-oauth2'
+      //}
     });
   }
 }

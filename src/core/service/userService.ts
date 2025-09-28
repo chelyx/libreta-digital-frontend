@@ -3,12 +3,25 @@ import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AuthService } from '@auth0/auth0-angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+export enum PANELES {
+  CODE_GENERATOR = 'code-generator',
+  CODE_VALIDATOR = 'code-validator',
+  MATERIAS = 'materias',
+  ASISTENCIA = 'asistencia',
+  CALIFICACIONES = 'calificaciones'
+}
+
+export enum ROLES {
+  PROFESOR = 'PROFESOR',
+  ALUMNO = 'ALUMNO',
+  ADMIN = 'ADMIN'
+}
+
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
-  // Guardamos roles como BehaviorSubject para que otros componentes puedan suscribirse
   private panel = new BehaviorSubject<string>("");
-  panel$ = this.panel.asObservable();
+  private role = new BehaviorSubject<string>("");
 
   constructor() {}
 
@@ -16,7 +29,16 @@ export class UserService {
     this.panel.next(panel);
   }
 
-  currentPanel(): string {
-    return this.panel.getValue();
+  currentPanel(): Observable<string> {
+    return this.panel.asObservable();
+  }
+
+  setRole(role: string) {
+    console.log("Role seteado en userService:", role);
+    this.role.next(role);
+  }
+
+  currentRole(): Observable<string> {
+    return this.role.asObservable();
   }
 }
