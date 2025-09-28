@@ -8,7 +8,8 @@ import { AuthService as Auth0Auth } from '@auth0/auth0-angular';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  constructor( public auth: Auth0Auth, private route: ActivatedRoute,) { }
+  constructor( public auth: Auth0Auth, private route: ActivatedRoute,) {
+   }
  login(): void {
    this.route.queryParams.subscribe(params => {
       const code = params['code'];
@@ -19,7 +20,11 @@ export class LoginComponent {
     });
 
     this.auth.loginWithRedirect({
-      appState: { target: '/home' }  // 👈 después de loguearse, redirige al /home
+      appState: { target: '/home' },
+      //TODO: esto te saca la page de login y te manda directo a google
+     // authorizationParams: {
+       // connection: 'google-oauth2'
+      //}
     });
   }
 }
