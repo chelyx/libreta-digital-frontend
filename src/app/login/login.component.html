@@ -1,12 +1,31 @@
-<div class="contenedor">
-  <div class="mensajes">
-    <h1>Bienvenido a SIRCA</h1>
-  </div>
-  <div class="seccion-blanca">
-    <img src="assets/logo.png" alt="Logo de SIRCA" class="logo">
-       <button mat-raised-button color="primary" (click)="login()">
-          ACCEDER
-        </button>
-    <p>Acceso para usuarios con cuenta Institucional</p>
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-content">
+      <h1 class="header-text">Acceso Usuario Institucional</h1>
+
+      <div class="icon-container">
+        <img src="assets/logo.png" alt="UTN Logo" class="utn-icon" />
+      </div>
+
+      <div class="logo-section">
+        <div class="logo-text">
+          <span class="utn-text">UTN</span>
+          <span class="ba-text">.BA</span>
+        </div>
+        <div class="university-info">
+          <p class="university-name">UNIVERSIDAD TECNOLÓGICA NACIONAL</p>
+          <p class="university-name">FACULTAD REGIONAL BUENOS AIRES</p>
+        </div>
+      </div>
+
+      <button mat-raised-button class="acceder-button" (click)="login()">
+        Acceder
+      </button>
+
+      <p class="footer-text">
+        Acceso para usuarios del Sistema Integrado de<br />
+        Aplicaciones de la UTN.BA
+      </p>
+    </div>
   </div>
 </div>
