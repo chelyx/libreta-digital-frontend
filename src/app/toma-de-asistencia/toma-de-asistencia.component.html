@@ -1,91 +1,113 @@
-<mat-card class="asistencia-card">
-  <mat-toolbar color="accent" class="asistencia-toolbar">
-    <div class="toolbar-content">
-      <span class="titulo">Toma de asistencia</span>
+<div class="asistencia-container">
+  <!-- Header -->
+  <div class="asistencia-header">
+    <h1 class="header-title">Toma de Asistencia</h1>
 
-      <div class="acciones-der">
-        <!-- Selección de curso -->
-        <mat-form-field appearance="outline" class="buscador">
-          <mat-label>Curso</mat-label>
-
-          <mat-select
-            [(ngModel)]="cursoSeleccionado"
-            (selectionChange)="onCursoChange($event.value)"
-            [disabled]="cursos.length === 1"
-          >
-            <!-- “Todos” SOLO para ADMIN -->
-            <mat-option  [value]="">Todos</mat-option>
-
-            <mat-option *ngFor="let c of cursos" [value]="c.id">
-              {{ c.nombre }}
-            </mat-option>
-          </mat-select>
-
-          <!-- Botón de limpiar SOLO si es Admin -->
-          <button
-            mat-icon-button
-            matSuffix
-            aria-label="Limpiar curso"
-            *ngIf=" cursoSeleccionado"
-            (click)="onCursoChange('')"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-form-field>
-
-        <!-- Búsqueda de alumno -->
-        <mat-form-field appearance="outline" class="buscador">
-          <mat-label>Buscar alumno</mat-label>
-          <input
-            matInput
-            placeholder="Nombre o DNI"
-            [(ngModel)]="filtro"
-            aria-label="Buscar alumno por nombre o DNI"
-          />
-          <button
-            mat-icon-button
-            matSuffix
-            aria-label="Limpiar búsqueda"
-            *ngIf="filtro"
-            (click)="filtro = ''"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-form-field>
-
-        <button mat-stroked-button color="primary" (click)="refrescar()">
-          <mat-icon>refresh</mat-icon>
-          <span>&nbsp;Actualizar</span>
-        </button>
-      </div>
+    <div class="header-actions">
+      <button mat-icon-button (click)="refrescar()" aria-label="Actualizar">
+        <mat-icon>refresh</mat-icon>
+      </button>
     </div>
-  </mat-toolbar>
-
-  <div class="contenido">
-    <mat-card class="lista-card">
-      <mat-card-title>
-        Alumnos <span style="opacity:.7;">({{ alumnosFiltrados.length }})</span>
-      </mat-card-title>
-
-      <div class="lista-alumnos">
-        <div class="fila" *ngFor="let a of alumnosFiltrados; trackBy: trackByDni">
-          <div class="col nombre">{{ a.apellido }}, {{ a.nombre }}</div>
-          <div class="col dni">DNI: {{ a.dni }}</div>
-          <div class="col presente">
-            <mat-checkbox color="primary" [(ngModel)]="a.presente" (change)="marcar(a)">
-              Presente
-            </mat-checkbox>
-          </div>
-        </div>
-      </div>
-
-      <div class="acciones-inferiores">
-        <button mat-raised-button color="primary" (click)="guardar()" [disabled]="saving">
-          <mat-icon *ngIf="!saving">save</mat-icon>
-          <mat-progress-spinner *ngIf="saving" diameter="18" mode="indeterminate"></mat-progress-spinner>
-          <span>&nbsp;{{ saving ? 'Guardando...' : 'Guardar' }}</span>
-        </button>
-      </div>
-    </mat-card>
   </div>
-</mat-card>
+
+  <!-- Filtros -->
+  <div class="filtros-section">
+    <!-- Selección de curso -->
+    <mat-form-field appearance="outline" class="filtro-field">
+      <mat-label>Curso</mat-label>
+      <mat-select
+        [(ngModel)]="cursoSeleccionado"
+        (selectionChange)="onCursoChange($event.value)"
+        [disabled]="cursos.length === 1"
+      >
+        <mat-option [value]="">Todos</mat-option>
+        <mat-option *ngFor="let c of cursos" [value]="c.id">
+          {{ c.nombre }}
+        </mat-option>
+      </mat-select>
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="cursoSeleccionado"
+        (click)="onCursoChange('')"
+        aria-label="Limpiar curso"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <!-- Búsqueda -->
+    <mat-form-field appearance="outline" class="filtro-field">
+      <mat-label>Buscar alumno</mat-label>
+      <input
+        matInput
+        placeholder="Nombre o DNI"
+        [(ngModel)]="filtro"
+        aria-label="Buscar alumno"
+      />
+      <mat-icon matPrefix>search</mat-icon>
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="filtro"
+        (click)="filtro = ''"
+        aria-label="Limpiar búsqueda"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <!-- Contador -->
+  <div class="contador-section">
+    <span class="contador-text">
+      {{ alumnosFiltrados.length }} alumno{{ alumnosFiltrados.length !== 1 ? 's' : '' }}
+    </span>
+  </div>
+
+  <!-- Lista de alumnos -->
+  <div class="alumnos-lista">
+    <div
+      class="alumno-card"
+      *ngFor="let a of alumnosFiltrados; trackBy: trackByDni"
+      [class.presente]="a.presente"
+    >
+      <div class="alumno-info">
+        <div class="alumno-nombre">{{ a.apellido }}, {{ a.nombre }}</div>
+        <div class="alumno-dni">DNI: {{ a.dni }}</div>
+      </div>
+
+      <mat-checkbox
+        color="primary"
+        [(ngModel)]="a.presente"
+        (change)="marcar(a)"
+        class="alumno-checkbox"
+      >
+      </mat-checkbox>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="alumnosFiltrados.length === 0">
+      <mat-icon>search_off</mat-icon>
+      <p>No se encontraron alumnos</p>
+    </div>
+  </div>
+
+  <!-- Botón guardar flotante -->
+  <div class="guardar-section">
+    <button
+      mat-raised-button
+      class="guardar-button"
+      (click)="guardar()"
+      [disabled]="saving"
+    >
+      <mat-icon *ngIf="!saving">save</mat-icon>
+      <mat-progress-spinner
+        *ngIf="saving"
+        diameter="20"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+      <span>{{ saving ? 'Guardando...' : 'Guardar Asistencia' }}</span>
+    </button>
+  </div>
+</div>
