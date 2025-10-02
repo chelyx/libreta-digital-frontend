@@ -1,21 +1,34 @@
-<div style="display:flex; gap:.75rem; flex-wrap:wrap; align-items:end">
-  <mat-form-field appearance="outline">
-    <mat-label>Materia</mat-label>
-    <mat-select [(ngModel)]="materiaId" (selectionChange)="onMateriaChange()">
-      <mat-option [value]="''">-- Seleccione --</mat-option>
-      <mat-option *ngFor="let m of materias" [value]="m.id">{{ m.codigo }} - {{ m.nombre }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+<div class="selector-container">
+  <div class="form-row">
+    <label>Materia</label>
+    <mat-form-field appearance="outline">
+      <mat-select [(ngModel)]="materiaId" (selectionChange)="onMateriaChange()">
+        <mat-option [value]="''">-- Seleccione --</mat-option>
+        <mat-option *ngFor="let m of materias" [value]="m.id">
+          {{ m.codigo }} - {{ m.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-  <mat-form-field appearance="outline" *ngIf="materiaId">
-    <mat-label>Mesa (Fecha)</mat-label>
-    <mat-select [(ngModel)]="mesaId">
-      <mat-option [value]="''">-- Seleccione --</mat-option>
-      <mat-option *ngFor="let ms of mesas" [value]="ms.id">{{ ms.fechaISO | date }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div class="form-row" *ngIf="materiaId">
+    <label>Fecha de Mesa</label>
+    <mat-form-field appearance="outline">
+      <mat-select [(ngModel)]="mesaId">
+        <mat-option [value]="''">-- Seleccione --</mat-option>
+        <mat-option *ngFor="let ms of mesas" [value]="ms.id">
+          {{ ms.fechaISO | date:'dd/MM/yyyy' }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-  <button mat-raised-button color="primary" (click)="confirmar()" [disabled]="!materiaId || !mesaId">
+  <button
+    mat-raised-button
+    class="btn-continuar"
+    (click)="confirmar()"
+    [disabled]="!materiaId || !mesaId"
+  >
     Continuar
   </button>
 </div>

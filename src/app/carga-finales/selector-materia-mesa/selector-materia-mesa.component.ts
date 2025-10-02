@@ -1,23 +1,22 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Materia, MesaFinal } from 'src/core/models/models';
-
-
 import { FinalesService } from 'src/core/service/finales.service';
 
 @Component({
-  selector: 'app-selector-materia-mesa',
-  templateUrl: './selector-materia-mesa.component.html'
+selector: 'app-selector-materia-mesa',
+templateUrl: './selector-materia-mesa.component.html',
+styleUrls: ['./selector-materia-mesa.component.scss']
 })
 export class SelectorMateriaMesaComponent implements OnInit {
-  materias: Materia[] = [];
-  mesas: MesaFinal[] = [];
+materias: Materia[] = [];
+mesas: MesaFinal[] = [];
 
-  materiaId = '';
-  mesaId = '';
+materiaId = '';
+mesaId = '';
 
-  @Output() selected = new EventEmitter<{ materiaId: string; mesaId: string }>();
+@Output() selected = new EventEmitter<{ materiaId: string; mesaId: string }>();
 
-  constructor(private svc: FinalesService) {}
+constructor(private svc: FinalesService) {}
 
   ngOnInit(): void {
     this.svc.getMaterias().subscribe(m => this.materias = m);

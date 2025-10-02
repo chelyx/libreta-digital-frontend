@@ -1,35 +1,31 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FinalesService } from 'src/core/service/finales.service';
 
-
 type Row = {
-  alumnoId: string;
-  nombre: string;
-  legajo: string;
-  email: string;
-  // valor que edita el usuario en el select: 'AUS' | '0'..'10'
-  notaValor?: string;
-  // estado de bloqueo (si ya se notificó)
-  bloqueada: boolean;
-  // si el usuario presionó "MODIFICAR NOTAS" en esta fila
-  editando?: boolean;
+alumnoId: string;
+nombre: string;
+legajo: string;
+email: string;
+notaValor?: string;
+bloqueada: boolean;
+editando?: boolean;
 };
 
 @Component({
-  selector: 'app-tabla-carga-notas',
-  templateUrl: './tabla-carga-notas.component.html'
+selector: 'app-tabla-carga-notas',
+templateUrl: './tabla-carga-notas.component.html',
+styleUrls: ['./tabla-carga-notas.component.scss']
 })
 export class TablaCargaNotasComponent implements OnChanges {
-  @Input() mesaId!: string;
+@Input() mesaId!: string;
 
-  rows: Row[] = [];
-  loading = false;
-  feedback = '';
+rows: Row[] = [];
+loading = false;
+feedback = '';
 
-  // opciones 0..10 + Ausente
-  readonly opciones = ['AUS', ...Array.from({length: 11}, (_,i)=>String(i))];
+readonly opciones = ['AUS', ...Array.from({length: 10}, (_,i)=>String(i+1))];
 
-  constructor(private svc: FinalesService) {}
+constructor(private svc: FinalesService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['mesaId']?.currentValue) this.cargar();
@@ -40,7 +36,6 @@ export class TablaCargaNotasComponent implements OnChanges {
     this.feedback = '';
 
     this.svc.getInscriptosConAlumno(this.mesaId).subscribe(ins => {
-      // base
       this.rows = ins.map(i => ({
         alumnoId: i.alumnoId,
         nombre: i.alumno.nombre,
@@ -49,7 +44,6 @@ export class TablaCargaNotasComponent implements OnChanges {
         bloqueada: false
       }));
 
-      // pinto calificaciones y bloqueo si ya se notificó
       this.svc.getCalificacionesByMesa(this.mesaId).subscribe(califs => {
         this.rows = this.rows.map(r => {
           const c = califs.find(x => x.alumnoId === r.alumnoId);
@@ -67,7 +61,6 @@ export class TablaCargaNotasComponent implements OnChanges {
   habilitarEdicion(r: Row) { r.editando = true; }
 
   guardar() {
-    // sólo envío los que están editando o no están bloqueados
     const aEnviar = this.rows
       .filter(r => r.notaValor !== undefined && (r.editando || !r.bloqueada))
       .map(r => ({
@@ -82,7 +75,6 @@ export class TablaCargaNotasComponent implements OnChanges {
     this.svc.guardarNotasYNotificar(this.mesaId, aEnviar).subscribe(({guardadas, mails, errores}) => {
       this.loading = false;
       this.feedback = `Guardadas ${guardadas} notas. Emails OK: ${mails}${errores ? ' | Errores: ' + errores : ''}.`;
-      // recargo para actualizar bloqueos y limpiar "editando"
       this.cargar();
     });
   }

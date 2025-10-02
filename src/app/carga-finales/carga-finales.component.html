@@ -1,10 +1,26 @@
-<section class="container">
-  <h1>Carga de calificaciones (Finales)</h1>
+<div class="carga-finales-page">
+  <div class="page-header">
+    <h1>Carga de Calificaciones</h1>
+    <p>Exámenes Finales</p>
+  </div>
 
-  <app-selector-materia-mesa (selected)="onSelected($event)"></app-selector-materia-mesa>
+  <div class="step-card">
+    <div class="step-header">
+      <span class="step-badge">Paso 1</span>
+      <h2>Seleccionar Mesa de Examen</h2>
+    </div>
+    <div class="step-body">
+      <app-selector-materia-mesa (selected)="onSelected($event)"></app-selector-materia-mesa>
+    </div>
+  </div>
 
-  <ng-container *ngIf="mesaId">
-    <hr>
-    <app-tabla-carga-notas [mesaId]="mesaId!"></app-tabla-carga-notas>
-  </ng-container>
-</section>
+  <div class="step-card" *ngIf="mesaId">
+    <div class="step-header">
+      <span class="step-badge">Paso 2</span>
+      <h2>Cargar Calificaciones</h2>
+    </div>
+    <div class="step-body">
+      <app-tabla-carga-notas [mesaId]="mesaId"></app-tabla-carga-notas>
+    </div>
+  </div>
+</div>
