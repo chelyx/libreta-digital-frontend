@@ -1,0 +1,151 @@
+.home-container {
+  min-height: calc(100vh - 64px);
+  background-color: #f5f5f5;
+  padding: 1rem;
+}
+
+.dashboard {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-bottom: 2rem;
+}
+
+.welcome-section {
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.welcome-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 0.5rem 0;
+}
+
+.welcome-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+}
+
+.main-action-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.card-icon {
+  width: 80px;
+  height: 80px;
+  background-color: #C41E3A;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.card-description {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+}
+
+.primary-button {
+  width: 100%;
+  max-width: 280px;
+  height: 48px;
+  font-size: 1.125rem;
+  font-weight: 500;
+  background-color: #C41E3A !important;
+  color: white !important;
+  border-radius: 8px !important;
+  margin-top: 0.5rem;
+
+  &:hover {
+    background-color: #A01828 !important;
+  }
+}
+
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.quick-actions-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #666;
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.secondary-button {
+  width: 100%;
+  height: 56px;
+  background: white !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 8px !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 0 1.5rem !important;
+  font-size: 1rem;
+  color: #1a1a1a !important;
+  text-align: left;
+
+  svg {
+    flex-shrink: 0;
+    color: #C41E3A;
+  }
+
+  &:hover {
+    background-color: #f9f9f9 !important;
+    border-color: #C41E3A !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .home-container {
+    padding: 2rem;
+  }
+
+  .dashboard {
+    gap: 2.5rem;
+  }
+
+  .main-action-card {
+    padding: 3rem 2.5rem;
+  }
+
+  .quick-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .secondary-button {
+    flex: 1;
+    min-width: 200px;
+  }
+}
