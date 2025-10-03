@@ -1,1 +1,33 @@
-<p>mis-materias works!</p>
+<div class="mis-materias-page">
+  <div class="page-header">
+    <h1>Mis Materias</h1>
+    <p>Historial Académico</p>
+  </div>
+
+  <div class="loading" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+    <p>Cargando materias...</p>
+  </div>
+
+  <div class="materias-list" *ngIf="!loading && materias.length > 0">
+    <div class="materia-card" *ngFor="let materia of materias">
+      <div class="materia-header">
+        <div class="materia-nombre">{{ materia.nombre }}</div>
+        <div class="nota-badge" [class.aprobada]="materia.nota >= 4">
+          {{ materia.nota }}
+        </div>
+      </div>
+      <div class="materia-footer">
+        <div class="fecha">
+          <mat-icon>event</mat-icon>
+          <span>{{ materia.fecha | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && materias.length === 0">
+    <mat-icon>school</mat-icon>
+    <p>No hay materias rendidas</p>
+  </div>
+</div>
