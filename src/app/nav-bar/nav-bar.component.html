@@ -1,37 +1,23 @@
 <nav class="navbar">
-  <div class="logo">
-    <img src="assets/logo.png" alt="Logo SIRCA">
+  <img src="assets/logo.png" alt="Logo SIRCA" class="logo" (click)="goToHome()">
+
+  <div class="nav-links">
+    <a *ngIf="role === 'PROFESOR'" (click)="show(PANELES.CODE_VALIDATOR)"
+       [class.active]="currentPanel === PANELES.CODE_VALIDATOR">
+      Válidar códigos
+    </a>
+    <a *ngIf="role === 'PROFESOR'" (click)="show(PANELES.ASISTENCIA)"
+       [class.active]="currentPanel === PANELES.ASISTENCIA">
+      Toma de asistencia
+    </a>
+    <a *ngIf="role === 'ALUMNO'" (click)="show(PANELES.CODE_GENERATOR)"
+       [class.active]="currentPanel === PANELES.CODE_GENERATOR">
+      Generar código
+    </a>
+    <a *ngIf="role === 'ALUMNO'" (click)="show(PANELES.MATERIAS)"
+       [class.active]="currentPanel === PANELES.MATERIAS">
+      Mis materias
+    </a>
+    <a (click)="logout()">Cerrar sesión</a>
   </div>
-
-  <ul class="menu">
-    <!-- Profesor -->
-     <span *ngIf="role === 'PROFESOR'" class="nav-group">
-      <span class="nav-item" >
-        <a [ngClass]="{selected: currentPanel === PANELES.ASISTENCIA}" (click)="show(PANELES.ASISTENCIA)">Toma de asistencia</a>
-      </span>
-      <span  class="nav-item" >
-        <a [ngClass]="{selected: currentPanel === PANELES.CODE_VALIDATOR}" (click)="show(PANELES.CODE_VALIDATOR)">Válidar códigos</a>
-      </span>
-      <span  class="nav-item" >
-        <a [ngClass]="{selected: currentPanel === PANELES.CALIFICACIONES}" (click)="show(PANELES.CALIFICACIONES)">Calificaciones</a>
-      </span>
-     </span>
-
-
-    <!-- Alumno -->
-     <span *ngIf="role === 'ALUMNO'" class="nav-group">
-      <span class="nav-item" >
-        <a [ngClass]="{selected: currentPanel === PANELES.CODE_GENERATOR}" (click)="show(PANELES.CODE_GENERATOR)">Generar código</a>
-      </span>
-      <span  class="nav-item" >
-        <a [ngClass]="{selected: currentPanel === PANELES.MATERIAS}" (click)="show(PANELES.MATERIAS)">Mis materias</a>
-      </span>
-     </span>
-
-
-    <!-- Opción común a todos -->
-    <span class="nav-item">
-      <a (click)="logout()">Cerrar sesión</a>
-    </span>
-  </ul>
 </nav>
