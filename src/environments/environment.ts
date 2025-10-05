@@ -14,7 +14,8 @@ export const environment = {
   auth0ClientId:  '0mGm99P2Jv3LhUKXOWPGDcYrhn3upEdg',
   auth0Audience: 'http://localhost:8080',
   auth0Scope: 'openid profile email',
-  redirectUri: 'http://localhost:4200'
+  redirectUri: 'http://localhost:4200',
+  apiUrl: 'http://localhost:8080'
   // redirectUri: window.location.origin
 };
 

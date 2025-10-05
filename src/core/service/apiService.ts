@@ -3,12 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '@auth0/auth0-angular';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:8080'; // Cambiar por tu URL real
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, @Inject(AuthService) private auth: AuthService) {}
   getProtegido(endpoint: string): Observable<any> {
