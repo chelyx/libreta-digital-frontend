@@ -2,7 +2,7 @@
 
 <div class="home-container">
   <!-- ALUMNO -->
-  <ng-container *ngIf="role === 'ALUMNO'">
+  <ng-container *ngIf="role === ROLES.ALUMNO">
     <div class="dashboard" *ngIf="currentPanel === ''">
       <div class="welcome-section">
         <h1 class="welcome-title">Bienvenido</h1>
@@ -20,14 +20,14 @@
         </div>
         <h2 class="card-title">Generar Código QR</h2>
         <p class="card-description">Genera tu código para registrar asistencia</p>
-        <button mat-raised-button class="primary-button" (click)="navigateToPanel('code-generator')">
+        <button mat-raised-button class="primary-button" (click)="navigateToPanel(PANELES.CODE_GENERATOR)">
           Generar QR
         </button>
       </div>
 
       <div class="quick-actions">
         <h3 class="quick-actions-title">Acceso Rápido</h3>
-        <button mat-stroked-button class="secondary-button" (click)="navigateToPanel('materias')">
+        <button mat-stroked-button class="secondary-button" (click)="navigateToPanel(PANELES.MATERIAS)">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
@@ -37,12 +37,12 @@
       </div>
     </div>
 
-    <app-code-generator *ngIf="currentPanel === 'code-generator'"></app-code-generator>
-    <app-mis-materias *ngIf="currentPanel === 'materias'"></app-mis-materias>
+    <app-code-generator *ngIf="currentPanel === PANELES.CODE_GENERATOR"></app-code-generator>
+    <app-mis-materias *ngIf="currentPanel === PANELES.MATERIAS"></app-mis-materias>
   </ng-container>
 
   <!-- PROFESOR -->
-  <ng-container *ngIf="role === 'PROFESOR'">
+  <ng-container *ngIf="role === ROLES.PROFESOR">
     <div class="dashboard" *ngIf="currentPanel === ''">
       <div class="welcome-section">
         <h1 class="welcome-title">Bienvenido Profesor</h1>
@@ -90,7 +90,7 @@
   </ng-container>
 
   <!-- BEDEL -->
-  <ng-container *ngIf="role === 'BEDEL'">
+  <ng-container *ngIf="role === ROLES.BEDEL">
     <div class="dashboard" *ngIf="currentPanel === ''">
       <div class="welcome-section">
         <h1 class="welcome-title">Bienvenido Bedel</h1>
@@ -118,7 +118,7 @@
       </div>
     </div>
 
-    <app-toma-de-asistencia *ngIf="currentPanel === 'asistencia'"></app-toma-de-asistencia>
-    <app-carga-finales *ngIf="currentPanel === 'calificaciones'"></app-carga-finales>
+    <app-toma-de-asistencia *ngIf="currentPanel === PANELES.ASISTENCIA"></app-toma-de-asistencia>
+    <app-carga-finales *ngIf="currentPanel === PANELES.CALIFICACIONES"></app-carga-finales>
   </ng-container>
 </div>

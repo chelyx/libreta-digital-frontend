@@ -35,8 +35,11 @@ export class CodeValidatorComponent {
         this.tokenValidated = true;
       },
       error: (err) =>{
+        console.log(err)
         if (err.status === 403) {
-          alert('Solo los profesores pueden validar códigos.');
+          this.snackBar.open('Solo los profesores pueden validar códigos.');
+        } else {
+          this.snackBar.open(err.error.error);
         }
         this.tokenValidated = false;
     }});

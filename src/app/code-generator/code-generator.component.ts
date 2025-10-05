@@ -20,7 +20,7 @@ export class CodeGeneratorComponent {
     private apiService: ApiService,
     private snackBar: MatSnackBar,
   ) {
-
+    this.onGenerate();
   }
 
   onGenerate() {

@@ -14,6 +14,7 @@ export enum PANELES {
 export enum ROLES {
   PROFESOR = 'PROFESOR',
   ALUMNO = 'ALUMNO',
+  BEDEL = 'BEDEL',
   ADMIN = 'ADMIN'
 }
 
