@@ -5,6 +5,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MockAsistenciasInterceptor } from './mocks/mock-asistencias.interceptor';
+
 
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { TomaDeAsistenciaComponent } from './toma-de-asistencia/toma-de-asistencia.component';
@@ -86,7 +89,13 @@ import { env } from 'process';
       useRefreshTokens: true
     }),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MockAsistenciasInterceptor,
+      multi: true,
+    },
+],
   bootstrap: [AppComponent]
 })
 export class AppModule {

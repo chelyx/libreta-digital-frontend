@@ -1,65 +1,65 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { AuthService as Auth0Auth } from '@auth0/auth0-angular';
 import { ROLES, UserService } from 'src/core/service/userService';
-
+import { AsistenciaOfflineService, AsistenciaPayload } from '../offline/asistencia-offline.service';
 
 interface Curso { id: string; nombre: string; }
-
 interface Alumno {
-  nombre: string;
-  apellido: string;
-  dni: string;
-  presente: boolean;
-  cursoId: string[];
+nombre: string;
+apellido: string;
+dni: string;
+presente: boolean;
+cursoId: string[];
 }
 
 @Component({
-  selector: 'app-toma-de-asistencia',
-  templateUrl: './toma-de-asistencia.component.html',
-  styleUrls: ['./toma-de-asistencia.component.scss'],
+selector: 'app-toma-de-asistencia',
+templateUrl: './toma-de-asistencia.component.html',
+styleUrls: ['./toma-de-asistencia.component.scss'],
 })
 export class TomaDeAsistenciaComponent implements OnInit, OnDestroy {
-  private sub?: Subscription;
-  role = '';
-  filtro = '';
-  saving = false;
+private sub?: Subscription;
+role = '';
+filtro = '';
+saving = false;
 
-  // 🔁 Copia inmutable de TODOS los cursos
-  private allCursos: Curso[] = [
-    { id: '1A', nombre: 'Redes de información' },
-    { id: '2B', nombre: 'Técnicas Avanzadas de Programación' },
-    { id: '3C', nombre: 'Proyecto Final' },
-    { id: '4C', nombre: 'Neurociencia' },
-    { id: '5C', nombre: 'Laboratorio Física 1' },
-    { id: '6C', nombre: 'Sistemas de Gestión' },
-  ];
+private allCursos: Curso[] = [
+{ id: '1A', nombre: 'Redes de información' },
+{ id: '2B', nombre: 'Técnicas Avanzadas de Programación' },
+{ id: '3C', nombre: 'Proyecto Final' },
+{ id: '4C', nombre: 'Neurociencia' },
+{ id: '5C', nombre: 'Laboratorio Física 1' },
+{ id: '6C', nombre: 'Sistemas de Gestión' },
+];
 
-  // 👇 Lista visible (se filtra según rol)
-  cursos: Curso[] = [...this.allCursos];
-  cursoSeleccionado: string = ''; // '' = Todos (solo Admin)
+cursos: Curso[] = [...this.allCursos];
+cursoSeleccionado: string = '';
 
-  alumnos: Alumno[] = [
-    { nombre: 'Ezequiel', apellido: 'Castiglione',  dni: '43234567', presente: false, cursoId: ['4C','3C'] },
-    { nombre: 'Maximiliano', apellido: 'De la Fuente',  dni: '44244668', presente: false, cursoId: ['3C'] },
-    { nombre: 'Yasmin', apellido: 'Elias',  dni: '54345678', presente: false, cursoId: ['2B','3C'] },
-    { nombre: 'Ana',     apellido: 'García', dni: '30111222', presente: false, cursoId: ['1A'] },
-    { nombre: 'Luis',    apellido: 'Pérez',  dni: '28999888', presente: true,  cursoId: ['2B'] },
-    { nombre: 'Cecilia', apellido: 'Rocca',  dni: '32123456', presente: false, cursoId: ['1A','3C','2B'] },
-    { nombre: 'Araceli', apellido: 'Soffulto',  dni: '33133557', presente: true, cursoId: ['2B'] },
-  ];
+alumnos: Alumno[] = [
+{ nombre: 'Ezequiel', apellido: 'Castiglione',  dni: '43234567', presente: false, cursoId: ['4C','3C'] },
+{ nombre: 'Maximiliano', apellido: 'De la Fuente',  dni: '44244668', presente: false, cursoId: ['3C'] },
+{ nombre: 'Yasmin', apellido: 'Elias',  dni: '54345678', presente: false, cursoId: ['2B','3C'] },
+{ nombre: 'Ana',     apellido: 'García', dni: '30111222', presente: false, cursoId: ['1A'] },
+{ nombre: 'Luis',    apellido: 'Pérez',  dni: '28999888', presente: true,  cursoId: ['2B'] },
+{ nombre: 'Cecilia', apellido: 'Rocca',  dni: '32123456', presente: false, cursoId: ['1A','3C','2B'] },
+{ nombre: 'Araceli', apellido: 'Soffulto',  dni: '33133557', presente: true, cursoId: ['2B'] },
+];
 
-  constructor(private snack: MatSnackBar, private userService: UserService) {
-
-  }
+constructor(
+    private snack: MatSnackBar,
+    private userService: UserService,
+    private offline: AsistenciaOfflineService
+  ) {}
 
   ngOnInit(): void {
-    this.userService.currentRole().subscribe(role => {
+    this.sub = this.userService.currentRole().subscribe(role => {
       this.role = role;
+      this.aplicarFiltroPorRol();
     });
-    // y una vez de arranque
-    this.aplicarFiltroPorRol();
+
+    // Si vuelve la conexión mientras esta pantalla está abierta, se intentará sincronizar.
+    this.offline.flush();
   }
 
   ngOnDestroy(): void {
@@ -67,30 +67,10 @@ export class TomaDeAsistenciaComponent implements OnInit, OnDestroy {
   }
 
   private aplicarFiltroPorRol(): void {
-    // reset a todos
     this.cursos = [...this.allCursos];
-
-    // Si es PROFESOR (y no Admin), filtrar por allowedCourseIds
     if (this.role === ROLES.PROFESOR) {
-      // const permitidos = this.appAuth.user?.allowedCourseIds ?? [];
-      // this.cursos = this.cursos.filter(c => permitidos.includes(c.id));
-
-      // // Selección coherente
-      // if (this.cursos.length === 1) {
-      //   this.cursoSeleccionado = this.cursos[0].id;
-      // } else if (this.cursos.length > 1) {
-      //   if (!this.cursoSeleccionado || !permitidos.includes(this.cursoSeleccionado)) {
-      //     this.cursoSeleccionado = this.cursos[0].id;
-      //   }
-      // } else {
-      //   // Sin cursos permitidos
-      //   this.cursoSeleccionado = '';
-      // }
-
-      // Debug útil:
-      // console.log('Cursos permitidos:', permitidos, 'Cursos visibles:', this.cursos);
+      // acá podrías filtrar this.cursos por cursos permitidos si tu UserService los trae
     }
-    // Admin: ve todos, cursoSeleccionado queda como esté ('' = Todos válido solo para Admin)
   }
 
   get alumnosFiltrados(): Alumno[] {
@@ -105,19 +85,16 @@ export class TomaDeAsistenciaComponent implements OnInit, OnDestroy {
   trackByDni = (_: number, a: Alumno) => a.dni;
 
   onCursoChange(id: string) {
-    // ⛑️ PROFESOR: no permitir 'Todos' ('') ni cursos no asignados
     if (this.role === ROLES.PROFESOR) {
-      // if (!id) return; // evita 'Todos'
-      // const permitidos = this.appAuth.user?.allowedCourseIds ?? [];
-      // if (!permitidos.includes(id)) return;
+      // aplicar validaciones si corresponde
     }
     this.cursoSeleccionado = id;
   }
 
   marcar(_a: Alumno) {}
 
-  guardar(): void {
-    const payload = {
+  async guardar(): Promise<void> {
+    const payload: AsistenciaPayload = {
       fecha: new Date().toISOString().slice(0, 10),
       cursoId: this.cursoSeleccionado || null,
       items: this.alumnosFiltrados.map(a => ({ dni: a.dni, presente: a.presente })),
@@ -125,20 +102,29 @@ export class TomaDeAsistenciaComponent implements OnInit, OnDestroy {
     };
 
     this.saving = true;
-    setTimeout(() => {
-      try {
-        const key = 'asistencia_historial';
-        const hist = JSON.parse(localStorage.getItem(key) || '[]');
-        hist.push(payload);
-        localStorage.setItem(key, JSON.stringify(hist));
-        this.snack.open('Asistencia guardada (local) ', 'OK', { duration: 2500 });
-      } catch (e) {
-        console.error('Error guardando', e);
-        this.snack.open('Error al guardar ', 'Cerrar', { duration: 3500 });
-      } finally {
-        this.saving = false;
-      }
-    }, 800);
+    try {
+      // Guarda en outbox y dispara flush si hay red
+      await this.offline.add(payload);
+
+      // (opcional) mantener historial local como tenías
+      const key = 'asistencia_historial';
+      const hist = JSON.parse(localStorage.getItem(key) || '[]');
+      hist.push(payload);
+      localStorage.setItem(key, JSON.stringify(hist));
+
+      this.snack.open(
+        navigator.onLine
+          ? 'Asistencia guardada (enviando al servidor)…'
+          : 'Asistencia guardada sin conexión. Se enviará al reconectar.',
+        'OK',
+        { duration: 3000 }
+      );
+    } catch (e) {
+      console.error('Error guardando en outbox', e);
+      this.snack.open('Error al guardar asistencia', 'Cerrar', { duration: 3500 });
+    } finally {
+      this.saving = false;
+    }
   }
 
   cancelar(): void {
