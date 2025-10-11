@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http';
 import jsQR from 'jsqr';
+import { ApiService } from 'src/core/service/apiService';
 
 @Component({
   selector: 'app-code-validator',
@@ -21,7 +22,7 @@ export class CodeValidatorComponent implements OnInit, OnDestroy {
   scanInterval: any = null;
 
   constructor(
-    private http: HttpClient,
+    private apiService: ApiService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -103,7 +104,7 @@ export class CodeValidatorComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.http.post('http://localhost:8080/api/validate-token', { token: this.token }).subscribe({
+    this.apiService.validateCode(this.token).subscribe({
       next: (response: any) => {
         this.validatedStudents.push(response);
         this.lastValidated = response;
