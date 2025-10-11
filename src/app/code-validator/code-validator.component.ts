@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http';
-import QrScanner from 'qr-scanner';
-import { ApiService } from 'src/core/service/apiService';
+import jsQR from 'jsqr';
 
 @Component({
   selector: 'app-code-validator',
@@ -10,16 +9,19 @@ import { ApiService } from 'src/core/service/apiService';
   styleUrls: ['./code-validator.component.scss']
 })
 export class CodeValidatorComponent implements OnInit, OnDestroy {
- @ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
+  @ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvas', { static: false }) canvasElement!: ElementRef<HTMLCanvasElement>;
 
   token: string = '';
   scanning: boolean = false;
   validatedStudents: any[] = [];
   lastValidated: any = null;
-  qrScanner!: QrScanner;
+
+  videoStream: MediaStream | null = null;
+  scanInterval: any = null;
 
   constructor(
-    private apiService: ApiService,
+    private http: HttpClient,
     private snackBar: MatSnackBar
   ) {}
 
@@ -29,64 +31,84 @@ export class CodeValidatorComponent implements OnInit, OnDestroy {
     if (this.scanning) {
       this.stopScanner();
     } else {
-      await this.startScanner();
+      this.scanning = true;
+
+      // Esperamos que Angular renderice el video
+      setTimeout(() => this.startScanner(), 50);
     }
   }
 
   async startScanner() {
-     if (!this.videoElement) {
-      console.error('Video element no está listo');
+    if (!this.videoElement || !this.canvasElement) {
+      console.error('Video o canvas no están listos');
       return;
     }
-    this.scanning = true;
-    const video = this.videoElement.nativeElement;
-
-   this.qrScanner = new QrScanner(
-    video,
-    result => this.validateToken(result),
-    {
-      preferredCamera: 'environment'  // fuerza cámara trasera
-    }
-);
 
     try {
-      await this.qrScanner.start();
+      this.videoStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' }
+      });
+
+      const video = this.videoElement.nativeElement;
+      video.srcObject = this.videoStream;
+      video.setAttribute('playsinline', 'true'); // iOS
+      video.muted = true;
+      await video.play();
+
+      const canvas = this.canvasElement.nativeElement;
+      const context = canvas.getContext('2d');
+      if (!context) return;
+
+      // Escaneo continuo
+      this.scanInterval = setInterval(() => {
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+          const code = jsQR(imageData.data, imageData.width, imageData.height);
+          if (code) {
+            this.token = code.data;
+            this.validateToken();
+          }
+        }
+      }, 300);
+
       this.snackBar.open('Apunta la cámara al código QR', 'Cerrar', { duration: 3000 });
     } catch (err) {
-      console.error(err);
-      this.snackBar.open('Error al abrir la cámara', 'Cerrar', { duration: 3000 });
+      console.error('Error al abrir la cámara:', err);
+      this.snackBar.open('No se pudo abrir la cámara', 'Cerrar', { duration: 3000 });
       this.scanning = false;
     }
   }
 
   stopScanner() {
-    if (this.qrScanner) {
-      this.qrScanner.stop();
+    if (this.scanInterval) {
+      clearInterval(this.scanInterval);
+      this.scanInterval = null;
     }
+
+    if (this.videoStream) {
+      this.videoStream.getTracks().forEach(track => track.stop());
+      this.videoStream = null;
+    }
+
     this.scanning = false;
   }
 
-  validateToken(result: QrScanner.ScanResult) {
-    console.log('QR Code detected:', result);
-
-    this.onValidate(this.token.trim()); //TODO use result
-  }
-
-  validateManual() {
+  validateToken() {
     if (!this.token || this.token.trim() === '') {
       this.snackBar.open('Por favor ingrese un token', 'Cerrar', { duration: 3000 });
       return;
     }
-    this.onValidate(this.token.trim());
-  }
 
-  onValidate(token:string){
-     this.apiService.validateCode(token).subscribe({
+    this.http.post('http://localhost:8080/api/validate-token', { token: this.token }).subscribe({
       next: (response: any) => {
         this.validatedStudents.push(response);
         this.lastValidated = response;
 
-        // Limpiar input
+        // Limpiar input para el siguiente QR
         this.token = '';
 
         // Resaltar temporalmente
@@ -94,7 +116,7 @@ export class CodeValidatorComponent implements OnInit, OnDestroy {
 
         this.snackBar.open('Token validado correctamente', 'Cerrar', { duration: 3000 });
       },
-      error: (err) => {
+      error: () => {
         this.snackBar.open('Error al validar el token', 'Cerrar', { duration: 3000 });
       }
     });

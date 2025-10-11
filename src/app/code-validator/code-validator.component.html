@@ -19,6 +19,7 @@
 
       <div *ngIf="scanning" class="camera-container">
         <video #video autoplay muted playsinline></video>
+        <canvas #canvas style="display: none;"></canvas>
         <p class="hint">Apuntá la cámara al código QR</p>
       </div>
 
@@ -36,7 +37,7 @@
         <button
           mat-raised-button
           color="primary"
-          (click)="validateManual()"
+          (click)="validateToken()"
           [disabled]="scanning"
           class="validate-button"
         >
