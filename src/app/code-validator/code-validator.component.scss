@@ -1,65 +1,55 @@
 .container {
   max-width: 600px;
-  margin: 0 auto;
+  margin: 2rem auto;
+  padding: 1rem;
 }
 
 .qr-card {
-  border: 1px solid rgba(0,0,0,0.1);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
 }
 
-.text-center {
+.camera-button {
+  display: block;
+  margin: 1rem auto;
+}
+
+.camera-container {
+  margin: 1rem 0;
   text-align: center;
+
+  video {
+    width: 100%;
+    max-width: 400px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+  }
 }
 
-.scanner-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+.manual-input {
+  margin-top: 1rem;
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 
-.scanner {
+.full-width {
   width: 100%;
-  height: 300px;
-  border-radius: 8px;
-  border: 1px dashed rgba(0,0,0,0.3);
-  overflow: hidden;
 }
 
-.scanner-result {
-  margin-top: 8px;
-  font-weight: 500;
+.validate-button {
+  width: 100%;
+  margin-top: 1rem;
 }
 
-.manual-token {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 16px;
-}
+.success-card {
+  background-color: #e8f5e9;
 
-.qr-success {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: primary;
-  margin-bottom: 16px;
-}
-
-.profile-card {
-  display: flex;
-  align-items: center;
-  padding: 8px;
-  max-width: 300px;
-  margin: 0 auto;
-}
-
-.profile-card img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 16px;
+  pre {
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+  }
 }

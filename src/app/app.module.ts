@@ -39,6 +39,7 @@ import { TablaCargaNotasComponent } from './carga-finales/tabla-carga-notas/tabl
 import { QRCodeModule } from 'angularx-qrcode';
 import { environment } from '../environments/environment';
 import { env } from 'process';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,7 +62,6 @@ import { env } from 'process';
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
-
     // Material
     MatButtonModule,
     MatListModule,
@@ -107,4 +107,5 @@ export class AppModule {
     matIconRegistry.registerFontClassAlias('material-symbols-outlined', 'material-symbols-outlined');
     matIconRegistry.setDefaultFontSetClass('material-symbols-outlined');
   }
+
 }
