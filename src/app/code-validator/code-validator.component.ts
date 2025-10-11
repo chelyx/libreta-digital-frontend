@@ -37,10 +37,13 @@ export class CodeValidatorComponent implements OnInit, OnDestroy {
     this.scanning = true;
     const video = this.videoElement.nativeElement;
 
-    this.qrScanner = new QrScanner(video, (result: string) => {
-      this.token = result;
-      this.validateToken();
-    });
+   this.qrScanner = new QrScanner(
+    video,
+    result => this.validateToken(result),
+    {
+      preferredCamera: 'environment'  // fuerza cámara trasera
+    }
+);
 
     try {
       await this.qrScanner.start();
@@ -59,13 +62,22 @@ export class CodeValidatorComponent implements OnInit, OnDestroy {
     this.scanning = false;
   }
 
-  validateToken() {
+  validateToken(result: QrScanner.ScanResult) {
+    console.log('QR Code detected:', result);
+
+    this.onValidate(this.token.trim()); //TODO use result
+  }
+
+  validateManual() {
     if (!this.token || this.token.trim() === '') {
       this.snackBar.open('Por favor ingrese un token', 'Cerrar', { duration: 3000 });
       return;
     }
+    this.onValidate(this.token.trim());
+  }
 
-    this.apiService.validateCode(this.token).subscribe({
+  onValidate(token:string){
+     this.apiService.validateCode(token).subscribe({
       next: (response: any) => {
         this.validatedStudents.push(response);
         this.lastValidated = response;
