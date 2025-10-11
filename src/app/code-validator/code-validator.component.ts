@@ -10,7 +10,7 @@ import { ApiService } from 'src/core/service/apiService';
   styleUrls: ['./code-validator.component.scss']
 })
 export class CodeValidatorComponent implements OnInit, OnDestroy {
-  @ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
+ @ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
 
   token: string = '';
   scanning: boolean = false;
@@ -34,6 +34,10 @@ export class CodeValidatorComponent implements OnInit, OnDestroy {
   }
 
   async startScanner() {
+     if (!this.videoElement) {
+      console.error('Video element no está listo');
+      return;
+    }
     this.scanning = true;
     const video = this.videoElement.nativeElement;
 
