@@ -68,9 +68,11 @@ export class CodeValidatorComponent implements OnInit, OnDestroy {
           context.drawImage(video, 0, 0, canvas.width, canvas.height);
           const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-          const code = jsQR(imageData.data, imageData.width, imageData.height);
-          if (code) {
-            this.token = code.data;
+          const qrData = jsQR(imageData.data, imageData.width, imageData.height);
+          if (qrData) {
+            const url = new URL(qrData.data);
+            this.token = url.searchParams.get('code') || '';
+
             this.validateToken();
           }
         }
