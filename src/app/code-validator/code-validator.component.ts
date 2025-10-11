@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http';
+import jsQR from 'jsqr';
 
 @Component({
 selector: 'app-code-validator',
@@ -16,6 +17,7 @@ scanning: boolean = false;
 validated: boolean = false;
 studentData: any = null;
 stream: MediaStream | null = null;
+scanningInterval: any = null;
 
 constructor(
     private http: HttpClient,
@@ -41,11 +43,18 @@ constructor(
 
       setTimeout(() => {
         if (this.videoElement) {
-          this.videoElement.nativeElement.srcObject = this.stream;
+          const video = this.videoElement.nativeElement;
+          video.srcObject = this.stream;
+          video.play();
+
+          // Iniciar escaneo continuo
+          this.scanningInterval = setInterval(() => {
+            this.scanQRCode();
+          }, 300);
         }
       }, 100);
 
-      this.snackBar.open('Cámara activada - Escanea el código QR', 'Cerrar', { duration: 3000 });
+      this.snackBar.open('Apunta la cámara al código QR', 'Cerrar', { duration: 3000 });
     } catch (err) {
       console.error('Error opening camera:', err);
       this.snackBar.open('Error al abrir la cámara', 'Cerrar', { duration: 3000 });
@@ -53,7 +62,36 @@ constructor(
     }
   }
 
+  scanQRCode(): void {
+    if (!this.videoElement || !this.canvasElement) return;
+
+    const video = this.videoElement.nativeElement;
+    const canvas = this.canvasElement.nativeElement;
+    const context = canvas.getContext('2d');
+
+    if (!context || video.readyState !== video.HAVE_ENOUGH_DATA) return;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+    if (code) {
+      console.log('[v0] QR Code detected:', code.data);
+      this.token = code.data;
+      this.stopCamera();
+      this.validateToken();
+    }
+  }
+
   stopCamera(): void {
+    if (this.scanningInterval) {
+      clearInterval(this.scanningInterval);
+      this.scanningInterval = null;
+    }
+
     if (this.stream) {
       this.stream.getTracks().forEach(track => track.stop());
       this.stream = null;
