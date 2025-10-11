@@ -1,124 +1,90 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http';
-import jsQR from 'jsqr';
+import QrScanner from 'qr-scanner';
+import { ApiService } from 'src/core/service/apiService';
 
 @Component({
-selector: 'app-code-validator',
-templateUrl: './code-validator.component.html',
-styleUrls: ['./code-validator.component.scss']
+  selector: 'app-code-validator',
+  templateUrl: './code-validator.component.html',
+  styleUrls: ['./code-validator.component.scss']
 })
 export class CodeValidatorComponent implements OnInit, OnDestroy {
-@ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
-@ViewChild('canvas', { static: false }) canvasElement!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
 
-token: string = '';
-scanning: boolean = false;
-validated: boolean = false;
-studentData: any = null;
-stream: MediaStream | null = null;
-scanningInterval: any = null;
+  token: string = '';
+  scanning: boolean = false;
+  validatedStudents: any[] = [];
+  lastValidated: any = null;
+  qrScanner!: QrScanner;
 
-constructor(
-    private http: HttpClient,
+  constructor(
+    private apiService: ApiService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {}
 
-  async toggleCamera(): Promise<void> {
+  async toggleScanner() {
     if (this.scanning) {
-      this.stopCamera();
+      this.stopScanner();
     } else {
-      await this.startCamera();
+      await this.startScanner();
     }
   }
 
-  async startCamera(): Promise<void> {
+  async startScanner() {
+    this.scanning = true;
+    const video = this.videoElement.nativeElement;
+
+    this.qrScanner = new QrScanner(video, (result: string) => {
+      this.token = result;
+      this.validateToken();
+    });
+
     try {
-      this.scanning = true;
-      this.stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' }
-      });
-
-      setTimeout(() => {
-        if (this.videoElement) {
-          const video = this.videoElement.nativeElement;
-          video.srcObject = this.stream;
-          video.play();
-
-          // Iniciar escaneo continuo
-          this.scanningInterval = setInterval(() => {
-            this.scanQRCode();
-          }, 300);
-        }
-      }, 100);
-
+      await this.qrScanner.start();
       this.snackBar.open('Apunta la cámara al código QR', 'Cerrar', { duration: 3000 });
     } catch (err) {
-      console.error('Error opening camera:', err);
+      console.error(err);
       this.snackBar.open('Error al abrir la cámara', 'Cerrar', { duration: 3000 });
       this.scanning = false;
     }
   }
 
-  scanQRCode(): void {
-    if (!this.videoElement || !this.canvasElement) return;
-
-    const video = this.videoElement.nativeElement;
-    const canvas = this.canvasElement.nativeElement;
-    const context = canvas.getContext('2d');
-
-    if (!context || video.readyState !== video.HAVE_ENOUGH_DATA) return;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-    if (code) {
-      console.log('[v0] QR Code detected:', code.data);
-      this.token = code.data;
-      this.stopCamera();
-      this.validateToken();
-    }
-  }
-
-  stopCamera(): void {
-    if (this.scanningInterval) {
-      clearInterval(this.scanningInterval);
-      this.scanningInterval = null;
-    }
-
-    if (this.stream) {
-      this.stream.getTracks().forEach(track => track.stop());
-      this.stream = null;
+  stopScanner() {
+    if (this.qrScanner) {
+      this.qrScanner.stop();
     }
     this.scanning = false;
   }
 
-  validateToken(): void {
+  validateToken() {
     if (!this.token || this.token.trim() === '') {
       this.snackBar.open('Por favor ingrese un token', 'Cerrar', { duration: 3000 });
       return;
     }
 
-    // Cambiá esta URL por la de tu backend
-    this.http.post('http://localhost:8080/api/validate-token', { token: this.token }).subscribe({
+    this.apiService.validateCode(this.token).subscribe({
       next: (response: any) => {
-        this.validated = true;
-        this.studentData = response;
+        this.validatedStudents.push(response);
+        this.lastValidated = response;
+
+        // Limpiar input
+        this.token = '';
+
+        // Resaltar temporalmente
+        setTimeout(() => this.lastValidated = null, 3000);
+
         this.snackBar.open('Token validado correctamente', 'Cerrar', { duration: 3000 });
       },
-      error: (error: any) => {
+      error: (err) => {
         this.snackBar.open('Error al validar el token', 'Cerrar', { duration: 3000 });
       }
     });
   }
 
   ngOnDestroy(): void {
-    this.stopCamera();
+    this.stopScanner();
   }
 }

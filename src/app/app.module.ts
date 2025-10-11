@@ -38,7 +38,6 @@ import { CargaFinalesComponent } from './carga-finales/carga-finales.component';
 import { TablaCargaNotasComponent } from './carga-finales/tabla-carga-notas/tabla-carga-notas.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { environment } from '../environments/environment';
-import { env } from 'process';
 
 @NgModule({
   declarations: [
