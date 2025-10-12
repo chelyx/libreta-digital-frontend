@@ -18,13 +18,13 @@ ROLES = ROLES;
 
 constructor(private auth: AuthService, public userService: UserService, public ux: UxService) {}
   mainCards: MainCard[] = [];
-  quickActions: Actions[] = [];
+  actions: Actions[] = [];
   ngOnInit(): void {
     this.auth.idTokenClaims$.subscribe(claims => {
       this.role = claims?.[this.sircaRoles][0] || null;
       this.userService.setRole(this.role!);
       this.ux.role = this.role;
-      this.quickActions = this.ux.getActionsByRole().filter(action => !action.main);
+      this.actions = this.ux.getActionsByRole();
       this.mainCards = this.ux.getMainCardsByRole();
     });
 
@@ -44,5 +44,15 @@ constructor(private auth: AuthService, public userService: UserService, public u
 
   navigateToPanel(panel: string): void {
     this.ux.setPanel(panel);
+  }
+
+  goToHome(): void {
+    this.ux.setPanel('');
+  }
+
+  logout(): void {
+    this.auth.logout({
+      logoutParams: { returnTo: document.location.origin }
+    });
   }
 }

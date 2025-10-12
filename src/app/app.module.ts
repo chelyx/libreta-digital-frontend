@@ -8,8 +8,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MockAsistenciasInterceptor } from './mocks/mock-asistencias.interceptor';
 
-
-import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { TomaDeAsistenciaComponent } from './toma-de-asistencia/toma-de-asistencia.component';
 
 // Material
@@ -43,7 +41,6 @@ import { environment } from '../environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
-    NavBarComponent,
     TomaDeAsistenciaComponent,
     CodeGeneratorComponent,
     HomeComponent,
