@@ -1,61 +1,55 @@
-<div class="container">
-  <mat-card class="qr-card">
-    <mat-card-header>
-      <mat-card-title>Validar Asistencia</mat-card-title>
-      <mat-card-subtitle>
-        Escanea el código QR del alumno o ingresá el token manualmente
-      </mat-card-subtitle>
-    </mat-card-header>
+<div class="validation-container">
+  <h2>Validar Asistencia</h2>
+  <p class="subtitle">Escaneá el código QR del alumno o ingresá el token manualmente</p>
 
-    <mat-card-content>
-      <button
-        mat-fab
-        [color]="scanning ? 'warn' : 'primary'"
-        (click)="toggleScanner()"
-        class="camera-button"
-      >
-        <mat-icon>{{ scanning ? 'close' : 'photo_camera' }}</mat-icon>
+  <!-- Vista de cámara -->
+  <div class="scanner-wrapper" *ngIf="scanning; else manualMode">
+    <div class="video-container">
+      <video #video  autoplay muted playsinline></video>
+      <canvas #canvas style="display: none;"></canvas>
+    </div>
+
+    <div class="scanner-actions">
+      <button mat-mini-fab color="warn" (click)="stopScanner()"  matTooltip="Ingresar token manualmente">
+        <mat-icon>edit</mat-icon>
       </button>
+    </div>
 
-      <div *ngIf="scanning" class="camera-container">
-        <video #video autoplay muted playsinline></video>
-        <canvas #canvas style="display: none;"></canvas>
-        <p class="hint">Apuntá la cámara al código QR</p>
-      </div>
+    <div class="status">
+      <mat-icon *ngIf="!isReading">hourglass_empty</mat-icon>
+      <mat-icon *ngIf="isReading">center_focus_strong</mat-icon>
+      <span *ngIf="!isReading">Procesando...</span>
+      <span *ngIf="isReading">Listo para escanear</span>
+    </div>
+  </div>
 
-      <div class="manual-input" [class.disabled]="scanning">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Ingresar token manualmente</mat-label>
-          <input
-            matInput
-            [(ngModel)]="token"
-            [disabled]="scanning"
-            placeholder="Ingrese el token"
-          />
-        </mat-form-field>
+  <!-- Modo manual -->
+  <ng-template #manualMode>
+    <div class="manual-section">
+      <mat-form-field appearance="outline" class="token-input">
+        <mat-label>Ingresar token manualmente</mat-label>
+        <input matInput [(ngModel)]="token" type="number" />
+      </mat-form-field>
 
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="validateToken()"
-          [disabled]="scanning"
-          class="validate-button"
-        >
-          Validar Token
+      <div class="manual-buttons">
+        <button mat-raised-button color="primary" (click)="validateToken()">Validar Token</button>
+        <button mat-stroked-button color="primary" (click)="toggleScanner()">
+          <mat-icon>photo_camera</mat-icon> Usar cámara
         </button>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </ng-template>
 
+  <!-- Lista de alumnos validados -->
   <mat-card *ngIf="validatedStudents.length > 0" class="success-card">
     <mat-card-header>
-      <mat-card-title>Alumnos Validados</mat-card-title>
+      <mat-card-title>Alumnos Validados  ({{ validatedStudents.length }})</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <mat-list>
         <mat-list-item *ngFor="let student of validatedStudents; let i = index">
-          <div [class.highlight]="student === lastValidated">
-            <strong>{{ i + 1 }}.</strong> {{ student.name }} - {{ student.id }}
+          <div class="s-card" [class.highlight]="student === lastValidated">
+            <img mat-card-avatar [src]="student.picture" alt="{{ student.name }}"> {{ student.name }} - {{ student.email }}
           </div>
         </mat-list-item>
       </mat-list>
