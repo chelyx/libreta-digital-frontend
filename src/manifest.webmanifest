@@ -1,0 +1,17 @@
+{
+  "name": "SIRCA",
+  "short_name": "SIRCA",
+  "theme_color": "#c62828",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "assets/icons/SIRCA.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
+
