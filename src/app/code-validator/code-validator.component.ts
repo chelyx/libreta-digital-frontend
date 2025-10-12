@@ -39,52 +39,62 @@ export class CodeValidatorComponent implements OnInit, OnDestroy {
     }
   }
 
-  async startScanner() {
-    if (!this.videoElement || !this.canvasElement) {
-      console.error('Video o canvas no están listos');
-      return;
-    }
+ async startScanner() {
+  if (!this.videoElement || !this.canvasElement) {
+    console.error('Video o canvas no están listos');
+    return;
+  }
 
-    try {
-      this.videoStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' }
-      });
+  try {
+    this.videoStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' }
+    });
 
-      const video = this.videoElement.nativeElement;
-      video.srcObject = this.videoStream;
-      video.setAttribute('playsinline', 'true'); // iOS
-      video.muted = true;
-      await video.play();
+    const video = this.videoElement.nativeElement;
+    video.srcObject = this.videoStream;
+    video.setAttribute('playsinline', 'true'); // iOS
+    video.muted = true;
+    await video.play();
 
-      const canvas = this.canvasElement.nativeElement;
-      const context = canvas.getContext('2d');
-      if (!context) return;
+    const canvas = this.canvasElement.nativeElement;
+    const context = canvas.getContext('2d');
+    if (!context) return;
 
-      // Escaneo continuo
-      this.scanInterval = setInterval(() => {
-        if (video.readyState === video.HAVE_ENOUGH_DATA) {
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          context.drawImage(video, 0, 0, canvas.width, canvas.height);
-          const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    // Escaneo controlado
+    this.scanInterval = setInterval(() => {
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-          const qrData = jsQR(imageData.data, imageData.width, imageData.height);
-          if (qrData) {
+        const qrData = jsQR(imageData.data, imageData.width, imageData.height);
+        if (qrData) {
+          // Detenemos inmediatamente el escaneo para no leer varias veces
+          this.stopScanner();
+
+          try {
             const url = new URL(qrData.data);
             this.token = url.searchParams.get('code') || '';
-
-            this.validateToken();
+          } catch {
+            this.token = qrData.data; // Por si no es URL
           }
-        }
-      }, 300);
 
-      this.snackBar.open('Apunta la cámara al código QR', 'Cerrar', { duration: 3000 });
-    } catch (err) {
-      console.error('Error al abrir la cámara:', err);
-      this.snackBar.open('No se pudo abrir la cámara', 'Cerrar', { duration: 3000 });
-      this.scanning = false;
-    }
+          this.validateToken(); // Ejecutás tu validación
+          this.snackBar.open('QR detectado. Escaneo detenido.', 'Volver a escanear', {
+            duration: 3000
+          });
+        }
+      }
+    }, 300);
+
+    this.snackBar.open('Apunta la cámara al código QR', 'Cerrar', { duration: 3000 });
+  } catch (err) {
+    console.error('Error al abrir la cámara:', err);
+    this.snackBar.open('No se pudo abrir la cámara', 'Cerrar', { duration: 3000 });
+    this.scanning = false;
   }
+}
 
   stopScanner() {
     if (this.scanInterval) {
