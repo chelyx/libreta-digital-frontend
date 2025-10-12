@@ -1,151 +1,125 @@
-.home-container {
-  min-height: calc(100vh - 64px);
-  background-color: #f5f5f5;
-  padding: 1rem;
+app-nav-bar {
+  position: fixed; /* la hace fija */
+  top: 0;          /* pegada arriba */
+  left: 0;         /* pegada a la izquierda */
+  width: 100%;     /* que ocupe todo el ancho */
+  z-index: 1000;   /* para que quede encima del contenido */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 2rem;
+  background-color: white;
+  border-bottom: 2px solid #c62828;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.dashboard {
-  max-width: 600px;
-  margin: 0 auto;
+.home-container {
+  padding-top: 80px; // navbar fija
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 2rem;
-  padding-bottom: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .welcome-section {
   text-align: center;
-  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+
+  .welcome-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #c62828;
+  }
+
+  .welcome-subtitle {
+    font-size: 1.2rem;
+    color: #555;
+  }
 }
 
-.welcome-title {
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0 0 0.5rem 0;
-}
-
-.welcome-subtitle {
-  font-size: 1rem;
-  color: #666;
-  margin: 0;
+.cards-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 
 .main-action-card {
-  background: white;
+  background-color: #fff;
+  border: 1px solid #c62828;
   border-radius: 12px;
-  padding: 2.5rem 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 2rem;
   text-align: center;
-}
-
-.card-icon {
-  width: 80px;
-  height: 80px;
-  background-color: #C41E3A;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  margin-bottom: 0.5rem;
-}
-
-.card-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0;
-}
-
-.card-description {
-  font-size: 1rem;
-  color: #666;
-  margin: 0;
-}
-
-.primary-button {
+  max-width: 400px;
   width: 100%;
-  max-width: 280px;
-  height: 48px;
-  font-size: 1.125rem;
-  font-weight: 500;
-  background-color: #C41E3A !important;
-  color: white !important;
-  border-radius: 8px !important;
-  margin-top: 0.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 
   &:hover {
-    background-color: #A01828 !important;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  mat-icon{
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 1rem;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-description {
+    color: #555;
+    margin-bottom: 1rem;
   }
 }
 
 .quick-actions {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.quick-actions-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #666;
-  margin: 0 0 0.5rem 0;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.secondary-button {
-  width: 100%;
-  height: 56px;
-  background: white !important;
-  border: 1px solid #e0e0e0 !important;
-  border-radius: 8px !important;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  flex-wrap: wrap;
   gap: 1rem;
-  padding: 0 1.5rem !important;
-  font-size: 1rem;
-  color: #1a1a1a !important;
-  text-align: left;
+  justify-content: center;
+  margin-top: 2rem;
 
-  svg {
-    flex-shrink: 0;
-    color: #C41E3A;
+ button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+
+    padding: 1rem 1.5rem;      // más grande
+    min-width: 140px;          // ancho mínimo
+    min-height: 80px;          // alto mínimo
+    font-size: 1rem;
+
+    mat-icon {
+      font-size: 36px;
+      height: 36px;
+      width: 36px;
+    }
   }
 
-  &:hover {
-    background-color: #f9f9f9 !important;
-    border-color: #C41E3A !important;
+  .quick-actions-title {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #c62828;
   }
 }
 
-@media (min-width: 768px) {
-  .home-container {
-    padding: 2rem;
-  }
-
-  .dashboard {
-    gap: 2.5rem;
-  }
-
-  .main-action-card {
-    padding: 3rem 2.5rem;
-  }
-
-  .quick-actions {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .secondary-button {
-    flex: 1;
-    min-width: 200px;
+@media (max-width: 768px) {
+  .main-action-card, .quick-actions {
+    width: 90%;
+    flex-direction: column;
   }
 }

@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http';
 import jsQR from 'jsqr';
 import { ApiService } from 'src/core/service/apiService';
+import { UserValidatedClass } from 'src/core/models/user';
 
 @Component({
   selector: 'app-code-validator',
@@ -117,7 +118,7 @@ export class CodeValidatorComponent implements OnInit, OnDestroy {
     }
 
     this.apiService.validateCode(this.token).subscribe({
-      next: (response: any) => {
+      next: (response: UserValidatedClass) => {
         this.validatedStudents.push(response);
         this.lastValidated = response;
 

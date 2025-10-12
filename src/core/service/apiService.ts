@@ -4,6 +4,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { UserValidatedClass } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,7 @@ export class ApiService {
     return this.postProtegido('api/codes/generate', {});
   }
 
-  validateCode(code: string): Observable<any> {
+  validateCode(code: string): Observable<UserValidatedClass> {
     return this.postProtegido('api/codes/validate', { code });
   }
 }

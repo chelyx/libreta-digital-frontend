@@ -37,6 +37,7 @@ import { SelectorMateriaMesaComponent } from './carga-finales/selector-materia-m
 import { CargaFinalesComponent } from './carga-finales/carga-finales.component';
 import { TablaCargaNotasComponent } from './carga-finales/tabla-carga-notas/tabla-carga-notas.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import {MatSidenavModule} from '@angular/material/sidenav';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -59,6 +60,7 @@ import { environment } from '../environments/environment';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatSidenavModule,
     HttpClientModule,
     FormsModule,
     // Material

@@ -1,124 +1,52 @@
-<app-nav-bar></app-nav-bar>
+<app-nav-bar [role]="role" ></app-nav-bar>
 
 <div class="home-container">
-  <!-- ALUMNO -->
-  <ng-container *ngIf="role === ROLES.ALUMNO">
-    <div class="dashboard" *ngIf="currentPanel === ''">
-      <div class="welcome-section">
-        <h1 class="welcome-title">Bienvenido</h1>
-        <p class="welcome-subtitle">Sistema de Asistencia UTN.BA</p>
-      </div>
 
-      <div class="main-action-card">
-        <div class="card-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="7" height="7"/>
-            <rect x="14" y="3" width="7" height="7"/>
-            <rect x="14" y="14" width="7" height="7"/>
-            <rect x="3" y="14" width="7" height="7"/>
-          </svg>
-        </div>
-        <h2 class="card-title">Generar Código QR</h2>
-        <p class="card-description">Genera tu código para registrar asistencia</p>
-        <button mat-raised-button class="primary-button" (click)="navigateToPanel(PANELES.CODE_GENERATOR)">
-          Generar QR
-        </button>
-      </div>
+  <!-- DASHBOARD -->
+  <div class="dashboard" *ngIf="currentPanel === ''">
 
-      <div class="quick-actions">
-        <h3 class="quick-actions-title">Acceso Rápido</h3>
-        <button mat-stroked-button class="secondary-button" (click)="navigateToPanel(PANELES.MATERIAS)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-          </svg>
-          Mis Materias
-        </button>
+    <div class="welcome-section">
+      <h1 class="welcome-title">
+        Bienvenido
+        <span *ngIf="role === ROLES.PROFESOR">Profesor</span>
+        <span *ngIf="role === ROLES.BEDEL">Bedel</span>
+      </h1>
+      <p class="welcome-subtitle">
+        {{ role === ROLES.ALUMNO ? 'Sistema de Asistencia UTN.BA' : role === ROLES.PROFESOR ? 'Sistema de Gestión Académica' : 'Sistema de Gestión Administrativa' }}
+      </p>
+    </div>
+
+    <!-- MAIN CARDS -->
+    <div class="cards-container" *ngIf="mainCards.length > 0">
+      <div class="main-action-card" *ngFor="let card of mainCards" (click)="navigateToPanel(card.panel)">
+        <mat-icon>
+          {{ card.icon }}
+        </mat-icon>
+        <h2 class="card-title">{{ card.title }}</h2>
+        <p class="card-description">{{ card.description }}</p>
+        <button mat-raised-button [color]="card.color">{{ card.buttonLabel }}</button>
       </div>
     </div>
 
-    <app-code-generator *ngIf="currentPanel === PANELES.CODE_GENERATOR"></app-code-generator>
-    <app-mis-materias *ngIf="currentPanel === PANELES.MATERIAS"></app-mis-materias>
-  </ng-container>
-
-  <!-- PROFESOR -->
-  <ng-container *ngIf="role === ROLES.PROFESOR">
-    <div class="dashboard" *ngIf="currentPanel === ''">
-      <div class="welcome-section">
-        <h1 class="welcome-title">Bienvenido Profesor</h1>
-        <p class="welcome-subtitle">Sistema de Gestión Académica</p>
-      </div>
-
-      <div class="main-action-card">
-        <div class="card-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 11 12 14 22 4"/>
-            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-          </svg>
-        </div>
-        <h2 class="card-title">Validar Código QR</h2>
-        <p class="card-description">Escanea el código de los alumnos</p>
-        <button mat-raised-button class="primary-button" (click)="navigateToPanel('code-validator')">
-          Validar QR
-        </button>
-      </div>
-
-      <div class="quick-actions">
-        <h3 class="quick-actions-title">Acceso Rápido</h3>
-        <button mat-stroked-button class="secondary-button" (click)="navigateToPanel('asistencia')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-          Toma de Asistencia
-        </button>
-        <button mat-stroked-button class="secondary-button" (click)="navigateToPanel('calificaciones')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-            <polyline points="14 2 14 8 20 8"/>
-          </svg>
-          Carga de Finales
-        </button>
-      </div>
+    <!-- QUICK ACTIONS -->
+    <div class="quick-actions" *ngIf="quickActions.length > 0">
+      <h3 class="quick-actions-title">Acceso Rápido</h3>
+      <button
+              mat-stroked-button
+              *ngFor="let action of quickActions"
+              (click)="navigateToPanel(action.panel)">
+        <mat-icon>{{ action.icon }}</mat-icon>
+        {{ action.label }}
+      </button>
     </div>
 
-    <app-toma-de-asistencia *ngIf="currentPanel === 'asistencia'"></app-toma-de-asistencia>
-    <app-code-validator *ngIf="currentPanel === 'code-validator'"></app-code-validator>
-    <app-carga-finales *ngIf="currentPanel === 'calificaciones'"></app-carga-finales>
-  </ng-container>
+  </div>
 
-  <!-- BEDEL -->
-  <ng-container *ngIf="role === ROLES.BEDEL">
-    <div class="dashboard" *ngIf="currentPanel === ''">
-      <div class="welcome-section">
-        <h1 class="welcome-title">Bienvenido Bedel</h1>
-        <p class="welcome-subtitle">Sistema de Gestión Administrativa</p>
-      </div>
+  <!-- PANELS -->
+  <app-code-generator *ngIf="currentPanel === PANELES.CODE_GENERATOR"></app-code-generator>
+  <app-mis-materias *ngIf="currentPanel === PANELES.MATERIAS"></app-mis-materias>
+  <app-toma-de-asistencia *ngIf="currentPanel === PANELES.ASISTENCIA "></app-toma-de-asistencia>
+  <app-code-validator *ngIf="currentPanel === PANELES.CODE_VALIDATOR"></app-code-validator>
+  <app-carga-finales *ngIf="currentPanel === PANELES.CALIFICACIONES"></app-carga-finales>
 
-      <div class="quick-actions">
-        <h3 class="quick-actions-title">Funciones Administrativas</h3>
-        <button mat-stroked-button class="secondary-button" (click)="navigateToPanel('asistencia')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-          Toma de Asistencia
-        </button>
-        <button mat-stroked-button class="secondary-button" (click)="navigateToPanel('calificaciones')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-            <polyline points="14 2 14 8 20 8"/>
-          </svg>
-          Carga de Finales
-        </button>
-      </div>
-    </div>
-
-    <app-toma-de-asistencia *ngIf="currentPanel === PANELES.ASISTENCIA"></app-toma-de-asistencia>
-    <app-carga-finales *ngIf="currentPanel === PANELES.CALIFICACIONES"></app-carga-finales>
-  </ng-container>
 </div>

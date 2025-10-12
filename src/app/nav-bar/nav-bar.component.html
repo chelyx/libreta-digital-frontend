@@ -1,41 +1,15 @@
 <nav class="navbar">
   <img src="assets/logo.png" alt="Logo SIRCA" class="logo" (click)="goToHome()">
 
-  <div class="nav-links">
-    <!-- Profesor -->
-    <a *ngIf="role === 'PROFESOR'" (click)="show(PANELES.CODE_VALIDATOR)"
-       [class.active]="currentPanel === PANELES.CODE_VALIDATOR">
-      Válidar códigos
-    </a>
-    <a *ngIf="role === 'PROFESOR'" (click)="show(PANELES.ASISTENCIA)"
-       [class.active]="currentPanel === PANELES.ASISTENCIA">
-      Toma de asistencia
-    </a>
-    <a *ngIf="role === 'PROFESOR'" (click)="show(PANELES.CALIFICACIONES)"
-       [class.active]="currentPanel === PANELES.CALIFICACIONES">
-      Calificaciones
-    </a>
+  <!-- Botón hamburguesa siempre visible -->
+  <button class="nav-toggle" (click)="toggleMenu()">☰</button>
 
-    <!-- Bedel -->
-    <a *ngIf="role === 'BEDEL'" (click)="show(PANELES.ASISTENCIA)"
-       [class.active]="currentPanel === PANELES.ASISTENCIA">
-      Toma de asistencia
+  <div class="nav-links" [class.active]="menuOpen">
+    <a *ngFor="let link of links"
+       (click)="show(link.panel)"
+       [class.active]="currentPanel === link.panel">
+      {{ link.label }}
     </a>
-    <a *ngIf="role === 'BEDEL'" (click)="show(PANELES.CALIFICACIONES)"
-       [class.active]="currentPanel === PANELES.CALIFICACIONES">
-      Calificaciones
-    </a>
-
-    <!-- Alumno -->
-    <a *ngIf="role === 'ALUMNO'" (click)="show(PANELES.CODE_GENERATOR)"
-       [class.active]="currentPanel === PANELES.CODE_GENERATOR">
-      Generar código
-    </a>
-    <a *ngIf="role === 'ALUMNO'" (click)="show(PANELES.MATERIAS)"
-       [class.active]="currentPanel === PANELES.MATERIAS">
-      Mis materias
-    </a>
-
     <a (click)="logout()">Cerrar sesión</a>
   </div>
 </nav>
