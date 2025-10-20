@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
+import { ApiService } from 'src/core/service/api.service';
 import { UserService, ROLES } from 'src/core/service/userService';
 import { UxService, PANELES, Actions, MainCard } from 'src/core/service/ux.service';
 
@@ -16,7 +17,7 @@ sircaRoles = 'https://sirca.com/roles';
 PANELES = PANELES;
 ROLES = ROLES;
 
-constructor(private auth: AuthService, public userService: UserService, public ux: UxService) {}
+constructor(private auth: AuthService, public userService: UserService, public ux: UxService, private apiService: ApiService ) {}
   mainCards: MainCard[] = [];
   actions: Actions[] = [];
   ngOnInit(): void {

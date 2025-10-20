@@ -23,7 +23,7 @@ export class ApiService {
     );
   }
 
-  postProtegido(endpoint: string, data: any): Observable<any> {
+  postProtegido(endpoint: string, data?: any): Observable<any> {
     return this.auth.getAccessTokenSilently().pipe(
       switchMap(token => {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -42,5 +42,13 @@ export class ApiService {
 
   validateCode(code: string): Observable<UserValidatedClass> {
     return this.postProtegido('api/codes/validate', { code });
+  }
+
+  getMisCursos(): Observable<any> {
+    return this.getProtegido('api/cursos/mios');
+  }
+
+  registerUser(): Observable<any> {
+    return this.postProtegido('api/user/register', {});
   }
 }
