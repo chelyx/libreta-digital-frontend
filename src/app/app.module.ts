@@ -38,6 +38,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { OfflineInterceptor } from 'src/core/service/interceptor';
 
 @NgModule({
   declarations: [
@@ -95,11 +96,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       }),
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MockAsistenciasInterceptor,
-      multi: true,
-    },
+     { provide: HTTP_INTERCEPTORS, useClass: OfflineInterceptor, multi: true },
 ],
   bootstrap: [AppComponent]
 })

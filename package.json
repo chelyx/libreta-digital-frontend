@@ -24,6 +24,7 @@
     "@auth0/auth0-angular": "^2.2.3",
     "@emailjs/browser": "^4.4.1",
     "angularx-qrcode": "^15.0.0",
+    "idb": "^8.0.3",
     "jsqr": "^1.4.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

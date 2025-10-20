@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http';
 import jsQR from 'jsqr';
-import { ApiService } from 'src/core/service/apiService';
+import { ApiService } from 'src/core/service/api.service';
 import { UserValidatedClass } from 'src/core/models/user';
 
 @Component({

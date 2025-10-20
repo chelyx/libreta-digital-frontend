@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, User } from '@auth0/auth0-angular';
-import { ApiService } from 'src/core/service/apiService';
+import { ApiService } from 'src/core/service/api.service';
 import { UserService } from 'src/core/service/userService';
 
 @Component({

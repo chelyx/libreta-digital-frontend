@@ -8,7 +8,7 @@ import { AuthService } from '@auth0/auth0-angular';
 
 // Si lo usás en otros lados, lo dejo inyectado
 
-import { ApiService } from 'src/core/service/apiService';
+import { ApiService } from 'src/core/service/api.service';
 import { filter, tap } from 'rxjs';
 
 @Component({
