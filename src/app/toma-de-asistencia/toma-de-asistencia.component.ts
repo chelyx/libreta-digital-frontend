@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Curso } from 'src/core/models/curso';
 import { User } from 'src/core/models/user';
 
@@ -16,17 +17,18 @@ export class TomaDeAsistenciaComponent implements OnInit {
   asistencias: { [auth0Id: string]: boolean } = {};
   saving = false;
 
-  constructor(private cursoService: ApiService) {}
+  constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-    this.refrescar();
-  }
-
-  refrescar(): void {
-    this.cursoService.getMisCursos().subscribe({
+     this.cursoService.getMisCursos().subscribe({
       next: (data) => (this.cursos = data),
       error: (err) => console.error('Error al cargar cursos', err)
     });
+  }
+
+  refrescar(): void {
+    this.onCursoChange('')
+
   }
 
   onCursoChange(curso: Curso | ''): void {
@@ -39,6 +41,13 @@ export class TomaDeAsistenciaComponent implements OnInit {
     this.asistencias = {};
     curso.alumnos.forEach((alumno) => {
       this.asistencias[alumno.auth0Id] = false;
+    });
+
+    this.cursoService.getAsistenciaPorCurso(curso.id).subscribe({
+      next: (data) => {
+        console.log('Asistencias recibidas:', data);
+      },
+      error: (err) => console.error('Error al cargar asistencias', err)
     });
   }
 
@@ -68,7 +77,11 @@ export class TomaDeAsistenciaComponent implements OnInit {
 
     // acá harías el POST al endpoint de asistencia (ejemplo)
     this.cursoService.saveAsistencia(this.cursoSeleccionado!.id,lista).subscribe({
-      next: () => this.saving = false,
+      next: (res: any) =>{
+        this.saving = false
+        this.snackBar.open(res.status, '',{ duration: 3000 });
+        this.refrescar();
+      },
       error: (err) => { console.error(err); this.saving = false; }
     });
 
