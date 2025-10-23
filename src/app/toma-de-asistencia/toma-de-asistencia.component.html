@@ -1,11 +1,12 @@
 <div class="asistencia-container">
+  <div class="header-section">
   <!-- Header -->
   <div class="asistencia-header">
     <h1 class="header-title">Toma de Asistencia</h1>
 
     <div class="header-actions">
-      <button mat-icon-button (click)="refrescar()" aria-label="Actualizar">
-        <mat-icon>refresh</mat-icon>
+      <button mat-icon-button (click)="guardarAsistencia()" matTooltip="Guardar">
+        <mat-icon>save</mat-icon>
       </button>
     </div>
   </div>
@@ -62,6 +63,7 @@
       {{ alumnosFiltrados.length }} alumno{{ alumnosFiltrados.length !== 1 ? 's' : '' }}
     </span>
   </div>
+  </div>
 
   <!-- Lista de alumnos -->
   <div class="alumnos-lista" *ngIf="cursoSeleccionado">
@@ -91,21 +93,5 @@
     </div>
   </div>
 
-  <!-- Botón guardar flotante -->
-  <div class="guardar-section" *ngIf="cursoSeleccionado">
-    <button
-      mat-raised-button
-      class="guardar-button"
-      (click)="guardarAsistencia()"
-      [disabled]="saving"
-    >
-      <mat-icon *ngIf="!saving">save</mat-icon>
-      <mat-progress-spinner
-        *ngIf="saving"
-        diameter="20"
-        mode="indeterminate"
-      ></mat-progress-spinner>
-      <span>{{ saving ? 'Guardando...' : 'Guardar Asistencia' }}</span>
-    </button>
-  </div>
+
 </div>
