@@ -5,6 +5,7 @@ import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserValidatedClass } from '../models/user';
+import { Curso } from '../models/curso';
 
 @Injectable({
   providedIn: 'root'
@@ -44,8 +45,13 @@ export class ApiService {
     return this.postProtegido('api/codes/validate', { code });
   }
 
-  getMisCursos(): Observable<any> {
+  getMisCursos(): Observable<Curso[]> {
     return this.getProtegido('api/cursos/mios');
+  }
+
+  saveAsistencia(cursoId: number, asistencias: { alumnoId: string; presente: boolean; }[]): Observable<any> {
+    let fecha = new Date();
+    return this.postProtegido('api/asistencias/guardar', { cursoId, fecha,  asistencias });
   }
 
   registerUser(): Observable<any> {

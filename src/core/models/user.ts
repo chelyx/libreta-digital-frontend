@@ -15,3 +15,10 @@ export class UserValidatedClass {
     this.updated_at = data.updated_at;
   }
 }
+
+export interface User {
+  auth0Id: string;
+  nombre: string;
+  email: string;
+  rol: string;
+}

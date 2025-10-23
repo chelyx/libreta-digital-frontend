@@ -18,10 +18,8 @@
       <mat-select
         [(ngModel)]="cursoSeleccionado"
         (selectionChange)="onCursoChange($event.value)"
-        [disabled]="cursos.length === 1"
       >
-        <mat-option [value]="">Todos</mat-option>
-        <mat-option *ngFor="let c of cursos" [value]="c.id">
+        <mat-option *ngFor="let c of cursos" [value]="c">
           {{ c.nombre }}
         </mat-option>
       </mat-select>
@@ -41,7 +39,7 @@
       <mat-label>Buscar alumno</mat-label>
       <input
         matInput
-        placeholder="Nombre o DNI"
+        placeholder="Nombre o Email"
         [(ngModel)]="filtro"
         aria-label="Buscar alumno"
       />
@@ -59,32 +57,32 @@
   </div>
 
   <!-- Contador -->
-  <div class="contador-section">
+  <div class="contador-section" *ngIf="cursoSeleccionado">
     <span class="contador-text">
       {{ alumnosFiltrados.length }} alumno{{ alumnosFiltrados.length !== 1 ? 's' : '' }}
     </span>
   </div>
 
   <!-- Lista de alumnos -->
-  <div class="alumnos-lista">
-    <div
+  <div class="alumnos-lista" *ngIf="cursoSeleccionado">
+ <div
       class="alumno-card"
-      *ngFor="let a of alumnosFiltrados; trackBy: trackByDni"
-      [class.presente]="a.presente"
+      *ngFor="let a of alumnosFiltrados; trackBy: trackByAuth0Id"
+      [class.presente]="asistencias[a.auth0Id]"
     >
       <div class="alumno-info">
-        <div class="alumno-nombre">{{ a.apellido }}, {{ a.nombre }}</div>
-        <div class="alumno-dni">DNI: {{ a.dni }}</div>
+        <div class="alumno-nombre">{{ a.nombre }}</div>
+        <div class="alumno-email">{{ a.email }}</div>
       </div>
 
       <mat-checkbox
         color="primary"
-        [(ngModel)]="a.presente"
-        (change)="marcar(a)"
+        [(ngModel)]="asistencias[a.auth0Id]"
         class="alumno-checkbox"
       >
       </mat-checkbox>
     </div>
+
 
     <!-- Empty state -->
     <div class="empty-state" *ngIf="alumnosFiltrados.length === 0">
@@ -94,11 +92,11 @@
   </div>
 
   <!-- Botón guardar flotante -->
-  <div class="guardar-section">
+  <div class="guardar-section" *ngIf="cursoSeleccionado">
     <button
       mat-raised-button
       class="guardar-button"
-      (click)="guardar()"
+      (click)="guardarAsistencia()"
       [disabled]="saving"
     >
       <mat-icon *ngIf="!saving">save</mat-icon>

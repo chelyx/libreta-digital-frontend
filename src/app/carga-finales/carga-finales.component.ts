@@ -13,9 +13,7 @@ mesaId?: string;
     private apiService: ApiService
   ) {}
    ngOnInit(): void {
-   this.apiService.getMisCursos().subscribe(cursos => {
-      console.log('Cursos obtenidos:', cursos);
-    });
+
   }
 
 onSelected(e: { materiaId: string; mesaId: string }) {
