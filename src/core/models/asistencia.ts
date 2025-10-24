@@ -7,3 +7,12 @@ export interface Asistencia {
   presente: boolean;
   fecha: Date;
 }
+
+export interface AsistenciaResponse {
+  id: UUID;
+  cursoId: UUID;
+  auth0Id: string;
+  nombre: string;
+  presente: boolean;
+  fecha: string;
+}

@@ -43,12 +43,6 @@ export class TomaDeAsistenciaComponent implements OnInit {
       this.asistencias[alumno.auth0Id] = false;
     });
 
-    this.cursoService.getAsistenciaPorCurso(curso.id).subscribe({
-      next: (data) => {
-        console.log('Asistencias recibidas:', data);
-      },
-      error: (err) => console.error('Error al cargar asistencias', err)
-    });
   }
 
   get alumnosFiltrados(): User[] {
@@ -70,13 +64,14 @@ export class TomaDeAsistenciaComponent implements OnInit {
     this.saving = true;
     const lista = Object.entries(this.asistencias).map(([auth0Id, presente]) => ({
       alumnoId: auth0Id,
-      presente
+      presente,
+      fecha: new Date()
     }));
 
     console.log('Datos a enviar:', lista);
 
     // acá harías el POST al endpoint de asistencia (ejemplo)
-    this.cursoService.saveAsistencia(this.cursoSeleccionado!.id,lista).subscribe({
+    this.cursoService.saveAsistencia(this.cursoSeleccionado!.id, lista).subscribe({
       next: (res: any) =>{
         this.saving = false
         this.snackBar.open(res.status, '',{ duration: 3000 });

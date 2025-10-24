@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { UserValidatedClass } from '../models/user';
 import { Curso } from '../models/curso';
 import { UUID } from 'crypto';
-import { Asistencia } from '../models/asistencia';
+import { Asistencia, AsistenciaResponse } from '../models/asistencia';
 
 @Injectable({
   providedIn: 'root'
@@ -51,13 +51,12 @@ export class ApiService {
     return this.getProtegido('api/cursos/mios');
   }
 
-   getAsistenciaPorCurso(cursoId: UUID): Observable<Asistencia[]> {
+   getAsistenciaPorCurso(cursoId: UUID): Observable<AsistenciaResponse[]> {
     return this.getProtegido(`api/asistencias/${cursoId}`);
   }
 
-  saveAsistencia(cursoId: UUID, asistencias: { alumnoId: string; presente: boolean; }[]): Observable<any> {
-    let fecha = new Date();
-    return this.postProtegido('api/asistencias/guardar', { cursoId, fecha,  asistencias });
+  saveAsistencia(cursoId: UUID, asistencias: { alumnoId: string; presente: boolean; fecha: Date }[]): Observable<any> {
+    return this.postProtegido('api/asistencias/guardar', { cursoId,  asistencias });
   }
 
   registerUser(): Observable<any> {

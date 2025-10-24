@@ -39,6 +39,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { OfflineInterceptor } from 'src/core/service/interceptor';
+import { AsistenciaTableComponent } from './asistencia-table/asistencia-table.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { OfflineInterceptor } from 'src/core/service/interceptor';
     MisMateriasComponent,
     SelectorMateriaMesaComponent,
     CargaFinalesComponent,
-    TablaCargaNotasComponent
+    TablaCargaNotasComponent,
+    AsistenciaTableComponent
 
   ],
   imports: [

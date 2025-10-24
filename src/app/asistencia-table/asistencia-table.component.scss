@@ -1,0 +1,39 @@
+.asistencia-container {
+  padding: 16px;
+  overflow-x: auto;
+}
+
+.asistencia-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.asistencia-table th,
+.asistencia-table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  min-width: 100px;
+}
+
+.asistencia-table th:first-child,
+.asistencia-table td:first-child {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  background-color: #fff;
+}
+
+.nombre {
+  font-weight: 500;
+}
+
+.checkbox-cell {
+  text-align: center;
+}
+
+.acciones {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
