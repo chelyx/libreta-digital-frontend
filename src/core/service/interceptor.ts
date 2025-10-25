@@ -18,6 +18,7 @@ export class OfflineInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Si estamos offline y es POST, guardamos y retornamos un HttpResponse vacío
     if (!this.network.online$.value && req.method === 'POST') {
+      console.log('guardando petición offline:', req.url);
       this.offlineDB.addPending({
         url: req.url,
         body: req.body,

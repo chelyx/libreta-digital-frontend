@@ -16,6 +16,7 @@ export class OfflineDB {
   }
 
   async getAllPending() {
+    console.log('Obteniendo todas las peticiones pendientes desde IndexedDB');
     const db = await this.dbPromise;
     return db.getAll('pending');
   }

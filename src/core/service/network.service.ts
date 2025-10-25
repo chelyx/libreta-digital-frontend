@@ -12,6 +12,7 @@ export class NetworkService {
 
     merge(online$, offline$, of(navigator.onLine)).subscribe(status => {
       this.zone.run(() => this.online$.next(status));
+      console.log('Network status changed:', status);
     });
   }
 

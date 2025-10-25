@@ -10,6 +10,7 @@ import { AuthService } from '@auth0/auth0-angular';
 
 import { ApiService } from 'src/core/service/api.service';
 import { filter, tap } from 'rxjs';
+import { SyncService } from 'src/core/service/sync.service';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ export class AppComponent implements OnInit {
   constructor(
     private auth0: AuthService,   // servicio de Auth0
     private router: Router,
+    private sync: SyncService
   ) {}
 
   ngOnInit(): void {

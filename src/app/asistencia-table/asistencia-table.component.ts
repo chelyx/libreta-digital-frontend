@@ -18,7 +18,7 @@ interface AsistenciaResponse {
   styleUrls: ['./asistencia-table.component.scss']
 })
 export class AsistenciaTableComponent implements OnInit {
-  cursoId: UUID = "594a3e5c-fe35-40cc-9684-3ee0c20b1533";
+  cursoId: UUID = "60e97660-d1eb-4a27-855a-7dca0b1541fa";
   fechas: string[] = [];
 
   // Mapa de alumnos: auth0Id -> datos
