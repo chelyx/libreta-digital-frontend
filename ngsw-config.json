@@ -16,7 +16,7 @@
     {
       "name": "assets",
       "installMode": "lazy",
-      "resources": { "files": ["/assets/**"] }
+      "resources": { "files": ["/assets/**", "/manifest.webmanifest"] }
     }
   ],
   "dataGroups": [
