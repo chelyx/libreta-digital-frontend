@@ -4,12 +4,19 @@
     {
       "name": "app",
       "installMode": "prefetch",
-      "resources": { "files": ["/favicon.ico","/*.css","/*.js"] }
+      "resources": {
+        "files": [
+          "/favicon.ico",
+          "/index.html",
+          "/*.css",
+          "/*.js"
+        ]
+      }
     },
     {
       "name": "assets",
       "installMode": "lazy",
-      "resources": { "files": ["/assets/**"] }
+      "resources": { "files": ["/assets/**", "/manifest.webmanifest"] }
     }
   ],
   "dataGroups": [
