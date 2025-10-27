@@ -1,14 +1,12 @@
-/* Contenedor principal del sidenav */
 .container {
   height: 100vh;
   width: 100%;
 }
 
-/* Drawer / menú lateral */
 .sidenav {
   width: 250px;
-  background-color: #fff;
-  border-right: 1px solid #ddd;
+  padding: 1rem 0;
+  background-color: #f5eedc;
 
   mat-nav-list {
     padding: 0;
@@ -16,52 +14,45 @@
     a {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      font-weight: 500;
+      padding: 1rem 1.5rem;
       color: #333;
-      padding: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
 
       mat-icon {
-        color:#a82a19;
-        width: 24px;         /* ancho fijo */
-        text-align: center;  /* centra ícono */
-        font-size: 24px;
-      }
-      span {
-        line-height: 1; /* mejora alineación vertical */
+        margin-right: 1rem;
+        color: #a82a19;
       }
 
       &:hover {
-        cursor: pointer;
-        background-color: rgba(122, 119, 119, 0.616);
+        background-color: rgba(168, 42, 25, 0.1);
       }
     }
   }
 }
 
-/* Contenido que acompaña al drawer */
 .sidenav-content {
   display: flex;
   flex-direction: column;
   height: 100%;
-
-  /* Toolbar fija arriba */
-  .navbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    height: 64px;
-    padding: 0 1rem;
-
-    button {
-      margin-right: 1rem;
-    }
-  }
-
 }
 
+.navbar {
+  background-color: #a82a19;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  flex-shrink: 0;
+
+  .app-title {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+}
 
 .home-container {
   padding-top: 1rem;
@@ -70,111 +61,138 @@
   align-items: center;
   gap: 2rem;
   margin: 0 auto;
-  overflow-y: hidden;
+  overflow-y: auto;
+  flex: 1;
+}
+
+// Dashboard styles
+.dashboard {
+  width: 100%;
+  max-width: 1200px;
+  padding: 2rem 1rem;
 }
 
 .welcome-section {
   text-align: center;
-   .logo {
-      height: 70px;
+  margin-bottom: 3rem;
+
+  .logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.05);
     }
+  }
+
   .welcome-title {
-    margin-top: 0.5rem;;
-    margin-bottom: 0;
     font-size: 2rem;
     font-weight: 700;
-    color: #c62828;
+    color: #1a1a1a;
+    margin: 0 0 0.5rem 0;
   }
 
   .welcome-subtitle {
-    font-size: 1.2rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    color: #555;
+    font-size: 1.125rem;
+    color: #666;
+    margin: 0;
   }
 }
 
 .cards-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .main-action-card {
-  background-color: #fff;
-  border: 1px solid #c62828;
+  background: white;
+  border: 2px solid #e0e0e0;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   padding: 2rem;
   text-align: center;
-  max-width: 400px;
-  width: 100%;
-  transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
+  transition: all 0.3s;
 
   &:hover {
+    border-color: #a82a19;
+    box-shadow: 0 8px 16px rgba(168, 42, 25, 0.15);
     transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
   }
 
-  mat-icon{
+  mat-icon {
     font-size: 48px;
-    height: 48px;
     width: 48px;
+    height: 48px;
+    color: #a82a19;
     margin-bottom: 1rem;
   }
 
   .card-title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    color: #1a1a1a;
+    margin: 0 0 0.5rem 0;
   }
 
   .card-description {
-    color: #555;
-    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: #666;
+    margin: 0 0 1.5rem 0;
+    line-height: 1.5;
+  }
+
+  button {
+    width: 100%;
   }
 }
 
 .quick-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: 2rem;
-
- button {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25rem;
-
-    padding: 1rem 1.5rem;      // más grande
-    min-width: 140px;          // ancho mínimo
-    min-height: 80px;          // alto mínimo
-    font-size: 1rem;
-
-    mat-icon {
-      font-size: 36px;
-      height: 36px;
-      width: 36px;
-    }
-  }
+  text-align: center;
 
   .quick-actions-title {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 1rem;
+    font-size: 1.125rem;
     font-weight: 600;
-    color: #c62828;
+    color: #1a1a1a;
+    margin: 0 0 1rem 0;
+  }
+
+  button {
+    margin: 0.5rem;
+    min-width: 200px;
+
+    mat-icon {
+      margin-right: 0.5rem;
+    }
   }
 }
 
+// Responsive
 @media (max-width: 768px) {
-  .main-action-card, .quick-actions {
-    width: 90%;
-    flex-direction: column;
+  .welcome-section {
+    .logo {
+      width: 80px;
+    }
+
+    .welcome-title {
+      font-size: 1.5rem;
+    }
+
+    .welcome-subtitle {
+      font-size: 1rem;
+    }
+  }
+
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions button {
+    min-width: 100%;
+    margin: 0.25rem 0;
   }
 }

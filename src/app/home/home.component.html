@@ -1,75 +1,54 @@
-<mat-drawer-container class="container" autosize [hasBackdrop]="true">
-  <mat-drawer #drawer class="sidenav" mode="side">
+<mat-drawer-container class="container">
+  <mat-drawer #drawer class="sidenav" mode="over">
     <mat-nav-list>
-      <a  *ngFor="let link of actions" (click)="navigateToPanel(link.panel); drawer.close()">
+      <a mat-list-item *ngFor="let link of actions" (click)="navigateToPanel(link.panel); drawer.close()">
         <mat-icon>{{ link.icon }}</mat-icon>
         <span>{{ link.label }}</span>
       </a>
-      <a  (click)="logout(); drawer.close()">
+      <a mat-list-item (click)="logout(); drawer.close()">
         <mat-icon>logout</mat-icon>
-        <span>Cerrar sesión</span>
+        <span>Salir</span>
       </a>
     </mat-nav-list>
   </mat-drawer>
 
-  <div class="sidenav-content">
+  <mat-drawer-content class="sidenav-content">
     <mat-toolbar class="navbar">
-      <button mat-icon-button (click)="drawer.toggle()" aria-label="Menu">
+      <button mat-icon-button (click)="drawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
       <span class="app-title">SIRCA</span>
+      <span></span>
     </mat-toolbar>
+
     <div class="home-container">
+      <!-- DASHBOARD -->
+      <div class="dashboard" *ngIf="currentPanel === ''">
+        <div class="welcome-section">
+          <img src="assets/logo.png" alt="Logo SIRCA" class="logo" (click)="navigateToPanel('')">
+          <h1 class="welcome-title">Bienvenido</h1>
+          <p class="welcome-subtitle">Sistema de Gestión Académica</p>
+        </div>
 
-    <!-- DASHBOARD -->
-    <div class="dashboard" *ngIf="currentPanel === ''">
-
-      <div class="welcome-section">
-        <img src="assets/logo.png" alt="Logo SIRCA" class="logo" (click)="navigateToPanel('')">
-        <h1 class="welcome-title">
-          Bienvenido
-        </h1>
-        <p class="welcome-subtitle">
-        Sistema de Gestión Académica
-        </p>
-      </div>
-
-      <!-- MAIN CARDS -->
-      <div class="cards-container" *ngIf="mainCards.length > 0">
-        <div class="main-action-card" *ngFor="let card of mainCards" (click)="navigateToPanel(card.panel)">
-          <mat-icon>
-            {{ card.icon }}
-          </mat-icon>
-          <h2 class="card-title">{{ card.title }}</h2>
-          <p class="card-description">{{ card.description }}</p>
-          <button mat-raised-button [color]="card.color">{{ card.buttonLabel }}</button>
+        <!-- MAIN CARDS -->
+        <div class="cards-container" *ngIf="mainCards.length > 0">
+          <div class="main-action-card" *ngFor="let card of mainCards" (click)="navigateToPanel(card.panel)">
+            <mat-icon>{{ card.icon }}</mat-icon>
+            <h2 class="card-title">{{ card.title }}</h2>
+            <p class="card-description">{{ card.description }}</p>
+            <button mat-raised-button [color]="card.color">{{ card.buttonLabel }}</button>
+          </div>
         </div>
       </div>
 
-      <!-- QUICK ACTIONS -->
-      <!-- <div class="quick-actions" *ngIf="actions.length > 0">
-        <h3 class="quick-actions-title">Acceso Rápido</h3>
-        <button
-                mat-stroked-button
-                *ngFor="let action of actions"
-                (click)="navigateToPanel(action.panel)">
-          <mat-icon>{{ action.icon }}</mat-icon>
-          {{ action.label }}
-        </button>
-      </div> -->
-
+      <!-- PANELS -->
+      <app-code-generator *ngIf="currentPanel === PANELES.CODE_GENERATOR"></app-code-generator>
+      <app-mis-materias *ngIf="currentPanel === PANELES.MATERIAS"></app-mis-materias>
+      <app-toma-de-asistencia *ngIf="currentPanel === PANELES.ASISTENCIA"></app-toma-de-asistencia>
+      <app-code-validator *ngIf="currentPanel === PANELES.CODE_VALIDATOR"></app-code-validator>
+      <app-carga-finales *ngIf="currentPanel === PANELES.CALIFICACIONES"></app-carga-finales>
+      <app-asistencia-table *ngIf="currentPanel === PANELES.ASISTENCIA_TABLE"></app-asistencia-table>
+      <app-historial-notas *ngIf="currentPanel === PANELES.HISTORIAL_NOTAS"></app-historial-notas>
     </div>
-
-    <!-- PANELS -->
-    <app-code-generator *ngIf="currentPanel === PANELES.CODE_GENERATOR"></app-code-generator>
-    <app-mis-materias *ngIf="currentPanel === PANELES.MATERIAS"></app-mis-materias>
-    <app-toma-de-asistencia *ngIf="currentPanel === PANELES.ASISTENCIA "></app-toma-de-asistencia>
-    <app-code-validator *ngIf="currentPanel === PANELES.CODE_VALIDATOR"></app-code-validator>
-    <app-carga-finales *ngIf="currentPanel === PANELES.CALIFICACIONES"></app-carga-finales>
-    <app-asistencia-table *ngIf="currentPanel === PANELES.ASISTENCIA_TABLE"></app-asistencia-table>
-
-  </div>
-  </div>
-
+  </mat-drawer-content>
 </mat-drawer-container>
-

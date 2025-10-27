@@ -1,0 +1,83 @@
+<div class="historial-notas-page">
+  <div class="page-header">
+    <h1>Historial de Notas</h1>
+    <p>Registro completo de calificaciones</p>
+  </div>
+
+  <div class="loading" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+    <p>Cargando historial...</p>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="estadisticas" *ngIf="!loading && notas.length > 0">
+    <div class="stat-card">
+      <div class="stat-icon aprobadas">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ notasAprobadas.length }}</div>
+        <div class="stat-label">Aprobadas</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon desaprobadas">
+        <mat-icon>cancel</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ notasDesaprobadas.length }}</div>
+        <div class="stat-label">Desaprobadas</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon promedio">
+        <mat-icon>trending_up</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ promedio }}</div>
+        <div class="stat-label">Promedio</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de notas -->
+  <div class="notas-list" *ngIf="!loading && notas.length > 0">
+    <div class="nota-card" *ngFor="let nota of notas" [class]="getEstadoClase(nota)">
+      <div class="nota-header">
+        <div class="nota-info">
+          <div class="materia-nombre">{{ nota.materia }}</div>
+          <div class="materia-codigo">{{ nota.codigo }}</div>
+        </div>
+        <div class="nota-badge" [class]="getEstadoClase(nota)">
+          <span *ngIf="!nota.ausente && nota.nota !== null">{{ nota.nota }}</span>
+          <mat-icon *ngIf="nota.ausente">remove</mat-icon>
+          <mat-icon *ngIf="nota.nota === null && !nota.ausente">schedule</mat-icon>
+        </div>
+      </div>
+
+      <div class="nota-details">
+        <div class="detail-item">
+          <mat-icon>event</mat-icon>
+          <span>{{ nota.fecha | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="detail-item">
+          <mat-icon>description</mat-icon>
+          <span>{{ nota.tipoExamen }}</span>
+        </div>
+        <div class="detail-item estado">
+          <mat-icon>{{ getEstadoClase(nota) === 'aprobada' ? 'check_circle' : getEstadoClase(nota) === 'ausente' ? 'remove_circle' : 'cancel' }}</mat-icon>
+          <span>{{ getEstadoTexto(nota) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estado vacío -->
+  <div class="empty-state" *ngIf="!loading && notas.length === 0">
+    <mat-icon>assignment</mat-icon>
+    <p>No hay notas registradas</p>
+    <span>Tus calificaciones aparecerán aquí una vez que sean cargadas</span>
+  </div>
+</div>
