@@ -7,7 +7,8 @@ import { environment } from 'src/environments/environment';
 import { UserValidatedClass } from '../models/user';
 import { Curso } from '../models/curso';
 import { UUID } from 'crypto';
-import { Asistencia, AsistenciaResponse } from '../models/asistencia';
+import {  AsistenciaResponse } from '../models/asistencia';
+import {  NotaBulkDto, NotaResponse } from '../models/notas';
 
 @Injectable({
   providedIn: 'root'
@@ -59,8 +60,17 @@ export class ApiService {
     return this.postProtegido('api/asistencias/guardar', { cursoId,  asistencias });
   }
 
-   saveNotas(cursoId: UUID, notas: any[]): Observable<any> {
+
+  saveNotas(cursoId: UUID, notas: any[]): Observable<any> {
     return this.postProtegido(`api/notas/curso/${cursoId}/bulk`, notas);
+  }
+
+  updateNotas(notas: NotaBulkDto): Observable<NotaResponse[]> {
+    return this.postProtegido(`api/notas/actualizar-bulk`, notas);
+  }
+
+  getNotasByCurso(cursoId: UUID): Observable<NotaResponse[]> {
+    return this.getProtegido(`api/notas/curso/${cursoId}`);
   }
 
   registerUser(): Observable<any> {
@@ -78,8 +88,6 @@ export class ApiService {
     return this.postProtegido('api/notas/registrar', nota);
   }
 
-  getNotasByCurso(cursoId: UUID): Observable<any[]> {
-    return this.getProtegido(`api/notas/curso/${cursoId}`);
-  }
+
 
 }

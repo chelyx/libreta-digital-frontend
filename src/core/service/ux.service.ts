@@ -10,6 +10,7 @@ ASISTENCIA = "asistencia",
 CALIFICACIONES = "calificaciones",
 ASISTENCIA_TABLE = "asistencia-table",
 HISTORIAL_NOTAS = "historial-notas",
+EDITAR_NOTAS = 'editar-notas'
 }
 export interface Actions {
 label: string
@@ -57,6 +58,7 @@ constructor() {}
           { label: "Carga de Finales", icon: "folder_shared", panel: PANELES.CALIFICACIONES, main: false },
           { label: "Validar Código QR", icon: "qr_code_scanner", panel: PANELES.CODE_VALIDATOR, main: true },
           { label: "Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
+          {label: "Notas", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false}
         ]
 
       case "BEDEL":

@@ -40,7 +40,8 @@ import { environment } from "../environments/environment"
 import { ServiceWorkerModule } from "@angular/service-worker"
 import { OfflineInterceptor } from "src/core/service/interceptor"
 import { AsistenciaTableComponent } from "./asistencia-table/asistencia-table.component"
-import { HistorialNotasComponent } from "./historial-notas/historial-notas.component"
+import { HistorialNotasComponent } from "./historial-notas/historial-notas.component";
+import { NotasTableComponent } from './notas-table/notas-table.component'
 
 @NgModule({
 declarations: [
@@ -56,6 +57,7 @@ CargaFinalesComponent,
 TablaCargaNotasComponent,
 AsistenciaTableComponent,
 HistorialNotasComponent,
+NotasTableComponent,
 ],
 imports: [
 QRCodeModule,
