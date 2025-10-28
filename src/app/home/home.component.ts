@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
+import { Curso } from 'src/core/models/curso';
 import { ApiService } from 'src/core/service/api.service';
 import { UserService, ROLES } from 'src/core/service/userService';
 import { UxService, PANELES, Actions, MainCard } from 'src/core/service/ux.service';
@@ -20,6 +21,7 @@ ROLES = ROLES;
 constructor(private auth: AuthService, public userService: UserService, public ux: UxService, private apiService: ApiService ) {}
   mainCards: MainCard[] = [];
   actions: Actions[] = [];
+  cursos: Curso[] = [];
   ngOnInit(): void {
     this.auth.idTokenClaims$.subscribe(claims => {
       this.role = claims?.[this.sircaRoles][0] || null;
@@ -34,6 +36,7 @@ constructor(private auth: AuthService, public userService: UserService, public u
     });
 
     this.validatePendingCode();
+    this.getInfoByRole();
   }
 
   validatePendingCode(): void {
@@ -41,6 +44,13 @@ constructor(private auth: AuthService, public userService: UserService, public u
     if (code && this.role === ROLES.PROFESOR) {
       this.ux.setPanel(PANELES.CODE_VALIDATOR);
     }
+  }
+
+  getInfoByRole() {
+ this.apiService.getMisCursos().subscribe({
+      next: (data) => (this.cursos = data),
+      error: (err) => console.error('Error al cargar cursos', err)
+    });
   }
 
   navigateToPanel(panel: string): void {

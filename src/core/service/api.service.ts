@@ -59,6 +59,10 @@ export class ApiService {
     return this.postProtegido('api/asistencias/guardar', { cursoId,  asistencias });
   }
 
+   saveNotas(cursoId: UUID, notas: any[]): Observable<any> {
+    return this.postProtegido(`api/notas/curso/${cursoId}/bulk`, notas);
+  }
+
   registerUser(): Observable<any> {
     return this.postProtegido('api/user/register', {});
   }
@@ -74,5 +78,8 @@ export class ApiService {
     return this.postProtegido('api/notas/registrar', nota);
   }
 
+  getNotasByCurso(cursoId: UUID): Observable<any[]> {
+    return this.getProtegido(`api/notas/curso/${cursoId}`);
+  }
 
 }

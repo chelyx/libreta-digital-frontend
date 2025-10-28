@@ -44,10 +44,10 @@
       <!-- PANELS -->
       <app-code-generator *ngIf="currentPanel === PANELES.CODE_GENERATOR"></app-code-generator>
       <app-mis-materias *ngIf="currentPanel === PANELES.MATERIAS"></app-mis-materias>
-      <app-toma-de-asistencia *ngIf="currentPanel === PANELES.ASISTENCIA"></app-toma-de-asistencia>
+      <app-toma-de-asistencia *ngIf="currentPanel === PANELES.ASISTENCIA" [cursos]="cursos"></app-toma-de-asistencia>
       <app-code-validator *ngIf="currentPanel === PANELES.CODE_VALIDATOR"></app-code-validator>
-      <app-carga-finales *ngIf="currentPanel === PANELES.CALIFICACIONES"></app-carga-finales>
-      <app-asistencia-table *ngIf="currentPanel === PANELES.ASISTENCIA_TABLE"></app-asistencia-table>
+      <app-carga-finales *ngIf="currentPanel === PANELES.CALIFICACIONES"  [cursos]="cursos"></app-carga-finales>
+      <app-asistencia-table *ngIf="currentPanel === PANELES.ASISTENCIA_TABLE" [cursos]="cursos" ></app-asistencia-table>
       <app-historial-notas *ngIf="currentPanel === PANELES.HISTORIAL_NOTAS"></app-historial-notas>
     </div>
   </mat-drawer-content>

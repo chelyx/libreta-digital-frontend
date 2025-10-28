@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from 'src/core/service/api.service';
 import { UUID } from 'crypto';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Curso } from 'src/core/models/curso';
 
 interface AsistenciaResponse {
   cursoId: string;
@@ -18,9 +19,9 @@ interface AsistenciaResponse {
   styleUrls: ['./asistencia-table.component.scss']
 })
 export class AsistenciaTableComponent implements OnInit {
-  cursoId: UUID = "60e97660-d1eb-4a27-855a-7dca0b1541fa";
   fechas: string[] = [];
-
+  cursoSeleccionado: UUID = '' as UUID;
+  @Input() cursos: Curso[] = [];
   // Mapa de alumnos: auth0Id -> datos
   alumnosMap: Map<string, {
     nombre: string;
@@ -32,7 +33,15 @@ export class AsistenciaTableComponent implements OnInit {
   constructor(private apiService: ApiService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-    this.apiService.getAsistenciaPorCurso(this.cursoId).subscribe(data => {
+  }
+
+  onCursoChange(cursoId: UUID) {
+    this.cursoSeleccionado = cursoId;
+    this.cargarAsistenciasPorCurso(cursoId);
+  }
+
+  cargarAsistenciasPorCurso(cursoId: UUID) {
+   this.apiService.getAsistenciaPorCurso(cursoId).subscribe(data => {
       if (!data.length) return;
       this.fechas = [...new Set(data.map(a => a.fecha))].sort();
 
@@ -96,7 +105,7 @@ export class AsistenciaTableComponent implements OnInit {
       return;
     }
 
-    this.apiService.saveAsistencia(this.cursoId, cambios).subscribe({
+    this.apiService.saveAsistencia(this.cursoSeleccionado, cambios).subscribe({
       next: (res) => {
         // actualizar originales y limpiar marcas
         this.alumnosMap.forEach(alumno => {

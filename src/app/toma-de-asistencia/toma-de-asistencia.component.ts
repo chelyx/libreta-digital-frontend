@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Curso } from 'src/core/models/curso';
 import { User } from 'src/core/models/user';
@@ -11,7 +11,7 @@ templateUrl: './toma-de-asistencia.component.html',
 styleUrls: ['./toma-de-asistencia.component.scss'],
 })
 export class TomaDeAsistenciaComponent implements OnInit {
-  cursos: Curso[] = [];
+ @Input() cursos: Curso[] = [];
   cursoSeleccionado?: Curso;
   filtro = '';
   asistencias: { [auth0Id: string]: boolean } = {};
@@ -20,15 +20,10 @@ export class TomaDeAsistenciaComponent implements OnInit {
   constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-     this.cursoService.getMisCursos().subscribe({
-      next: (data) => (this.cursos = data),
-      error: (err) => console.error('Error al cargar cursos', err)
-    });
   }
 
   refrescar(): void {
     this.onCursoChange('')
-
   }
 
   onCursoChange(curso: Curso | ''): void {
