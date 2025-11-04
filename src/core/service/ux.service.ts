@@ -48,8 +48,7 @@ constructor() {}
     switch (this.role) {
       case ROLES.ALUMNO:
         return [
-          { label: "Mis Materias", icon: "menu_book", panel: PANELES.MATERIAS, main: false },
-          { label: "Historial de Notas", icon: "assignment", panel: PANELES.HISTORIAL_NOTAS, main: false },
+         { label: "Historial de Notas", icon: "assignment", panel: PANELES.HISTORIAL_NOTAS, main: false },
           { label: "Generar Código QR", icon: "qr_code", panel: PANELES.CODE_GENERATOR, main: true },
         ]
       case "PROFESOR":
@@ -65,6 +64,8 @@ constructor() {}
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
           { label: "Carga de Finales", icon: "folder_shared", panel: PANELES.CALIFICACIONES, main: false },
+          { label: "Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false }
+
         ]
       default:
         return []
