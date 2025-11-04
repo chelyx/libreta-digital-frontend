@@ -16,7 +16,7 @@
 .asistencia-header {
   background-color: #C41E3A;
   color: white;
-  padding: 0.75rem 1rem; // Increased padding for more breathing room
+  padding: 1rem 1.25rem; // Increased padding for more breathing room
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -29,16 +29,17 @@
   }
 
   .header-title {
-    font-size: 1.25rem; // Increased from 1.1rem for better hierarchy
-    font-weight: 500; // Reduced from 600 for softer, more casual look
-    letter-spacing: -0.01em; // Tighter spacing for modern feel
+    font-size: 1.35rem; // Increased from 1.1rem for better hierarchy
+    font-weight: 400; // Reduced from 600 for softer, more casual look
+    letter-spacing: -0.02em; // Tighter spacing for modern feel
     line-height: 1.2;
+    margin: 0;
   }
 
   .header-subtitle {
     font-size: 0.8rem;
-    font-weight: 400;
-    opacity: 0.9;
+    font-weight: 300;
+    opacity: 0.85;
     margin: 0;
     letter-spacing: 0.01em;
   }
@@ -46,10 +47,10 @@
 
 .filtros-section {
   background: white;
-  padding: 0.75rem;
+  padding: 1rem; // Increased padding for more space
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 
   @media (min-width: 768px) {
@@ -58,23 +59,23 @@
 }
 
 .contador-section {
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.25rem; // Increased padding for better spacing
   background: white;
   border-bottom: 1px solid #eee;
 
   .contador-text {
-    font-size: 0.85rem; // Slightly increased from 0.8rem
-    font-weight: 500; // Reduced from 600 for lighter feel
-    color: #555; // Softer color from #666
-    letter-spacing: 0.02em; // Reduced letter-spacing for casual feel
+    font-size: 0.9rem; // Slightly increased from 0.8rem
+    font-weight: 400; // Reduced from 600 for lighter feel
+    color: #666; // Softer color from #555
+    letter-spacing: 0.01em; // Reduced letter-spacing for casual feel
   }
 }
 
 .alumnos-lista {
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem 1rem; // Increased padding and gap for more breathing room
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
   flex: 1 1 auto;
   overflow-y: scroll;
 }
@@ -82,7 +83,7 @@
 .alumno-card {
   background: white;
   border-radius: 8px;
-  padding: 0.6rem 0.75rem;
+  padding: 0.875rem 1rem; // Increased padding for more comfortable layout
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -106,11 +107,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 0.15rem; // Added gap for better spacing between name and email
 
   .alumno-nombre {
     font-size: 1rem; // Increased from 0.95rem for better readability
     font-weight: 400; // Reduced from 500 for softer, casual look
-    color: #333; // Softer color from #222
+    color: #2a2a2a; // Softer color from #333
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -120,7 +122,7 @@
   .alumno-email {
     font-size: 0.85rem; // Slightly increased from 0.8rem
     font-weight: 400; // Added explicit weight
-    color: #888; // Softer color from #777
+    color: #999; // Softer color from #888
     letter-spacing: 0.01em; // Added for better readability
   }
 }
@@ -154,7 +156,7 @@
   width: 100%;
   height: 48px;
   font-size: 1rem;
-  font-weight: 500; // Reduced from 600 for softer button text
+  font-weight: 400; // Reduced from 600 for softer button text
   background-color: #C41E3A !important;
   color: white !important;
   border-radius: 8px !important;
@@ -162,7 +164,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  letter-spacing: 0.02em; // Added for better button text spacing
+  letter-spacing: 0.01em; // Added for better button text spacing
 
   &:hover:not([disabled]) {
     background-color: #a01828 !important;
