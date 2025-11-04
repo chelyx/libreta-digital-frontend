@@ -1,73 +1,77 @@
 <div class="asistencia-container">
   <div class="header-section">
-  <!-- Header -->
-  <div class="asistencia-header">
-    <h1 class="header-title">Toma de Asistencia</h1>
+    <!-- Header -->
+    <div class="asistencia-header">
+      <!-- Added subtitle for more casual, friendly feel like reference image -->
+      <div class="header-content">
+        <h1 class="header-title">Toma de Asistencia</h1>
+        <p class="header-subtitle">Registro diario de presentes</p>
+      </div>
 
-    <div class="header-actions">
-      <button mat-icon-button (click)="guardarAsistencia()" matTooltip="Guardar">
-        <mat-icon>save</mat-icon>
-      </button>
+      <div class="header-actions">
+        <button mat-icon-button (click)="guardarAsistencia()" matTooltip="Guardar">
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
     </div>
-  </div>
 
-  <!-- Filtros -->
-  <div class="filtros-section">
-    <!-- Selección de curso -->
-    <mat-form-field appearance="outline" class="filtro-field">
-      <mat-label>Curso</mat-label>
-      <mat-select
-        [(ngModel)]="cursoSeleccionado"
-        (selectionChange)="onCursoChange($event.value)"
-      >
-        <mat-option *ngFor="let c of cursos" [value]="c">
-          {{ c.nombre }}
-        </mat-option>
-      </mat-select>
-      <button
-        mat-icon-button
-        matSuffix
-        *ngIf="cursoSeleccionado"
-        (click)="onCursoChange('')"
-        aria-label="Limpiar curso"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
+    <!-- Filtros -->
+    <div class="filtros-section">
+      <!-- Selección de curso -->
+      <mat-form-field appearance="outline" class="filtro-field">
+        <mat-label>Curso</mat-label>
+        <mat-select
+          [(ngModel)]="cursoSeleccionado"
+          (selectionChange)="onCursoChange($event.value)"
+        >
+          <mat-option *ngFor="let c of cursos" [value]="c">
+            {{ c.nombre }}
+          </mat-option>
+        </mat-select>
+        <button
+          mat-icon-button
+          matSuffix
+          *ngIf="cursoSeleccionado"
+          (click)="onCursoChange('')"
+          aria-label="Limpiar curso"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
 
-    <!-- Búsqueda -->
-    <mat-form-field appearance="outline" class="filtro-field">
-      <mat-label>Buscar alumno</mat-label>
-      <input
-        matInput
-        placeholder="Nombre o Email"
-        [(ngModel)]="filtro"
-        aria-label="Buscar alumno"
-      />
-      <mat-icon matPrefix>search</mat-icon>
-      <button
-        mat-icon-button
-        matSuffix
-        *ngIf="filtro"
-        (click)="filtro = ''"
-        aria-label="Limpiar búsqueda"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
-  </div>
+      <!-- Búsqueda -->
+      <mat-form-field appearance="outline" class="filtro-field">
+        <mat-label>Buscar alumno</mat-label>
+        <input
+          matInput
+          placeholder="Nombre o Email"
+          [(ngModel)]="filtro"
+          aria-label="Buscar alumno"
+        />
+        <mat-icon matPrefix>search</mat-icon>
+        <button
+          mat-icon-button
+          matSuffix
+          *ngIf="filtro"
+          (click)="filtro = ''"
+          aria-label="Limpiar búsqueda"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
 
-  <!-- Contador -->
-  <div class="contador-section" *ngIf="cursoSeleccionado">
+    <!-- Contador -->
+    <div class="contador-section" *ngIf="cursoSeleccionado">
     <span class="contador-text">
       {{ alumnosFiltrados.length }} alumno{{ alumnosFiltrados.length !== 1 ? 's' : '' }}
     </span>
-  </div>
+    </div>
   </div>
 
   <!-- Lista de alumnos -->
   <div class="alumnos-lista" *ngIf="cursoSeleccionado">
- <div
+    <div
       class="alumno-card"
       *ngFor="let a of alumnosFiltrados; trackBy: trackByAuth0Id"
       [class.presente]="asistencias[a.auth0Id]"
