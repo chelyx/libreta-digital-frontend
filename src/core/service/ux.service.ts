@@ -62,8 +62,8 @@ constructor() {}
       case "BEDEL":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
-          { label: "Carga de Finales", icon: "folder_shared", panel: PANELES.CALIFICACIONES, main: false },
-          { label: "Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false }
+          {label: "Cargar Nota", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false},
+          { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false }
 
         ]
       default:
