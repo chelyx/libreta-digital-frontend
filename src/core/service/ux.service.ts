@@ -54,10 +54,9 @@ constructor() {}
       case "PROFESOR":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
-          { label: "Carga de Finales", icon: "folder_shared", panel: PANELES.CALIFICACIONES, main: false },
+          {label: "Cargar Nota", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false},
           { label: "Validar Código QR", icon: "qr_code_scanner", panel: PANELES.CODE_VALIDATOR, main: true },
-          { label: "Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
-          {label: "Notas", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false}
+          { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false }
         ]
 
       case "BEDEL":
