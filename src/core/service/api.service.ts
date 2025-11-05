@@ -78,14 +78,15 @@ export class ApiService {
   }
 
 
-  registrarBFA(): Observable<any> {
-        let nota = {
-      legajoAlumno: 1673154,
-      materia: 'Sistemas de Información II',
-      nota: 10,
-      fecha: new Date().toUTCString()
-    }
-    return this.postProtegido('api/notas/registrar', nota);
+  registrarBFA(): void {
+    //     let nota = {
+    //   legajoAlumno: 123456,
+    //   materia: 'BFA PRUEBA',
+    //   nota: 10,
+    //   fecha: new Date()
+    // }
+    // return this.postProtegido('api/notas/registrar', nota);
+
   }
 
 

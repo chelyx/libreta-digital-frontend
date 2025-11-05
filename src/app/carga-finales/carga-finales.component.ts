@@ -13,9 +13,9 @@ mesaId?: string;
     private apiService: ApiService
   ) {}
    ngOnInit(): void {
-this.apiService.registrarBFA().subscribe(response => {
-      console.log('Respuesta del servidor:', response);
-    });
+    // this.apiService.registrarBFA().subscribe(response => {
+    //   console.log('Respuesta del servidor:', response);
+    // });
   }
 
 onSelected(e: { materiaId: string; mesaId: string }) {
