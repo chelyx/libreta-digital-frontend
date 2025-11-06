@@ -56,9 +56,8 @@
 
       <div class="acciones">
         <button mat-raised-button
-                (click)="guardarNotas()"
-                [disabled]="!hayCambios()">
-          Guardar notas ({{ getCambiosCount() }})
+                (click)="guardarNotas()">
+          Guardar notas ({{ notas.length }})
         </button>
       </div>
     </div>
