@@ -58,13 +58,13 @@ guardarNotas() {
 }
 
 hayCambios(): boolean {
-  return true
-  // return this.notas.some(a => a.nota !== a.notaFinal);
+  // Retorna true si hay al menos una nota con valor ingresado
+  return this.notas.some(n => n.valor !== null && n.valor !== undefined && n.valor !== 0);
 }
 
 getCambiosCount(): number {
-  return 0;
-  //return this.notas.filter(a => a.nota !== a.notaFinal).length;
+  // Cuenta cuántas notas tienen un valor ingresado
+  return this.notas.filter(n => n.valor !== null && n.valor !== undefined && n.valor !== 0).length;
 }
 
 }
