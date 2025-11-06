@@ -73,6 +73,15 @@ export class ApiService {
     return this.getProtegido(`api/notas/curso/${cursoId}`);
   }
 
+  
+getNotasPorAlumno(auth0Id: string): Observable<NotaResponse[]> {
+  return this.getProtegido(`api/notas/alumno/${encodeURIComponent(auth0Id)}`);
+}
+
+getNotasDeAlumnoEnCurso(cursoId: UUID, auth0Id: string): Observable<NotaResponse[]> {
+  //ARREGLAR: NO EXPONER EL AUTH0ID EN LA URL
+  return this.getProtegido(`api/notas/curso/${cursoId}/alumno/${encodeURIComponent(auth0Id)}`);
+}
   registerUser(): Observable<any> {
     return this.postProtegido('api/user/register', {});
   }
