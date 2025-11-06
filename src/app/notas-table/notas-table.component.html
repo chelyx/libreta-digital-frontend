@@ -1,52 +1,71 @@
 <div class="notas-container">
-  <!-- Header con título y selector -->
-  <div class="notas-header">
-    <h1 class="header-title">Carga de Notas de Final</h1>
-
-    <mat-form-field appearance="outline" class="curso-select">
-      <mat-label>Curso</mat-label>
-      <mat-select [(ngModel)]="cursoSeleccionado" (selectionChange)="onCursoChange($event.value)">
-        <mat-option *ngFor="let curso of cursos" [value]="curso.id">
-          {{ curso.nombre }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <!-- Header principal -->
+  <div class="page-header">
+    <h1>Carga de Calificaciones</h1>
+    <p>Exámenes Finales</p>
   </div>
 
-  <!-- Tabla de notas -->
-  <table class="notas-table" *ngIf="notas.length > 0">
-    <thead>
-      <tr>
-        <th>Alumno</th>
-        <th>Nota</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let alumno of notas">
-        <td class="nombre">{{ alumno.alumnoNombre }}</td>
-        <td>
-          <mat-form-field appearance="outline" class="nota-input">
-            <input matInput type="number"
-                   [(ngModel)]="alumno.valor"
-                   min="1" max="10"
-                   placeholder="Ingrese nota" />
-          </mat-form-field>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- PASO 1: Seleccionar Mesa de Examen -->
+  <div class="step-card">
+    <div class="step-header">
+      <span class="step-badge">PASO 1</span>
+      <h2>Seleccionar Mesa de Examen</h2>
+    </div>
+    <div class="step-body">
+      <div class="form-field">
+        <mat-form-field appearance="outline" class="curso-select">
+          <mat-label>Materia</mat-label>
+          <mat-select [(ngModel)]="cursoSeleccionado" (selectionChange)="onCursoChange($event.value)">
+            <mat-option *ngFor="let curso of cursos" [value]="curso.id">
+              {{ curso.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 2: Cargar Calificaciones (solo se muestra si hay curso seleccionado y alumnos) -->
+  <div class="step-card" *ngIf="cursoSeleccionado && notas.length > 0">
+    <div class="step-header">
+      <span class="step-badge">PASO 2</span>
+      <h2>Cargar Calificaciones</h2>
+    </div>
+    <div class="step-body">
+      <table class="notas-table">
+        <thead>
+        <tr>
+          <th>Alumno</th>
+          <th>Nota</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let alumno of notas">
+          <td class="nombre">{{ alumno.alumnoNombre }}</td>
+          <td>
+            <mat-form-field appearance="outline" class="nota-input">
+              <input matInput type="number"
+                     [(ngModel)]="alumno.valor"
+                     min="1" max="10"
+                     placeholder="Ingrese nota" />
+            </mat-form-field>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="acciones">
+        <button mat-raised-button
+                (click)="guardarNotas()"
+                [disabled]="!hayCambios()">
+          Guardar notas ({{ getCambiosCount() }})
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Mensaje si no hay alumnos -->
   <div class="no-alumnos" *ngIf="cursoSeleccionado && notas.length === 0">
     No hay alumnos cargados para este curso.
-  </div>
-
-  <!-- Acciones -->
-  <div class="acciones">
-    <button mat-raised-button color="primary"
-            (click)="guardarNotas()"
-            [disabled]="!hayCambios()">
-      Guardar notas ({{ getCambiosCount() }})
-    </button>
   </div>
 </div>
