@@ -11,13 +11,15 @@ templateUrl: './toma-de-asistencia.component.html',
 styleUrls: ['./toma-de-asistencia.component.scss'],
 })
 export class TomaDeAsistenciaComponent implements OnInit {
- @Input() cursos: Curso[] = [];
-  cursoSeleccionado?: Curso;
-  filtro = '';
-  asistencias: { [auth0Id: string]: boolean } = {};
-  saving = false;
+@Input() cursos: Curso[] = [];
+cursoSeleccionado?: Curso;
+filtro = '';
+// <CHANGE> Agregar campo para búsqueda por ID/codigo de curso
+cursoIdBusqueda = '';
+asistencias: { [auth0Id: string]: boolean } = {};
+saving = false;
 
-  constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
+constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
   }
@@ -32,12 +34,35 @@ export class TomaDeAsistenciaComponent implements OnInit {
       this.asistencias = {};
       return;
     }
+    // <CHANGE> Limpiar búsqueda por ID/codigo cuando se selecciona del dropdown
+    this.cursoIdBusqueda = '';
     this.cursoSeleccionado = curso;
     this.asistencias = {};
     curso.alumnos.forEach((alumno) => {
       this.asistencias[alumno.auth0Id] = false;
     });
+  }
 
+  // <CHANGE> Nueva función para buscar curso por ID/codigo
+  onBuscarPorId(): void {
+    if (this.cursoIdBusqueda.trim()) {
+      // Limpiar selección del dropdown
+      this.cursoSeleccionado = undefined;
+
+      // Buscar el curso por ID/codigo
+      const cursoEncontrado = this.cursos.find(c =>
+        c.id.toString().toLowerCase() === this.cursoIdBusqueda.toLowerCase() ||
+        c.nombre.toLowerCase().includes(this.cursoIdBusqueda.toLowerCase())
+      );
+
+      if (cursoEncontrado) {
+        console.log('[v0] Curso encontrado por código:', cursoEncontrado);
+        this.onCursoChange(cursoEncontrado);
+      } else {
+        console.log('[v0] No se encontró curso con ese código:', this.cursoIdBusqueda);
+        this.snackBar.open('No se encontró un curso con ese código', '', { duration: 3000 });
+      }
+    }
   }
 
   get alumnosFiltrados(): User[] {
@@ -65,7 +90,6 @@ export class TomaDeAsistenciaComponent implements OnInit {
 
     console.log('Datos a enviar:', lista);
 
-    // acá harías el POST al endpoint de asistencia (ejemplo)
     this.cursoService.saveAsistencia(this.cursoSeleccionado!.id, lista).subscribe({
       next: (res: any) =>{
         this.saving = false
@@ -74,6 +98,5 @@ export class TomaDeAsistenciaComponent implements OnInit {
       },
       error: (err) => { console.error(err); this.saving = false; }
     });
-
   }
 }
