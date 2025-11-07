@@ -86,6 +86,12 @@ getNotasDeAlumnoEnCurso(cursoId: UUID, auth0Id: string): Observable<NotaResponse
     return this.postProtegido('api/user/register', {});
   }
 
+  getCursoPorCodigo(codigo: string) {
+  const safe = encodeURIComponent(codigo.trim());
+  // Si implementaste la variante con query param, cambia por:
+  // return this.getProtegido(`api/cursos/buscar?codigo=${safe}`);
+  return this.getProtegido(`api/cursos/codigo/${safe}`);
+}
 
   registrarBFA(): Observable<any> {
         let nota = {

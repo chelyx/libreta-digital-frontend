@@ -43,27 +43,46 @@ constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
     });
   }
 
-  // <CHANGE> Nueva función para buscar curso por ID/codigo
-  onBuscarPorId(): void {
-    if (this.cursoIdBusqueda.trim()) {
-      // Limpiar selección del dropdown
-      this.cursoSeleccionado = undefined;
-
-      // Buscar el curso por ID/codigo
-      const cursoEncontrado = this.cursos.find(c =>
-        c.id.toString().toLowerCase() === this.cursoIdBusqueda.toLowerCase() ||
-        c.nombre.toLowerCase().includes(this.cursoIdBusqueda.toLowerCase())
-      );
-
-      if (cursoEncontrado) {
-        console.log('[v0] Curso encontrado por código:', cursoEncontrado);
-        this.onCursoChange(cursoEncontrado);
-      } else {
-        console.log('[v0] No se encontró curso con ese código:', this.cursoIdBusqueda);
-        this.snackBar.open('No se encontró un curso con ese código', '', { duration: 3000 });
-      }
+ onBuscarPorId(): void {
+    const codigo = (this.cursoIdBusqueda || '').trim();
+    if (!codigo) {
+      this.snackBar.open('Ingresá un código de curso', '', { duration: 3000 });
+      return;
     }
-  }
+
+    // estados de carga si existen en el componente
+    if (typeof (this as any).cargando !== 'undefined') (this as any).cargando = true;
+    if (typeof (this as any).loading !== 'undefined') (this as any).loading = true;
+
+    // limpiar selección del dropdown para que la búsqueda por código prevalezca
+    this.cursoSeleccionado = undefined;
+    this.asistencias = {};
+
+    const safe = encodeURIComponent(codigo);
+    // usamos ApiService.getProtegido para llamar: GET /api/cursos/codigo/{codigo}
+    this.cursoService.getProtegido(`api/cursos/codigo/${safe}`).subscribe({
+      next: (curso: any) => {
+        // Usamos el flujo ya existente del componente
+        // onCursoChange configura cursoSeleccionado y resetea asistencias
+        this.onCursoChange(curso);
+
+        if (typeof (this as any).cargando !== 'undefined') (this as any).cargando = false;
+        if (typeof (this as any).loading !== 'undefined') (this as any).loading = false;
+
+        this.snackBar.open(`Curso encontrado: ${curso?.nombre || curso?.codigo || codigo}`, '', { duration: 2500 });
+      },
+      error: (err) => {
+        console.error('[onBuscarPorId] error:', err);
+        if (typeof (this as any).cargando !== 'undefined') (this as any).cargando = false;
+        if (typeof (this as any).loading !== 'undefined') (this as any).loading = false;
+
+        const msg = err?.status === 404
+          ? 'No se encontró un curso con ese código'
+          : 'Ocurrió un error buscando el curso';
+        this.snackBar.open(msg, '', { duration: 3000 });
+      }
+    });
+ }
 
   get alumnosFiltrados(): User[] {
     if (!this.cursoSeleccionado) return [];
