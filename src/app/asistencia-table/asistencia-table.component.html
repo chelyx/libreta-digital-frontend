@@ -1,113 +1,69 @@
-<div class="asistencia-container">
-  <!-- Header con título y subtítulo -->
-  <div class="header">
+<div class="main-content">
+  <div class="content-wrapper">
     <h2 class="title">Toma de Asistencia</h2>
     <p class="subtitle">Registro completo de calificaciones</p>
-  </div>
 
-  <!-- Selector de curso -->
-  <div class="course-selector">
-    <mat-form-field appearance="outline">
-      <mat-label>Curso</mat-label>
-      <mat-select [(ngModel)]="cursoSeleccionado" (selectionChange)="onCursoChange($event.value)">
-        <mat-option *ngFor="let curso of cursos" [value]="curso.id">
-          {{ curso.nombre }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <!-- Tarjetas de estadísticas -->
-  <div class="stats-cards" *ngIf="cursoSeleccionado">
-    <div class="stat-card">
-      <div class="stat-icon green">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-          <circle cx="9" cy="7" r="4"></circle>
-          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-        </svg>
-      </div>
-      <div class="stat-content">
-        <div class="stat-number">{{ alumnosMap.size }}</div>
-        <div class="stat-label">Alumnos</div>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon blue">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-          <line x1="16" y1="2" x2="16" y2="6"></line>
-          <line x1="8" y1="2" x2="8" y2="6"></line>
-          <line x1="3" y1="10" x2="21" y2="10"></line>
-        </svg>
-      </div>
-      <div class="stat-content">
-        <div class="stat-number">{{ fechas.length }}</div>
-        <div class="stat-label">Fechas</div>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon orange">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-        </svg>
-      </div>
-      <div class="stat-content">
-        <div class="stat-number">{{ getChangesCount() }}</div>
-        <div class="stat-label">Cambios</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Lista de alumnos en tarjetas -->
-  <div class="alumnos-list" *ngIf="cursoSeleccionado">
-    <div class="alumno-card" *ngFor="let item of alumnosMap | keyvalue; trackBy: trackByAlumno">
-      <div class="alumno-header">
-        <div class="alumno-avatar">
-          {{ item.value.nombre.split(' ')[0].charAt(0) }}{{ item.value.nombre.split(' ')[1]?.charAt(0) || '' }}
+    <div class="search-section">
+      <!-- Buscador por Curso (Dropdown) -->
+      <div class="search-option">
+        <div class="option-header">
+          <span class="step-number">1</span>
+          <label class="label">Seleccionar Curso</label>
         </div>
-        <div class="alumno-info">
-          <div class="alumno-nombre">{{ item.value.nombre }}</div>
-          <div class="alumno-email">{{ contarPresentes(item.value) }} de {{ fechas.length }} presentes</div>
-        </div>
+        <select class="select-input" [(ngModel)]="cursoSeleccionado" (change)="onCursoChange()">
+          <option value="" disabled selected>Seleccione un curso</option>
+          <option *ngFor="let curso of cursos" [value]="curso.id">
+            {{ curso.nombre }} - {{ curso.codigo }}
+          </option>
+        </select>
+        <p class="help-text">Elige un curso de la lista disponible</p>
       </div>
 
-      <div class="fechas-grid">
-        <div class="fecha-item" *ngFor="let fecha of fechas">
-          <div class="fecha-label">{{ fecha | date: 'dd/MM' }}</div>
-          <mat-checkbox
-            color="primary"
-            [(ngModel)]="item.value.asistenciasPorFecha[fecha]"
-            (change)="marcarModificado(item.key, fecha)"
-          ></mat-checkbox>
-        </div>
+      <!-- Divisor -->
+      <div class="divider">
+        <span class="divider-text">o</span>
       </div>
+
+      <!-- Buscador por ID de Curso -->
+      <div class="search-option">
+        <div class="option-header">
+          <span class="step-number">2</span>
+          <label class="label">Buscar por ID de Curso</label>
+        </div>
+        <div class="search-input-wrapper">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input
+            type="text"
+            class="search-input"
+            [(ngModel)]="cursoIdBusqueda"
+            (input)="onBuscarPorId()"
+            placeholder="Ingresa el ID del curso (ej: K101)"
+          />
+        </div>
+        <p class="help-text">Introduce el código único del curso para búsqueda rápida</p>
+      </div>
+
+      <!-- Botón de Búsqueda -->
+      <button class="search-button" (click)="buscarCurso()" [disabled]="!cursoSeleccionado && !cursoIdBusqueda">
+        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        Buscar Curso
+      </button>
     </div>
 
-    <!-- Empty state -->
-    <div class="empty-state" *ngIf="alumnosMap.size === 0">
-      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        <line x1="11" y1="8" x2="11" y2="14"></line>
-        <line x1="8" y1="11" x2="14" y2="11"></line>
+    <!-- Nota informativa -->
+    <div class="info-note">
+      <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
       </svg>
-      <p>No hay alumnos en este curso</p>
+      <p>Podes buscar el curso seleccionándolo de la lista o ingresando directamente su código. Ambos métodos te llevarán a la página de registro de asistencia.</p>
     </div>
-  </div>
-
-  <!-- Botón de guardar flotante -->
-  <div class="save-button-container" *ngIf="cursoSeleccionado && hasChanges()">
-    <button class="save-button" (click)="guardarCambios()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-        <polyline points="17 21 17 13 7 13 7 21"></polyline>
-        <polyline points="7 3 7 8 15 8"></polyline>
-      </svg>
-      Guardar cambios ({{ getChangesCount() }})
-    </button>
   </div>
 </div>

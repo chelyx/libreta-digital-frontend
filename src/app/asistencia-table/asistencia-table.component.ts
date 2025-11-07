@@ -1,138 +1,55 @@
-import { Component, Input, OnInit } from "@angular/core"
-import { ApiService } from "src/core/service/api.service"
-import { UUID } from "crypto"
-import { MatSnackBar } from "@angular/material/snack-bar"
-import { Curso } from "src/core/models/curso"
+import { Component, OnInit, Input } from '@angular/core'; // <-- Agrega Input aquí
 
-interface AsistenciaResponse {
-cursoId: string
-fecha: string
-auth0Id: string
-nombre: string
-presente: boolean
+interface Curso {
+id: string;
+nombre: string;
+codigo: string;
 }
 
 @Component({
-selector: "app-asistencia-table",
-templateUrl: "./asistencia-table.component.html",
-styleUrls: ["./asistencia-table.component.scss"],
+selector: 'app-asistencia-table',
+templateUrl: './asistencia-table.component.html',
+styleUrls: ['./asistencia-table.component.scss']
 })
 export class AsistenciaTableComponent implements OnInit {
-fechas: string[] = []
-cursoSeleccionado: UUID = "" as UUID
-@Input() cursos: Curso[] = []
-alumnosMap: Map<
-string,
-{
-nombre: string
-asistenciasPorFecha: { [fecha: string]: boolean }
-originalAsistenciasPorFecha: { [fecha: string]: boolean }
-modificadas: Set<string>
-}
-> = new Map()
+// <CHANGE> Agregar decorador @Input() para recibir cursos del componente padre
+@Input() cursos: Curso[] = [];  // <-- Esta es la línea clave que falta
 
-constructor(
-    private apiService: ApiService,
-    private snackBar: MatSnackBar,
-  ) {}
+cursoSeleccionado: string = '';
+cursoIdBusqueda: string = '';
 
-  ngOnInit(): void {}
+constructor() { }
 
-  onCursoChange(cursoId: UUID) {
-    this.cursoSeleccionado = cursoId
-    this.cargarAsistenciasPorCurso(cursoId)
+  ngOnInit(): void {
+    console.log('[v0] Cursos recibidos:', this.cursos);
   }
 
-  cargarAsistenciasPorCurso(cursoId: UUID) {
-    this.apiService.getAsistenciaPorCurso(cursoId).subscribe((data) => {
-      if (!data.length) return
-      this.fechas = [...new Set(data.map((a) => a.fecha))].sort()
-
-      data.forEach((a) => {
-        if (!this.alumnosMap.has(a.auth0Id)) {
-          this.alumnosMap.set(a.auth0Id, {
-            nombre: a.nombre,
-            asistenciasPorFecha: {},
-            originalAsistenciasPorFecha: {},
-            modificadas: new Set<string>(),
-          })
-        }
-        const alumno = this.alumnosMap.get(a.auth0Id)!
-        alumno.asistenciasPorFecha[a.fecha] = a.presente
-        alumno.originalAsistenciasPorFecha[a.fecha] = a.presente
-      })
-    })
+  toggleMenu(): void {
+    console.log('[v0] Menu toggled');
   }
 
-  marcarModificado(auth0Id: string, fecha: string) {
-    const alumno = this.alumnosMap.get(auth0Id)
-    if (!alumno) return
+  onCursoChange(): void {
+    if (this.cursoSeleccionado) {
+      this.cursoIdBusqueda = '';
+    }
+    console.log('[v0] Curso seleccionado:', this.cursoSeleccionado);
+  }
 
-    const nuevoValor = alumno.asistenciasPorFecha[fecha]
-    const original = alumno.originalAsistenciasPorFecha[fecha]
+  onBuscarPorId(): void {
+    if (this.cursoIdBusqueda) {
+      this.cursoSeleccionado = '';
+    }
+    console.log('[v0] Buscando por ID:', this.cursoIdBusqueda);
+  }
 
-    if (nuevoValor !== original) {
-      alumno.modificadas.add(fecha)
+  buscarCurso(): void {
+    const cursoId = this.cursoSeleccionado || this.cursoIdBusqueda;
+
+    if (cursoId) {
+      console.log('[v0] Buscando curso con ID:', cursoId);
+      // Aquí va tu lógica de navegación
     } else {
-      alumno.modificadas.delete(fecha)
+      console.warn('No se ha seleccionado ningún curso');
     }
-  }
-
-  hasChanges(): boolean {
-    for (const alumno of this.alumnosMap.values()) {
-      if (alumno.modificadas.size > 0) return true
-    }
-    return false
-  }
-
-  getChangesCount(): number {
-    let count = 0
-    this.alumnosMap.forEach((alumno) => (count += alumno.modificadas.size))
-    return count
-  }
-
-  guardarCambios() {
-    const cambios: { alumnoId: string; presente: boolean; fecha: Date }[] = []
-
-    this.alumnosMap.forEach((alumno, auth0Id) => {
-      alumno.modificadas.forEach((fecha) => {
-        cambios.push({
-          fecha: new Date(fecha),
-          alumnoId: auth0Id,
-          presente: alumno.asistenciasPorFecha[fecha],
-        })
-      })
-    })
-
-    if (!cambios.length) {
-      return
-    }
-
-    this.apiService.saveAsistencia(this.cursoSeleccionado, cambios).subscribe({
-      next: (res) => {
-        this.alumnosMap.forEach((alumno) => {
-          alumno.modificadas.forEach((fecha) => {
-            alumno.originalAsistenciasPorFecha[fecha] = alumno.asistenciasPorFecha[fecha]
-          })
-          alumno.modificadas.clear()
-        })
-        this.snackBar.open(res.status, "", { duration: 3000 })
-      },
-      error: () => console.log("Error al guardar los cambios"),
-    })
-  }
-
-  trackByAlumno(index: number, item: any) {
-    return item.key
-  }
-
-  contarPresentes(alumno: any): number {
-    let count = 0
-    this.fechas.forEach((fecha) => {
-      if (alumno.asistenciasPorFecha[fecha]) {
-        count++
-      }
-    })
-    return count
   }
 }
