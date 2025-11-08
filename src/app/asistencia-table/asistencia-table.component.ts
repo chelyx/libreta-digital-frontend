@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { UUID } from 'crypto';
 import { ApiService } from 'src/core/service/api.service';
 import { AsistenciaResponse } from 'src/core/models/asistencia';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface Curso {
 id: string;
@@ -21,11 +22,13 @@ cursoSeleccionado: string = '';
 cursoIdBusqueda: string = '';
 
 asistencias: AsistenciaResponse[] = [];
+editandoId: string | null = null;
+valorOriginal: boolean = false;
 
 cargando = false;
 errorMsg = '';
 
-constructor(private api: ApiService) {}
+constructor(private api: ApiService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     console.log('[v0] Cursos recibidos:', this.cursos);
@@ -35,36 +38,17 @@ constructor(private api: ApiService) {}
     console.log('[v0] Menu toggled');
   }
 
-  onCursoChange(event: any): void {
-  const cursoId = event.target.value;
-
-  if (!cursoId) {
-    this.asistencias = [];
-    return;
+  onCursoChange(): void {
+    if (this.cursoSeleccionado) {
+      this.cursoIdBusqueda = '';
+    }
+    console.log('[v0] Curso seleccionado:', this.cursoSeleccionado);
   }
 
-  this.cursoIdBusqueda = '';
-  this.cargando = true;
-  this.errorMsg = '';
-
-  this.api.getAsistenciaPorCurso(cursoId as unknown as UUID).subscribe({
-    next: (res) => {
-      this.asistencias = res || [];
-      this.cargando = false;
-    },
-    error: (err) => {
-      console.error('[asistencia-table] getAsistenciaPorCurso error', err);
-      this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
-      this.cargando = false;
-    }
-  });
-}
-
-
   onBuscarPorId(): void {
-      console.log('[v0] Buscando por ID:', this.cursoIdBusqueda);
+    console.log('[v0] Buscando por ID:', this.cursoIdBusqueda);
 
- const codigo = (this.cursoIdBusqueda || '').trim();
+    const codigo = (this.cursoIdBusqueda || '').trim();
 
     if (!codigo) {
       this.errorMsg = 'Ingresá un código de curso';
@@ -75,7 +59,7 @@ constructor(private api: ApiService) {}
     this.errorMsg = '';
     this.asistencias = [];
 
- this.api.getCursoPorCodigo(codigo).subscribe({
+    this.api.getCursoPorCodigo(codigo).subscribe({
       next: (curso: Curso) => {
         const cursoId = curso?.id as unknown as UUID;
         this.cursoSeleccionado = String(cursoId);
@@ -138,7 +122,51 @@ constructor(private api: ApiService) {}
   }
 
   editarAsistencia(asistencia: AsistenciaResponse): void {
-    console.log('Editar asistencia de:', asistencia);
-    // Implementar lógica de edición aquí
+    this.editandoId = asistencia.id;
+    this.valorOriginal = asistencia.presente;
+  }
+
+  cambiarPresente(asistencia: AsistenciaResponse, nuevoValor: boolean): void {
+    asistencia.presente = nuevoValor;
+  }
+
+  guardarAsistencia(asistencia: AsistenciaResponse): void {
+    const asistenciaDto = {
+      alumnoId: asistencia.id,
+      presente: asistencia.presente,
+      fecha: new Date(asistencia.fecha)
+    };
+
+    this.api.saveAsistencia(this.cursoSeleccionado as unknown as UUID, [asistenciaDto]).subscribe({
+      next: () => {
+        this.snackBar.open('✓ Asistencia actualizada correctamente', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar']
+        });
+        this.editandoId = null;
+      },
+      error: (err: any) => {
+        console.error('Error actualizando asistencia', err);
+        this.snackBar.open('Error al actualizar la asistencia', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar']
+        });
+        asistencia.presente = this.valorOriginal;
+        this.editandoId = null;
+      }
+    });
+  }
+
+  cancelarEdicion(asistencia: AsistenciaResponse): void {
+    asistencia.presente = this.valorOriginal;
+    this.editandoId = null;
+  }
+
+  estaEditando(asistencia: AsistenciaResponse): boolean {
+    return this.editandoId === asistencia.id;
   }
 }

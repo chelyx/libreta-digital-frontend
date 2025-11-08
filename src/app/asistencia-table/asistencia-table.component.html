@@ -9,8 +9,8 @@
           <span class="step-number">1</span>
           <label class="label">Seleccionar Curso</label>
         </div>
-        <select class="select-input" [(ngModel)]="cursoSeleccionado" (change)="onCursoChange($event)">
-        <option value="" disabled selected>Seleccione un curso</option>
+        <select class="select-input" [(ngModel)]="cursoSeleccionado" (change)="onCursoChange()">
+          <option value="" disabled selected>Seleccione un curso</option>
           <option *ngFor="let curso of cursos" [value]="curso.id">
             {{ curso.nombre }} - {{ curso.codigo }}
           </option>
@@ -25,7 +25,7 @@
       <div class="search-option">
         <div class="option-header">
           <span class="step-number">2</span>
-          <label class="label">Buscar por ID de Curso</label>
+          <label class="label">Buscar por Código de Curso</label>
         </div>
         <div class="search-input-wrapper">
           <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -37,7 +37,7 @@
             class="search-input"
             [(ngModel)]="cursoIdBusqueda"
             (input)="onBuscarPorId()"
-            placeholder="Ingresa el ID del curso (ej: K101)"
+            placeholder="Ingresa el Código del curso (ej: K101)"
           />
         </div>
         <p class="help-text">Introduce el código único del curso para búsqueda rápida</p>
@@ -90,17 +90,47 @@
             <td>{{ a.fecha | date: 'yyyy-MM-dd' }}</td>
             <td>{{ a.nombre || a.id }}</td>
             <td>
-                <span class="pill" [class.ok]="a.presente" [class.no]="!a.presente">
-                  {{ a.presente ? 'Sí' : 'No' }}
-                </span>
+              <div *ngIf="!estaEditando(a)">
+                  <span class="pill" [class.ok]="a.presente" [class.no]="!a.presente">
+                    {{ a.presente ? 'Sí' : 'No' }}
+                  </span>
+              </div>
+              <div *ngIf="estaEditando(a)" class="edit-buttons">
+                <button class="toggle-button"
+                        [class.active]="a.presente"
+                        (click)="cambiarPresente(a, true)">
+                  Sí
+                </button>
+                <button class="toggle-button"
+                        [class.active]="!a.presente"
+                        (click)="cambiarPresente(a, false)">
+                  No
+                </button>
+              </div>
             </td>
             <td class="acciones-column">
-              <button mat-icon-button
-                      class="edit-button"
-                      (click)="editarAsistencia(a)"
-                      matTooltip="Editar asistencia">
-                <mat-icon>edit</mat-icon>
-              </button>
+              <div *ngIf="!estaEditando(a)">
+                <button mat-icon-button
+                        class="edit-button"
+                        (click)="editarAsistencia(a)"
+                        matTooltip="Editar asistencia">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
+              <div *ngIf="estaEditando(a)" class="action-buttons">
+                <button mat-icon-button
+                        class="save-button"
+                        (click)="guardarAsistencia(a)"
+                        matTooltip="Guardar">
+                  <mat-icon>check</mat-icon>
+                </button>
+                <button mat-icon-button
+                        class="cancel-button"
+                        (click)="cancelarEdicion(a)"
+                        matTooltip="Cancelar">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
             </td>
           </tr>
           </tbody>
