@@ -1,7 +1,7 @@
 <div class="main-content">
   <div class="content-wrapper">
     <h2 class="title">Toma de Asistencia</h2>
-    <p class="subtitle">Registro completo de calificaciones</p>
+    <p class="subtitle">Registro completo de Asistencias</p>
 
     <div class="search-section">
       <!-- Buscador por Curso (Dropdown) -->
@@ -65,5 +65,54 @@
       </svg>
       <p>Podes buscar el curso seleccionándolo de la lista o ingresando directamente su código. Ambos métodos te llevarán a la página de registro de asistencia.</p>
     </div>
+  <!-- ===================== -->
+    <!-- NUEVA SECCIÓN: RESULTADOS -->
+    <!-- ===================== -->
+    <div class="results-section" *ngIf="cursoSeleccionado || cursoIdBusqueda">
+      <h3 class="results-title">Asistencias del curso</h3>
+
+      <!-- Estado de carga -->
+      <div class="loading" *ngIf="cargando">
+        <svg class="spinner" viewBox="0 0 50 50">
+          <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+        </svg>
+        <span>Cargando asistencias...</span>
+      </div>
+
+      <!-- Error -->
+      <div class="error" *ngIf="!cargando && errorMsg">
+        {{ errorMsg }}
+      </div>
+
+      <!-- Tabla con asistencias -->
+      <div class="table-wrapper" *ngIf="!cargando && !errorMsg && asistencias?.length">
+        <table class="asist-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Alumno</th>
+              <th>Presente</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of asistencias">
+              <td>{{ a.fecha | date: 'yyyy-MM-dd' }}</td>
+              <td>{{ a.nombre || a.id }}</td>
+              <td>
+                <span class="pill" [class.ok]="a.presente" [class.no]="!a.presente">
+                  {{ a.presente ? 'Sí' : 'No' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sin resultados -->
+      <div class="empty" *ngIf="!cargando && !errorMsg && (!asistencias || asistencias.length === 0)">
+        No hay asistencias para mostrar.
+      </div>
+    </div>
+
   </div>
 </div>
