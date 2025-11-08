@@ -1,11 +1,9 @@
 <div class="notas-container">
-  <!-- Header principal -->
   <div class="page-header">
     <h1>Carga de Calificaciones</h1>
     <p>Exámenes Finales</p>
   </div>
 
-  <!-- PASO 1: Seleccionar Mesa de Examen -->
   <div class="step-card">
     <div class="step-header">
       <span class="step-badge">PASO 1</span>
@@ -16,17 +14,54 @@
         <mat-form-field appearance="outline" class="curso-select">
           <mat-label>Materia</mat-label>
           <mat-select [(ngModel)]="cursoSeleccionado" (selectionChange)="onCursoChange($event.value)">
+            <mat-option value="">Todas las materias</mat-option>
             <mat-option *ngFor="let curso of cursos" [value]="curso.id">
               {{ curso.nombre }}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
+
+      <div class="search-section">
+        <div class="search-header">
+          <div class="search-title-wrapper">
+            <h3>Buscar Mesa de Examen</h3>
+            <p class="search-subtitle">Completar ambos campos obligatoriamente</p>
+          </div>
+          <button mat-stroked-button
+                  class="clear-button"
+                  (click)="limpiarBusqueda()"
+                  *ngIf="busquedaNombreAlumno || busquedaFecha">
+            <mat-icon>clear</mat-icon>
+            Limpiar filtros
+          </button>
+        </div>
+
+        <div class="search-fields">
+          <mat-form-field appearance="outline" class="search-input">
+            <mat-label>Nombre de Mesa</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput
+                   type="text"
+                   [(ngModel)]="busquedaNombreAlumno"
+                   (input)="aplicarFiltros()"
+                   placeholder="Ej: Analisis 1">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="search-input">
+            <mat-label>Fecha</mat-label>
+            <mat-icon matPrefix>calendar_today</mat-icon>
+            <input matInput
+                   type="date"
+                   [(ngModel)]="busquedaFecha"
+                   (change)="aplicarFiltros()">
+          </mat-form-field>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- PASO 2: Cargar Calificaciones (solo se muestra si hay curso seleccionado y alumnos) -->
-  <div class="step-card" *ngIf="cursoSeleccionado && notas.length > 0">
+  <div class="step-card" *ngIf="cursoSeleccionado && notasFiltradas.length > 0">
     <div class="step-header">
       <span class="step-badge">PASO 2</span>
       <h2>Cargar Calificaciones</h2>
@@ -40,7 +75,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let alumno of notas">
+        <tr *ngFor="let alumno of notasFiltradas">
           <td class="nombre">{{ alumno.alumnoNombre }}</td>
           <td>
             <mat-form-field appearance="outline" class="nota-input">
@@ -64,8 +99,7 @@
     </div>
   </div>
 
-  <!-- Mensaje si no hay alumnos -->
-  <div class="no-alumnos" *ngIf="cursoSeleccionado && notas.length === 0">
+  <div class="no-alumnos" *ngIf="cursoSeleccionado && notasFiltradas.length === 0">
     No hay alumnos cargados para este curso.
   </div>
 </div>
