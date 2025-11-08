@@ -119,29 +119,26 @@ constructor(private api: ApiService) {}
   }
 
   editarAsistencia(asistencia: AsistenciaResponse): void {
-    console.log('Editar asistencia de:', asistencia);
-  }
+  // activa modo edición
+  (asistencia as any)._editando = true;
+}
 
-  // Métodos auxiliares del modo edición (ya definidos en tu HTML)
-  estaEditando(a: AsistenciaResponse): boolean {
-    return (a as any)._editando === true;
-  }
+estaEditando(a: AsistenciaResponse): boolean {
+  return (a as any)._editando === true;
+}
 
-  editar(a: AsistenciaResponse): void {
-    (a as any)._editando = true;
-  }
+cancelarEdicion(a: AsistenciaResponse): void {
+  (a as any)._editando = false;
+}
 
-  cancelarEdicion(a: AsistenciaResponse): void {
-    (a as any)._editando = false;
-  }
+cambiarPresente(a: AsistenciaResponse, valor: boolean): void {
+  a.presente = valor;
+}
 
-  cambiarPresente(a: AsistenciaResponse, valor: boolean): void {
-    a.presente = valor;
-  }
-
-  guardarAsistencia(a: AsistenciaResponse): void {
-    console.log('[asistencia-table] Guardando asistencia modificada:', a);
-    (a as any)._editando = false;
-    // acá podés implementar api.updateAsistencia(a.id, a) si lo necesitás
-  }
+guardarAsistencia(a: AsistenciaResponse): void {
+  console.log('[asistencia-table] Guardando asistencia:', a);
+  (a as any)._editando = false;
+  // si querés persistirlo en backend:
+  // this.api.updateAsistencia(a.id, a).subscribe(...)
+}
 }
