@@ -1,126 +1,129 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ApiService } from 'src/core/service/api.service';
+import { Component, OnInit, Input } from '@angular/core'; // <-- Agrega Input aquí
 import { UUID } from 'crypto';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Curso } from 'src/core/models/curso';
+import { ApiService } from 'src/core/service/api.service';
+import { AsistenciaResponse } from 'src/core/models/asistencia';
 
-interface AsistenciaResponse {
-  cursoId: string;
-  fecha: string;
-  auth0Id: string;
-  nombre: string;
-  presente: boolean;
+interface Curso {
+id: string;
+nombre: string;
+codigo: string;
 }
 
 @Component({
-  selector: 'app-asistencia-table',
-  templateUrl: './asistencia-table.component.html',
-  styleUrls: ['./asistencia-table.component.scss']
+selector: 'app-asistencia-table',
+templateUrl: './asistencia-table.component.html',
+styleUrls: ['./asistencia-table.component.scss']
 })
 export class AsistenciaTableComponent implements OnInit {
-  fechas: string[] = [];
-  cursoSeleccionado: UUID = '' as UUID;
-  @Input() cursos: Curso[] = [];
-  // Mapa de alumnos: auth0Id -> datos
-  alumnosMap: Map<string, {
-    nombre: string;
-    asistenciasPorFecha: { [fecha: string]: boolean };
-    originalAsistenciasPorFecha: { [fecha: string]: boolean };
-    modificadas: Set<string>;
-  }> = new Map();
+// <CHANGE> Agregar decorador @Input() para recibir cursos del componente padre
+@Input() cursos: Curso[] = [];  // <-- Esta es la línea clave que falta
 
-  constructor(private apiService: ApiService, private snackBar: MatSnackBar) {}
+cursoSeleccionado: string = '';
+cursoIdBusqueda: string = '';
+
+  // Datos
+  asistencias: AsistenciaResponse[] = [];
+
+    // UI
+  cargando = false;
+  errorMsg = '';
+  
+  constructor(private api: ApiService) {}
 
   ngOnInit(): void {
+    console.log('[v0] Cursos recibidos:', this.cursos);
   }
 
-  onCursoChange(cursoId: UUID) {
-    this.cursoSeleccionado = cursoId;
-    this.cargarAsistenciasPorCurso(cursoId);
+  toggleMenu(): void {
+    console.log('[v0] Menu toggled');
   }
 
-  cargarAsistenciasPorCurso(cursoId: UUID) {
-   this.apiService.getAsistenciaPorCurso(cursoId).subscribe(data => {
-      if (!data.length) return;
-      this.fechas = [...new Set(data.map(a => a.fecha))].sort();
-
-      data.forEach(a => {
-        if (!this.alumnosMap.has(a.auth0Id)) {
-          this.alumnosMap.set(a.auth0Id, {
-            nombre: a.nombre,
-            asistenciasPorFecha: {},
-            originalAsistenciasPorFecha: {},
-            modificadas: new Set<string>()
-          });
-        }
-        const alumno = this.alumnosMap.get(a.auth0Id)!;
-        alumno.asistenciasPorFecha[a.fecha] = a.presente;
-        alumno.originalAsistenciasPorFecha[a.fecha] = a.presente;
-      });
-    });
-  }
-
-  marcarModificado(auth0Id: string, fecha: string) {
-    const alumno = this.alumnosMap.get(auth0Id);
-    if (!alumno) return;
-
-    const nuevoValor = alumno.asistenciasPorFecha[fecha];
-    const original = alumno.originalAsistenciasPorFecha[fecha];
-
-    if (nuevoValor !== original) {
-      alumno.modificadas.add(fecha);
-    } else {
-      alumno.modificadas.delete(fecha);
+  onCursoChange(): void {
+    if (this.cursoSeleccionado) {
+      this.cursoIdBusqueda = '';
     }
+    console.log('[v0] Curso seleccionado:', this.cursoSeleccionado);
   }
 
-  hasChanges(): boolean {
-    for (const alumno of this.alumnosMap.values()) {
-      if (alumno.modificadas.size > 0) return true;
-    }
-    return false;
-  }
+  onBuscarPorId(): void {
+      console.log('[v0] Buscando por ID:', this.cursoIdBusqueda);
+ 
+ const codigo = (this.cursoIdBusqueda || '').trim();
 
-  getChangesCount(): number {
-    let count = 0;
-    this.alumnosMap.forEach(alumno => count += alumno.modificadas.size);
-    return count;
-  }
-
-  guardarCambios() {
-    const cambios: { alumnoId: string; presente: boolean; fecha: Date }[] = [];
-
-    this.alumnosMap.forEach((alumno, auth0Id) => {
-      alumno.modificadas.forEach(fecha => {
-        cambios.push({
-          fecha: new Date(fecha),
-          alumnoId: auth0Id,
-          presente: alumno.asistenciasPorFecha[fecha]
-        });
-      });
-    });
-
-    if (!cambios.length) {
+    if (!codigo) {
+      this.errorMsg = 'Ingresá un código de curso';
       return;
     }
 
-    this.apiService.saveAsistencia(this.cursoSeleccionado, cambios).subscribe({
-      next: (res) => {
-        // actualizar originales y limpiar marcas
-        this.alumnosMap.forEach(alumno => {
-          alumno.modificadas.forEach(fecha => {
-            alumno.originalAsistenciasPorFecha[fecha] = alumno.asistenciasPorFecha[fecha];
-          });
-          alumno.modificadas.clear();
+    this.cargando = true;
+    this.errorMsg = '';
+    this.asistencias = [];
+
+ this.api.getCursoPorCodigo(codigo).subscribe({
+      next: (curso: Curso) => {
+        const cursoId = curso?.id as unknown as UUID;
+        // si además querés reflejar la selección actual en algún select:
+        this.cursoSeleccionado = String(cursoId);
+
+        // Paso 2: cargar asistencias del curso encontrado
+        this.api.getAsistenciaPorCurso(cursoId).subscribe({
+          next: (res) => {
+            this.asistencias = res || [];
+            this.cargando = false;
+          },
+          error: (err) => {
+            console.error('[asistencia-table] getAsistenciaPorCurso error', err);
+            this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
+            this.cargando = false;
+          }
         });
-        this.snackBar.open(res.status, '',{ duration: 3000 });
       },
-      error: () => console.log('Error al guardar los cambios')
+      error: (err) => {
+        console.error('[asistencia-table] getCursoPorCodigo error', err);
+        this.errorMsg = err?.status === 404
+          ? 'No se encontró un curso con ese código'
+          : 'Ocurrió un error buscando el curso';
+        this.cargando = false;
+      }
     });
   }
 
-  trackByAlumno(index: number, item: any) {
-    return item.key; // para *ngFor con keyvalue pipe
+  onCursoSelectChange(cursoId: string): void {
+    this.cursoSeleccionado = cursoId;
+    if (!cursoId) {
+      this.asistencias = [];
+      return;
+    }
+    this.cargando = true;
+    this.errorMsg = '';
+    this.api.getAsistenciaPorCurso(cursoId as unknown as UUID).subscribe({
+      next: (res) => {
+        this.asistencias = res || [];
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('[asistencia-table] getAsistenciaPorCurso error', err);
+        this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
+        this.cargando = false;
+      }
+    });
+  }
+
+  /**
+   * Método auxiliar (si lo necesitás en el template)
+   */
+  hayAsistencias(): boolean {
+    return Array.isArray(this.asistencias) && this.asistencias.length > 0;
+  }
+
+  buscarCurso(): void {
+    const cursoId = this.cursoSeleccionado || this.cursoIdBusqueda;
+
+    if (cursoId) {
+      console.log('[v0] Buscando curso con ID:', cursoId);
+      // Aquí va tu lógica de navegación
+    } else {
+      console.warn('No se ha seleccionado ningún curso');
+    }
   }
 }

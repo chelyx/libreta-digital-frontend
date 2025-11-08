@@ -1,39 +1,309 @@
-.asistencia-container {
-  padding: 16px;
-  overflow-x: auto;
-}
+// Removí los estilos .container, .header, .menu-button, .hamburger-icon, .header-title
+// ya que el header SIRCA debe estar en el componente padre o en el layout principal
 
-.asistencia-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-}
-
-.asistencia-table th,
-.asistencia-table td {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-  min-width: 100px;
-}
-
-.asistencia-table th:first-child,
-.asistencia-table td:first-child {
-  text-align: left;
-  position: sticky;
-  left: 0;
-  background-color: #fff;
-}
-
-.nombre {
-  font-weight: 500;
-}
-
-.checkbox-cell {
-  text-align: center;
-}
-
-.acciones {
-  margin-top: 16px;
+.main-content {
+  padding: 3rem 1rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  min-height: calc(100vh - 80px); // Ajusta según la altura de tu header principal
+  background: linear-gradient(to bottom, #fef2f2, #ffffff);
 }
+
+.content-wrapper {
+  width: 100%;
+  max-width: 42rem;
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  text-align: center;
+  color: #1f2937;
+  margin: 0 0 0.75rem 0;
+}
+
+.subtitle {
+  text-align: center;
+  color: #6b7280;
+  font-size: 1.125rem;
+  margin: 0 0 3rem 0;
+}
+
+.search-section {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  border: 1px solid #f3f4f6;
+}
+
+.search-option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.option-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+  color: white;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 1rem;
+}
+
+.select-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #1f2937;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #d1d5db;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #991b1b;
+    box-shadow: 0 0 0 3px rgba(153, 27, 27, 0.1);
+  }
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 3rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #1f2937;
+  transition: all 0.2s;
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+
+  &:hover {
+    border-color: #d1d5db;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #991b1b;
+    box-shadow: 0 0 0 3px rgba(153, 27, 27, 0.1);
+  }
+}
+
+.help-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 1rem 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e5e7eb;
+  }
+}
+
+.divider-text {
+  position: relative;
+  background: white;
+  padding: 0 1rem;
+  color: #9ca3af;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.search-button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(153, 27, 27, 0.3);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+    box-shadow: 0 6px 8px -1px rgba(153, 27, 27, 0.4);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.button-icon {
+  flex-shrink: 0;
+}
+
+.info-note {
+  margin-top: 2rem;
+  padding: 1rem 1.25rem;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.info-icon {
+  color: #3b82f6;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.info-note p {
+  margin: 0;
+  color: #1e40af;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+// Responsive
+@media (max-width: 640px) {
+  .title {
+    font-size: 1.875rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .search-section {
+    padding: 1.5rem;
+  }
+
+  .main-content {
+    padding: 2rem 1rem;
+  }
+}
+
+ .results-section {
+    margin-top: 20px;
+    padding: 16px;
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 12px;
+    background: #fff;
+  }
+  .results-title {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #555;
+  }
+  .spinner {
+    width: 24px;
+    height: 24px;
+    animation: rotate 1.4s linear infinite;
+  }
+  .spinner .path {
+    stroke: #3f51b5;
+    stroke-linecap: round;
+    animation: dash 1.4s ease-in-out infinite;
+  }
+  @keyframes rotate { 100% { transform: rotate(360deg); } }
+  @keyframes dash {
+    0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
+    50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
+    100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
+  }
+  .error {
+    color: #d32f2f;
+    background: #ffebee;
+    border: 1px solid #ffcdd2;
+    padding: 10px 12px;
+    border-radius: 8px;
+  }
+  .table-wrapper { overflow: auto; }
+  .asist-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fafafa;
+  }
+  .asist-table th, .asist-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+    text-align: left;
+  }
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    line-height: 20px;
+    border: 1px solid rgba(0,0,0,.2);
+  }
+  .pill.ok { background: rgba(76, 175, 80, .12); }
+  .pill.no { background: rgba(244, 67, 54, .12); }
+  .empty { opacity: .8; margin-top: 6px; }

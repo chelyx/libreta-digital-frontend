@@ -1,0 +1,235 @@
+<div class="validator-container">
+  <div class="validator-card">
+    <!-- Header estilo UTN.BA -->
+    <div class="header">
+      <h1 class="title">Validador de Certificados</h1>
+    </div>
+
+    <!-- Search Form -->
+    <div class="search-section">
+      <div class="instruction-box">
+        Ingrese su <strong>Número de Documento</strong>, y luego el <strong>Código de Validación</strong> impreso en el certificado.
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Número de Documento</label>
+        <input
+          type="text"
+          [(ngModel)]="documentNumber"
+          placeholder=""
+          class="input-field"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Código de Validación</label>
+        <input
+          type="text"
+          [(ngModel)]="validationCode"
+          placeholder=""
+          class="input-field"
+          [disabled]="isLoading"
+          (keyup.enter)="validateCertificate()"
+        />
+      </div>
+
+      <button
+        (click)="validateCertificate()"
+        [disabled]="isLoading || !validationCode.trim()"
+        class="btn btn-primary"
+      >
+        <span *ngIf="!isLoading">Validar</span>
+        <span *ngIf="isLoading" class="loading-content">
+          <span class="loading-spinner"></span>
+          Validando...
+        </span>
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-section">
+      <div class="spinner"></div>
+      <p class="loading-text">Consultando base de datos...</p>
+    </div>
+
+    <!-- Results -->
+    <div *ngIf="!isLoading && validationResult" class="results-section">
+
+      <!-- Valid Certificate -->
+      <div *ngIf="validationResult.isValid" class="result-card success">
+        <div class="result-header">
+          <svg class="result-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <div>
+            <h2>Certificado Válido</h2>
+            <p class="result-subtitle">Registrado en el sistema</p>
+          </div>
+        </div>
+        <p class="result-message">{{ validationResult.message }}</p>
+
+        <div class="certificate-details" *ngIf="validationResult.certificate">
+          <h3 class="details-title">Información del Certificado</h3>
+
+          <div class="detail-row">
+            <span class="detail-label">
+              <svg class="detail-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+              </svg>
+              Código:
+            </span>
+            <span class="detail-value code">{{ validationResult.certificate.code }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">
+              <svg class="detail-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+              </svg>
+              Titular:
+            </span>
+            <span class="detail-value">{{ validationResult.certificate.holderName }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">
+              <svg class="detail-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+              </svg>
+              Emisor:
+            </span>
+            <span class="detail-value">{{ validationResult.certificate.issuer }}</span>
+          </div>
+
+          <div class="detail-row" *ngIf="validationResult.certificate.course">
+            <span class="detail-label">
+              <svg class="detail-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+              </svg>
+              Curso:
+            </span>
+            <span class="detail-value">{{ validationResult.certificate.course }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="detail-label">
+              <svg class="detail-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+              </svg>
+              Fecha de emisión:
+            </span>
+            <span class="detail-value">{{ formatDate(validationResult.certificate.issueDate) }}</span>
+          </div>
+
+          <div class="detail-row" *ngIf="validationResult.certificate.expirationDate">
+            <span class="detail-label">
+              <svg class="detail-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+              </svg>
+              Fecha de expiración:
+            </span>
+            <span class="detail-value">{{ formatDate(validationResult.certificate.expirationDate) }}</span>
+          </div>
+
+          <div class="validity-badge">
+            <svg class="badge-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span>Certificado Autenticado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invalid Certificate -->
+      <div *ngIf="!validationResult.isValid" class="result-card error">
+        <div class="result-header">
+          <svg class="result-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          <div>
+            <h2>Certificado Inválido</h2>
+            <p class="result-subtitle">No pudo ser verificado</p>
+          </div>
+        </div>
+        <p class="result-message">{{ validationResult.message }}</p>
+
+        <div class="error-list" *ngIf="validationResult.errors && validationResult.errors.length > 0">
+          <h4>Detalles del error:</h4>
+          <ul>
+            <li *ngFor="let error of validationResult.errors">
+              <svg class="error-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              {{ error }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="certificate-details" *ngIf="validationResult.certificate">
+          <h3 class="details-title">Información del Certificado</h3>
+
+          <div class="detail-row">
+            <span class="detail-label">Código:</span>
+            <span class="detail-value code">{{ validationResult.certificate.code }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Titular:</span>
+            <span class="detail-value">{{ validationResult.certificate.holderName }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Estado:</span>
+            <span class="status-badge" [class]="validationResult.certificate.status">
+              {{ validationResult.certificate.status === 'expired' ? 'EXPIRADO' : 'REVOCADO' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <button (click)="reset()" class="btn btn-secondary">
+        <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+        </svg>
+        Validar otro certificado
+      </button>
+    </div>
+
+    <!-- Example Codes -->
+    <div class="search-section" *ngIf="!hasSearched">
+      <div class="examples-section">
+        <h3>Códigos de ejemplo para probar:</h3>
+        <div class="example-codes">
+          <button class="example-code" (click)="validationCode = 'SIRCA-2024-001'">
+            <svg class="example-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            SIRCA-2024-001
+            <span class="example-label">Válido</span>
+          </button>
+          <button class="example-code" (click)="validationCode = 'SIRCA-2023-458'">
+            <svg class="example-icon expired" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+            </svg>
+            SIRCA-2023-458
+            <span class="example-label expired">Expirado</span>
+          </button>
+          <button class="example-code" (click)="validationCode = 'SIRCA-2024-789'">
+            <svg class="example-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            SIRCA-2024-789
+            <span class="example-label">Válido</span>
+          </button>
+          <button class="example-code" (click)="validationCode = 'SIRCA-2022-100'">
+            <svg class="example-icon revoked" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+            SIRCA-2022-100
+            <span class="example-label revoked">Revocado</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
