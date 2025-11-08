@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { ApiService } from 'src/core/service/api.service';
