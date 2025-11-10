@@ -42,40 +42,32 @@ constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
   }
 
   onBuscarPorId(): void {
-    const codigo = (this.cursoIdBusqueda || '').trim();
-    if (!codigo) {
-      this.snackBar.open('Ingresá un código de curso', '', { duration: 3000 });
-      return;
-    }
-
-    if (typeof (this as any).cargando !== 'undefined') (this as any).cargando = true;
-    if (typeof (this as any).loading !== 'undefined') (this as any).loading = true;
-
-    this.cursoSeleccionado = undefined;
-    this.asistencias = {};
-
-    const safe = encodeURIComponent(codigo);
-    this.cursoService.getProtegido(`api/cursos/codigo/${safe}`).subscribe({
-      next: (curso: any) => {
-        this.onCursoChange(curso);
-
-        if (typeof (this as any).cargando !== 'undefined') (this as any).cargando = false;
-        if (typeof (this as any).loading !== 'undefined') (this as any).loading = false;
-
-        this.snackBar.open(`Curso encontrado: ${curso?.nombre || curso?.codigo || codigo}`, '', { duration: 2500 });
-      },
-      error: (err) => {
-        console.error('[onBuscarPorId] error:', err);
-        if (typeof (this as any).cargando !== 'undefined') (this as any).cargando = false;
-        if (typeof (this as any).loading !== 'undefined') (this as any).loading = false;
-
-        const msg = err?.status === 404
-          ? 'No se encontró un curso con ese código'
-          : 'Ocurrió un error buscando el curso';
-        this.snackBar.open(msg, '', { duration: 3000 });
-      }
-    });
+  const codigo = (this.cursoIdBusqueda || '').trim();
+  if (!codigo) {
+    this.snackBar.open('Ingresá un código de curso', '', { duration: 3000 });
+    return;
   }
+
+  const local = this.cursos.find(c => c.codigo?.toLowerCase() === codigo.toLowerCase());
+  if (local) {
+    this.onCursoChange(local);
+    this.snackBar.open(`Curso encontrado localmente: ${local.nombre}`, '', { duration: 2500 });
+    return;
+  }
+
+  // Si no está localmente, intentar buscar en backend
+  const safe = encodeURIComponent(codigo);
+  this.cursoService.getProtegido(`api/cursos/codigo/${safe}`).subscribe({
+    next: (curso: any) => {
+      this.onCursoChange(curso);
+      this.snackBar.open(`Curso encontrado desde servidor: ${curso.nombre || curso.codigo}`, '', { duration: 2500 });
+    },
+    error: () => {
+      this.snackBar.open('No se encontró un curso con ese código', '', { duration: 3000 });
+    }
+  });
+}
+
 
   get alumnosFiltrados(): User[] {
     if (!this.cursoSeleccionado) return [];
