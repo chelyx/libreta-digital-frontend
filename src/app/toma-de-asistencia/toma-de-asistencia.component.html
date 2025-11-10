@@ -1,141 +1,78 @@
-<div class="asistencia-container">
-  <div class="header-section">
-    <!-- Header -->
-    <div class="asistencia-header">
-      <h1 class="header-title">Toma de Asistencia</h1>
+<!-- Banner de título principal -->
+<div class="titulo-banner">
+  <h1 class="titulo-banner-text">Toma de asistencia</h1>
+</div>
 
-      <div class="header-actions">
-        <button mat-icon-button (click)="guardarAsistencia()" matTooltip="Guardar">
-          <mat-icon>save</mat-icon>
-        </button>
-      </div>
+<!-- Panel de filtros y búsqueda horizontal -->
+
+<div class="panel-horizontal">
+
+  <!-- Sección 1 -->
+  <div class="panel-item">
+
+    <div class="panel-header">
+      <div class="panel-number">1</div>
+      <div class="panel-title">Seleccionar Curso</div>
     </div>
-
-    <!-- Filtros -->
-    <div class="filtros-section">
-      <!-- Selección de curso -->
-      <mat-form-field appearance="outline" class="filtro-field">
-        <mat-label>Curso</mat-label>
-        <mat-select
-          [(ngModel)]="cursoSeleccionado"
-          (selectionChange)="onCursoChange($event.value)"
-        >
-          <mat-option *ngFor="let c of cursos" [value]="c">
-            {{ c.nombre }}
-          </mat-option>
-        </mat-select>
-        <button
-          mat-icon-button
-          matSuffix
-          *ngIf="cursoSeleccionado"
-          (click)="onCursoChange('')"
-          aria-label="Limpiar curso"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field>
-
-      <!-- Búsqueda de alumno -->
-      <mat-form-field appearance="outline" class="filtro-field">
-        <mat-label>Buscar alumno</mat-label>
-        <input
-          matInput
-          placeholder="Nombre o Email"
-          [(ngModel)]="filtro"
-          aria-label="Buscar alumno"
-        />
-        <mat-icon matPrefix>search</mat-icon>
-        <button
-          mat-icon-button
-          matSuffix
-          *ngIf="filtro"
-          (click)="filtro = ''"
-          aria-label="Limpiar búsqueda"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field>
-    </div>
-
-    <!-- Nueva sección: Búsqueda por ID de curso -->
-    <div class="divider-section">
-      <div class="divider-line"></div>
-      <span class="divider-text">o</span>
-      <div class="divider-line"></div>
-    </div>
-
-    <div class="busqueda-id-section">
-      <mat-form-field appearance="outline" class="busqueda-id-field">
-        <mat-label>Buscar por código de Curso</mat-label>
-        <input
-          matInput
-          placeholder="Ingresa el código del curso"
-          [(ngModel)]="cursoIdBusqueda"
-          (keyup.enter)="onBuscarPorId()"
-          aria-label="Buscar por código de curso"
-        />
-        <mat-icon matPrefix>tag</mat-icon>
-        <button
-          mat-icon-button
-          matSuffix
-          *ngIf="cursoIdBusqueda"
-          (click)="cursoIdBusqueda = ''"
-          aria-label="Limpiar búsqueda"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field>
+    <mat-form-field appearance="outline" class="panel-field">
+      <mat-label>Curso</mat-label>
+      <mat-select
+        [(ngModel)]="cursoSeleccionado"
+        (selectionChange)="onCursoChange($event.value)"
+      >
+        <mat-option *ngFor="let c of cursos" [value]="c">
+          {{ c.nombre }}
+        </mat-option>
+      </mat-select>
       <button
-        mat-raised-button
-        color="primary"
-        class="buscar-id-button"
-        (click)="onBuscarPorId()"
-        [disabled]="!cursoIdBusqueda.trim()"
+        mat-icon-button
+        matSuffix
+        *ngIf="cursoSeleccionado"
+        (click)="onCursoChange('')"
+        aria-label="Limpiar curso"
       >
-        <mat-icon>search</mat-icon>
-        Buscar
+        <mat-icon>close</mat-icon>
       </button>
-    </div>
-
-    <div class="help-text-section" *ngIf="!cursoSeleccionado">
-      <mat-icon class="help-icon">info</mat-icon>
-      <p class="help-text">
-        Selecciona un curso de la lista o busca directamente por su código
-      </p>
-    </div>
-
-    <!-- Contador -->
-    <div class="contador-section" *ngIf="cursoSeleccionado">
-      <span class="contador-text">
-        {{ alumnosFiltrados.length }} alumno{{ alumnosFiltrados.length !== 1 ? 's' : '' }}
-      </span>
-    </div>
+    </mat-form-field>
+    <p class="panel-subtext">Elige un curso de la lista disponible</p>
   </div>
 
-  <!-- Lista de alumnos -->
-  <div class="alumnos-lista" *ngIf="cursoSeleccionado">
-    <div
-      class="alumno-card"
-      *ngFor="let a of alumnosFiltrados; trackBy: trackByAuth0Id"
-      [class.presente]="asistencias[a.auth0Id]"
+  <!-- Sección 2 -->
+  <div class="panel-item">
+    <div class="panel-header">
+      <div class="panel-number">2</div>
+      <div class="panel-title">Buscar por Código de Curso</div>
+    </div>
+    <mat-form-field appearance="outline" class="panel-field">
+      <mat-label>Código del curso</mat-label>
+      <input
+        matInput
+        placeholder="Ej: K101"
+        [(ngModel)]="cursoIdBusqueda"
+        (keyup.enter)="onBuscarPorId()"
+      />
+      <mat-icon matPrefix>tag</mat-icon>
+    </mat-form-field>
+    <p class="panel-subtext">
+      Introduce el código único del curso para búsqueda rápida
+    </p>
+    <button
+      mat-raised-button
+      color="primary"
+      class="buscar-id-button"
+      (click)="onBuscarPorId()"
+      [disabled]="!cursoIdBusqueda.trim()"
     >
-      <div class="alumno-info">
-        <div class="alumno-nombre">{{ a.nombre }}</div>
-        <div class="alumno-email">{{ a.email }}</div>
-      </div>
-
-      <mat-checkbox
-        color="primary"
-        [(ngModel)]="asistencias[a.auth0Id]"
-        class="alumno-checkbox"
-      >
-      </mat-checkbox>
-    </div>
-
-    <!-- Empty state -->
-    <div class="empty-state" *ngIf="alumnosFiltrados.length === 0">
-      <mat-icon>search_off</mat-icon>
-      <p>No se encontraron alumnos</p>
-    </div>
+      <mat-icon>search</mat-icon>
+      Buscar Curso
+    </button>
   </div>
+</div>
+<div class="info-note">
+  <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="12" y1="16" x2="12" y2="12"></line>
+    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+  </svg>
+  <p>Podes buscar el curso seleccionándolo de la lista o ingresando directamente su código.</p>
 </div>

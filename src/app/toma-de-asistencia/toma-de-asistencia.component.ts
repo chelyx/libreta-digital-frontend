@@ -14,7 +14,6 @@ export class TomaDeAsistenciaComponent implements OnInit {
 @Input() cursos: Curso[] = [];
 cursoSeleccionado?: Curso;
 filtro = '';
-// <CHANGE> Agregar campo para búsqueda por ID/codigo de curso
 cursoIdBusqueda = '';
 asistencias: { [auth0Id: string]: boolean } = {};
 saving = false;
@@ -34,7 +33,6 @@ constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
       this.asistencias = {};
       return;
     }
-    // <CHANGE> Limpiar búsqueda por ID/codigo cuando se selecciona del dropdown
     this.cursoIdBusqueda = '';
     this.cursoSeleccionado = curso;
     this.asistencias = {};
@@ -43,27 +41,22 @@ constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
     });
   }
 
- onBuscarPorId(): void {
+  onBuscarPorId(): void {
     const codigo = (this.cursoIdBusqueda || '').trim();
     if (!codigo) {
       this.snackBar.open('Ingresá un código de curso', '', { duration: 3000 });
       return;
     }
 
-    // estados de carga si existen en el componente
     if (typeof (this as any).cargando !== 'undefined') (this as any).cargando = true;
     if (typeof (this as any).loading !== 'undefined') (this as any).loading = true;
 
-    // limpiar selección del dropdown para que la búsqueda por código prevalezca
     this.cursoSeleccionado = undefined;
     this.asistencias = {};
 
     const safe = encodeURIComponent(codigo);
-    // usamos ApiService.getProtegido para llamar: GET /api/cursos/codigo/{codigo}
     this.cursoService.getProtegido(`api/cursos/codigo/${safe}`).subscribe({
       next: (curso: any) => {
-        // Usamos el flujo ya existente del componente
-        // onCursoChange configura cursoSeleccionado y resetea asistencias
         this.onCursoChange(curso);
 
         if (typeof (this as any).cargando !== 'undefined') (this as any).cargando = false;
@@ -82,7 +75,7 @@ constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
         this.snackBar.open(msg, '', { duration: 3000 });
       }
     });
- }
+  }
 
   get alumnosFiltrados(): User[] {
     if (!this.cursoSeleccionado) return [];
