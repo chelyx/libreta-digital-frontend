@@ -68,6 +68,46 @@
     </button>
   </div>
 </div>
+<!-- Lista de alumnos -->
+<div class="alumnos-lista" *ngIf="cursoSeleccionado">
+  <div
+    class="alumno-card"
+    *ngFor="let a of alumnosFiltrados; trackBy: trackByAuth0Id"
+    [class.presente]="asistencias[a.auth0Id]"
+  >
+    <div class="alumno-info">
+      <div class="alumno-nombre">{{ a.nombre }}</div>
+      <div class="alumno-email">{{ a.email }}</div>
+    </div>
+
+    <mat-checkbox
+      color="primary"
+      [(ngModel)]="asistencias[a.auth0Id]"
+      class="alumno-checkbox"
+    >
+    </mat-checkbox>
+  </div>
+
+  <!-- Estado vacío -->
+  <div class="empty-state" *ngIf="alumnosFiltrados.length === 0">
+    <mat-icon>search_off</mat-icon>
+    <p>No se encontraron alumnos</p>
+  </div>
+</div>
+
+<!-- Botón Guardar -->
+<div class="guardar-section" *ngIf="cursoSeleccionado">
+  <button
+    mat-raised-button
+    class="guardar-button"
+    (click)="guardarAsistencia()"
+    [disabled]="saving"
+  >
+    <mat-icon>save</mat-icon>
+    {{ saving ? 'Guardando...' : 'Guardar' }}
+  </button>
+</div>
+
 <div class="info-note">
   <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="10"></circle>
