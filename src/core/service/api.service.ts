@@ -49,7 +49,7 @@ export class ApiService {
   }
 
   getMisCursos(): Observable<Curso[]> {
-    return this.getProtegido('api/cursos/mios');
+    return this.getProtegido('api/cursos/todos');
   }
 
    getAsistenciaPorCurso(cursoId: UUID): Observable<AsistenciaResponse[]> {
