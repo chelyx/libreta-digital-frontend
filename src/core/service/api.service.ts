@@ -93,6 +93,10 @@ getNotasDeAlumnoEnCurso(cursoId: UUID, auth0Id: string): Observable<NotaResponse
   return this.getProtegido(`api/cursos/codigo/${safe}`);
 }
 
+getByCodigoYFecha(codigo: string, fecha: string) {
+  return this.http.get<Curso>(`api/cursos/busqueda/final`, { params: { codigo, fecha }});
+}
+
   registrarBFA(): Observable<any> {
         let nota = {
       legajoAlumno: 1673154,

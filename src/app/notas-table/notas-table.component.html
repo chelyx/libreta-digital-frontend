@@ -38,25 +38,33 @@
         </div>
 
         <div class="search-fields">
+          <!-- Cambiado: ahora es Código del curso, ya no dispara aplicarFiltros -->
           <mat-form-field appearance="outline" class="search-input">
-            <mat-label>Nombre de Mesa</mat-label>
+            <mat-label>Código del curso</mat-label>
             <mat-icon matPrefix>search</mat-icon>
             <input matInput
                    type="text"
-                   [(ngModel)]="busquedaNombreAlumno"
-                   (input)="aplicarFiltros()"
-                   placeholder="Ej: Analisis 1">
+                   [(ngModel)]="codigoCurso"
+                   placeholder="Ej: ALG1-2025">
           </mat-form-field>
 
+          <!-- Fecha para la búsqueda por código+fecha -->
           <mat-form-field appearance="outline" class="search-input">
             <mat-label>Fecha</mat-label>
             <mat-icon matPrefix>calendar_today</mat-icon>
             <input matInput
                    type="date"
-                   [(ngModel)]="busquedaFecha"
-                   (change)="aplicarFiltros()">
+                   [(ngModel)]="fechaCurso">
           </mat-form-field>
+
+          <!-- NUEVO: botón Search que dispara la consulta conjunta -->
+          <button mat-raised-button color="primary"
+                  (click)="buscarCurso()"
+                  [disabled]="buscando">
+            {{ buscando ? 'Buscando...' : 'Search' }}
+          </button>
         </div>
+
       </div>
     </div>
   </div>
