@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core'; // <-- Agrega Input aquí
+import { Component, OnInit, Input } from '@angular/core';
 import { UUID } from 'crypto';
 import { ApiService } from 'src/core/service/api.service';
-import { AsistenciaResponse } from 'src/core/models/asistencia';
+import { AsistenciaAlumnoDto, AsistenciaResponse } from 'src/core/models/asistencia';
 
 interface Curso {
 id: string;
@@ -15,40 +15,48 @@ templateUrl: './asistencia-table.component.html',
 styleUrls: ['./asistencia-table.component.scss']
 })
 export class AsistenciaTableComponent implements OnInit {
-// <CHANGE> Agregar decorador @Input() para recibir cursos del componente padre
-@Input() cursos: Curso[] = [];  // <-- Esta es la línea clave que falta
+@Input() cursos: Curso[] = [];
 
 cursoSeleccionado: string = '';
 cursoIdBusqueda: string = '';
+asistencias: AsistenciaResponse[] = [];
+cargando = false;
+errorMsg = '';
 
-  // Datos
-  asistencias: AsistenciaResponse[] = [];
-
-    // UI
-  cargando = false;
-  errorMsg = '';
-
-  constructor(private api: ApiService) {}
+constructor(private api: ApiService) {}
 
   ngOnInit(): void {
-    console.log('[v0] Cursos recibidos:', this.cursos);
-  }
-
-  toggleMenu(): void {
-    console.log('[v0] Menu toggled');
+    console.log('[asistencia-table] Cursos recibidos:', this.cursos);
   }
 
   onCursoChange(): void {
-    if (this.cursoSeleccionado) {
-      this.cursoIdBusqueda = '';
+    if (!this.cursoSeleccionado) {
+      this.asistencias = [];
+      return;
     }
-    console.log('[v0] Curso seleccionado:', this.cursoSeleccionado);
+
+    this.cursoIdBusqueda = '';
+    this.cargando = true;
+    this.errorMsg = '';
+
+    console.log('[asistencia-table] Cargando asistencias del curso:', this.cursoSeleccionado);
+
+    this.api.getAsistenciaPorCurso(this.cursoSeleccionado as unknown as UUID).subscribe({
+      next: (res) => {
+        this.asistencias = res || [];
+        this.cargando = false;
+        console.log('[asistencia-table] Asistencias cargadas:', this.asistencias);
+      },
+      error: (err) => {
+        console.error('[asistencia-table] Error al cargar asistencias', err);
+        this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
+        this.cargando = false;
+      }
+    });
   }
 
   onBuscarPorId(): void {
-      console.log('[v0] Buscando por ID:', this.cursoIdBusqueda);
-
- const codigo = (this.cursoIdBusqueda || '').trim();
+    const codigo = (this.cursoIdBusqueda || '').trim();
 
     if (!codigo) {
       this.errorMsg = 'Ingresá un código de curso';
@@ -59,69 +67,52 @@ cursoIdBusqueda: string = '';
     this.errorMsg = '';
     this.asistencias = [];
 
- this.api.getCursoPorCodigo(codigo).subscribe({
+    this.api.getCursoPorCodigo(codigo).subscribe({
       next: (curso: Curso) => {
-        const cursoId = curso?.id as unknown as UUID;
-        // si además querés reflejar la selección actual en algún select:
-        this.cursoSeleccionado = String(cursoId);
-
-        // Paso 2: cargar asistencias del curso encontrado
-        this.api.getAsistenciaPorCurso(cursoId).subscribe({
-          next: (res) => {
-            this.asistencias = res || [];
-            this.cargando = false;
-          },
-          error: (err) => {
-            console.error('[asistencia-table] getAsistenciaPorCurso error', err);
-            this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
-            this.cargando = false;
-          }
-        });
+        if (curso && curso.id) {
+          this.cursoSeleccionado = curso.id;
+          this.api.getAsistenciaPorCurso(curso.id as unknown as UUID).subscribe({
+            next: (res) => {
+              this.asistencias = res || [];
+              this.cargando = false;
+            },
+            error: (err) => {
+              console.error('[asistencia-table] getAsistenciaPorCurso error', err);
+              this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
+              this.cargando = false;
+            }
+          });
+        } else {
+          this.errorMsg = 'No se encontró un curso con ese código.';
+          this.cargando = false;
+        }
       },
       error: (err) => {
         console.error('[asistencia-table] getCursoPorCodigo error', err);
-        this.errorMsg = err?.status === 404
-          ? 'No se encontró un curso con ese código'
-          : 'Ocurrió un error buscando el curso';
+        this.errorMsg =
+          err?.status === 404
+            ? 'No se encontró un curso con ese código'
+            : 'Ocurrió un error buscando el curso';
         this.cargando = false;
       }
     });
-  }
-
-  onCursoSelectChange(cursoId: string): void {
-    this.cursoSeleccionado = cursoId;
-    if (!cursoId) {
-      this.asistencias = [];
-      return;
-    }
-    this.cargando = true;
-    this.errorMsg = '';
-    this.api.getAsistenciaPorCurso(cursoId as unknown as UUID).subscribe({
-      next: (res) => {
-        this.asistencias = res || [];
-        this.cargando = false;
-      },
-      error: (err) => {
-        console.error('[asistencia-table] getAsistenciaPorCurso error', err);
-        this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
-        this.cargando = false;
-      }
-    });
-  }
-
-  /**
-   * Método auxiliar (si lo necesitás en el template)
-   */
-  hayAsistencias(): boolean {
-    return Array.isArray(this.asistencias) && this.asistencias.length > 0;
   }
 
   buscarCurso(): void {
     const cursoId = this.cursoSeleccionado || this.cursoIdBusqueda;
-
     if (cursoId) {
-      console.log('[v0] Buscando curso con ID:', cursoId);
-      // Aquí va tu lógica de navegación
+      console.log('[asistencia-table] Buscando curso con ID:', cursoId);
+      this.api.getAsistenciaPorCurso(cursoId as unknown as UUID).subscribe({
+        next: (res) => {
+          this.asistencias = res || [];
+          this.cargando = false;
+        },
+        error: (err) => {
+          console.error('[asistencia-table] getAsistenciaPorCurso error', err);
+          this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
+          this.cargando = false;
+        }
+      });
     } else {
       console.warn('No se ha seleccionado ningún curso');
     }
@@ -142,11 +133,38 @@ cancelarEdicion(a: AsistenciaResponse): void {
 
 cambiarPresente(a: AsistenciaResponse, valor: boolean): void {
   a.presente = valor;
+ /* this.asistenciaActualizada.alumnoId = a.auth0Id;
+  this.asistenciaActualizada.presente = a.presente;
+  this.asistenciaActualizada.fecha = '2025-11-12';
+
+  this.api.actualizarAsistenciaAlumno(a.cursoId.toString(), this.asistenciaActualizada).subscribe({
+    next: () => {
+      console.log('[asistencia-table] Asistencia actualizada con éxito para alumno:', a.auth0Id);
+      },
+    error: (err) => {
+      console.error('[asistencia-table] Error al actualizar asistencia para alumno:', a.auth0Id, err);
+      }
+    });*/
 }
 
 guardarAsistencia(a: AsistenciaResponse): void {
   console.log('[asistencia-table] Guardando asistencia:', a);
   (a as any)._editando = false;
+
+  const asistenciaActualizada: AsistenciaAlumnoDto = {
+    alumnoId: a.auth0Id,
+    presente: a.presente,
+    fecha: a.fecha
+  };
+
+  this.api.actualizarAsistenciaAlumno(a.cursoId.toString(), asistenciaActualizada).subscribe({
+    next: () => {
+      console.log('[asistencia-table] Asistencia actualizada con éxito para alumno:', a.auth0Id);
+      },
+    error: (err) => {
+      console.error('[asistencia-table] Error al actualizar asistencia para alumno:', a.auth0Id, err);
+      }
+    });
   // si querés persistirlo en backend:
   // this.api.updateAsistencia(a.id, a).subscribe(...)
 }
