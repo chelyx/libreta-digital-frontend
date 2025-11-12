@@ -48,23 +48,23 @@ constructor() {}
     switch (this.role) {
       case ROLES.ALUMNO:
         return [
-         { label: "Historial de Notas", icon: "assignment", panel: PANELES.HISTORIAL_NOTAS, main: false },
+          { label: "Mis Materias", icon: "menu_book", panel: PANELES.MATERIAS, main: false },
+          { label: "Historial de Notas", icon: "assignment", panel: PANELES.HISTORIAL_NOTAS, main: false },
           { label: "Generar Código QR", icon: "qr_code", panel: PANELES.CODE_GENERATOR, main: true },
         ]
       case "PROFESOR":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
-          {label: "Cargar Nota", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false},
+          { label: "Carga de Finales", icon: "folder_shared", panel: PANELES.CALIFICACIONES, main: false },
           { label: "Validar Código QR", icon: "qr_code_scanner", panel: PANELES.CODE_VALIDATOR, main: true },
-          { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false }
+          { label: "Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
+          {label: "Notas", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false}
         ]
 
       case "BEDEL":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
-          {label: "Cargar Nota", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false},
-          { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false }
-
+          { label: "Carga de Finales", icon: "folder_shared", panel: PANELES.CALIFICACIONES, main: false },
         ]
       default:
         return []

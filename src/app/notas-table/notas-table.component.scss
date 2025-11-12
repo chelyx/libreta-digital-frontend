@@ -1,243 +1,68 @@
-// Contenedor principal
 .notas-container {
-  min-height: 100vh;
-  background-color: #fafafa;
-  padding: 2rem 1rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 16px;
+  background-color: #f5f5f5;
+  overflow-x: auto;
 }
 
-// Header con título y selector - LADO A LADO
 .notas-header {
-  background: white !important;
-  border-radius: 0.75rem !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-  padding: 2rem !important;
-  margin-bottom: 2rem !important;
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  gap: 2rem !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 10;
+  padding: 8px 16px;
+  border-bottom: 1px solid #ddd;
 
-  @media (max-width: 768px) {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 1.5rem !important;
+  .header-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
   }
-}
 
-.header-title {
-  font-size: 2rem !important;
-  font-weight: bold !important;
-  color: #1f2937 !important;
-  margin: 0 !important;
-  line-height: 1.2 !important;
-  flex-shrink: 0 !important;
-  white-space: nowrap !important;
-
-  @media (max-width: 768px) {
-    font-size: 1.5rem !important;
-    text-align: center !important;
-    white-space: normal !important;
-  }
-}
-
-// Selector de curso
-.curso-select {
-  min-width: 300px !important;
-  max-width: 400px !important;
-  flex-shrink: 0 !important;
-
-  @media (max-width: 768px) {
-    min-width: 100% !important;
-    max-width: 100% !important;
-  }
-}
-
-// Estilos globales para Material Angular
-::ng-deep {
   .curso-select {
-    .mat-mdc-text-field-wrapper {
-      background-color: white !important;
-    }
-
-    .mdc-notched-outline__leading,
-    .mdc-notched-outline__notch,
-    .mdc-notched-outline__trailing {
-      border-color: #d1d5db !important;
-    }
-
-    &.mat-focused {
-      .mdc-notched-outline__leading,
-      .mdc-notched-outline__notch,
-      .mdc-notched-outline__trailing {
-        border-color: #b91c1c !important;
-        border-width: 2px !important;
-      }
-    }
-
-    .mat-mdc-select-value {
-      color: #b91c1c !important;
-      font-weight: 500 !important;
-    }
-
-    .mat-mdc-form-field-label {
-      color: #b91c1c !important;
-    }
+    width: 220px;
   }
 }
 
-// Tabla de notas
 .notas-table {
   width: 100%;
-  background: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: hidden;
-  margin-bottom: 2rem;
-
-  thead {
-    background-color: #b91c1c;
-
-    tr th {
-      padding: 1rem 1.5rem;
-      text-align: left;
-      font-weight: 600;
-      font-size: 0.875rem;
-      color: white;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-
-      &:first-child {
-        border-top-left-radius: 0.75rem;
-      }
-
-      &:last-child {
-        border-top-right-radius: 0.75rem;
-      }
-    }
-  }
-
-  tbody {
-    tr {
-      border-bottom: 1px solid #e5e7eb;
-      transition: background-color 0.2s;
-
-      &:hover {
-        background-color: #f9fafb;
-      }
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      td {
-        padding: 1rem 1.5rem;
-        color: #374151;
-
-        &.nombre {
-          font-weight: 500;
-          color: #1f2937;
-        }
-      }
-    }
-  }
+  border-collapse: collapse;
+  text-align: left;
+  margin-top: 12px;
 }
 
-// Input de nota
+.notas-table th,
+.notas-table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  min-width: 120px;
+}
+
 .nota-input {
-  max-width: 120px;
+  width: 100px;
 }
 
-::ng-deep {
-  .nota-input {
-    .mat-mdc-text-field-wrapper {
-      background-color: #f9fafb;
-    }
-
-    .mdc-notched-outline__leading,
-    .mdc-notched-outline__notch,
-    .mdc-notched-outline__trailing {
-      border-color: #d1d5db;
-    }
-
-    &.mat-focused {
-      .mdc-notched-outline__leading,
-      .mdc-notched-outline__notch,
-      .mdc-notched-outline__trailing {
-        border-color: #b91c1c;
-        border-width: 2px;
-      }
-    }
-
-    input {
-      text-align: center;
-      font-weight: 600;
-      font-size: 1.125rem;
-      color: #1f2937;
-    }
-  }
+.nombre {
+  font-weight: 500;
 }
 
-// Mensaje sin alumnos
 .no-alumnos {
-  background: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  padding: 3rem 2rem;
   text-align: center;
-  color: #6b7280;
-  font-size: 1.125rem;
-  margin-bottom: 2rem;
+  margin-top: 20px;
+  font-style: italic;
+  color: #777;
 }
 
-// Acciones
 .acciones {
+  margin-top: 16px;
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  padding: 1rem 0;
-
-  @media (max-width: 768px) {
-    justify-content: stretch;
-
-    button {
-      width: 100%;
-    }
-  }
-}
-
-::ng-deep {
-  .acciones {
-    .mat-mdc-raised-button {
-      background-color: #b91c1c !important;
-      color: white !important;
-      font-weight: 600 !important;
-      font-size: 1rem !important;
-      padding: 0.75rem 2rem !important;
-      border-radius: 0.5rem !important;
-      text-transform: none !important;
-      letter-spacing: 0.025em !important;
-      box-shadow: 0 4px 6px -1px rgba(185, 28, 28, 0.3), 0 2px 4px -1px rgba(185, 28, 28, 0.2) !important;
-      transition: all 0.2s !important;
-      height: auto !important;
-      line-height: 1.5 !important;
-
-      &:hover:not([disabled]) {
-        background-color: #991b1b !important;
-        box-shadow: 0 10px 15px -3px rgba(185, 28, 28, 0.4), 0 4px 6px -2px rgba(185, 28, 28, 0.3) !important;
-        transform: translateY(-1px) !important;
-      }
-
-      &[disabled] {
-        background-color: #d1d5db !important;
-        color: #9ca3af !important;
-        box-shadow: none !important;
-      }
-    }
-  }
+  background-color: #f5f5f5;
+  position: sticky;
+  bottom: 0;
+  padding: 8px 16px;
+  border-top: 1px solid #ddd;
 }

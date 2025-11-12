@@ -3,7 +3,6 @@ import { UUID } from 'crypto';
 import { Curso } from 'src/core/models/curso';
 import { NotaDto, NotaResponse } from 'src/core/models/notas';
 import { ApiService } from 'src/core/service/api.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-notas-table',
@@ -16,7 +15,7 @@ export class NotasTableComponent {
 cursoSeleccionado: UUID = '' as UUID;
 notas: NotaResponse[] = [];
 
-constructor(private apiService: ApiService, private snackBar: MatSnackBar) {}
+constructor(private apiService: ApiService) {}
 
 ngOnInit(): void {}
 
@@ -50,12 +49,7 @@ guardarNotas() {
     .subscribe({
       next: (res) => {
         console.log('Notas guardadas correctamente', res);
-        this.snackBar.open('✓ Notas cargadas exitosamente', 'Cerrar', {
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        panelClass: ['success-snackbar']
-      });
+        // Podés mostrar un snackbar o notificación
       },
       error: (err) => {
         console.error('Error guardando notas', err);
@@ -64,13 +58,13 @@ guardarNotas() {
 }
 
 hayCambios(): boolean {
-  // Retorna true si hay al menos una nota con valor ingresado
-  return this.notas.some(n => n.valor !== null && n.valor !== undefined && n.valor !== 0);
+  return true
+  // return this.notas.some(a => a.nota !== a.notaFinal);
 }
 
 getCambiosCount(): number {
-  // Cuenta cuántas notas tienen un valor ingresado
-  return this.notas.filter(n => n.valor !== null && n.valor !== undefined && n.valor !== 0).length;
+  return 0;
+  //return this.notas.filter(a => a.nota !== a.notaFinal).length;
 }
 
 }

@@ -1,118 +1,45 @@
-<div class="main-content">
-  <div class="content-wrapper">
-    <h2 class="title">Toma de Asistencia</h2>
-    <p class="subtitle">Registro completo de Asistencias</p>
+<div class="asistencia-container">
+  <!-- Header con título y selector -->
+  <div class="asistencia-header">
+    <h1 class="header-title">Toma de Asistencia</h1>
 
-    <div class="search-section">
-      <!-- Buscador por Curso (Dropdown) -->
-      <div class="search-option">
-        <div class="option-header">
-          <span class="step-number">1</span>
-          <label class="label">Seleccionar Curso</label>
-        </div>
-        <select class="select-input" [(ngModel)]="cursoSeleccionado" (change)="onCursoChange()">
-          <option value="" disabled selected>Seleccione un curso</option>
-          <option *ngFor="let curso of cursos" [value]="curso.id">
-            {{ curso.nombre }} - {{ curso.codigo }}
-          </option>
-        </select>
-        <p class="help-text">Elige un curso de la lista disponible</p>
-      </div>
+    <mat-form-field appearance="outline" class="curso-select">
+      <mat-label>Curso</mat-label>
+      <mat-select [(ngModel)]="cursoSeleccionado" (selectionChange)="onCursoChange($event.value)">
+        <mat-option *ngFor="let curso of cursos" [value]="curso.id">
+          {{ curso.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-      <!-- Divisor -->
-      <div class="divider">
-        <span class="divider-text">o</span>
-      </div>
+  <!-- Tabla de asistencias -->
+  <table class="asistencia-table">
+    <thead>
+      <tr>
+        <th>Alumno</th>
+        <th *ngFor="let fecha of fechas">{{ fecha | date:'dd/MM/yyyy' }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of alumnosMap | keyvalue; trackBy: trackByAlumno">
+        <td class="nombre">{{ item.value.nombre }}</td>
+        <td *ngFor="let fecha of fechas" class="checkbox-cell">
+          <mat-checkbox
+            [(ngModel)]="item.value.asistenciasPorFecha[fecha]"
+            (change)="marcarModificado(item.key, fecha)">
+          </mat-checkbox>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-      <!-- Buscador por ID de Curso -->
-      <div class="search-option">
-        <div class="option-header">
-          <span class="step-number">2</span>
-          <label class="label">Buscar por ID de Curso</label>
-        </div>
-        <div class="search-input-wrapper">
-          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.35-4.35"></path>
-          </svg>
-          <input
-            type="text"
-            class="search-input"
-            [(ngModel)]="cursoIdBusqueda"
-            (input)="onBuscarPorId()"
-            placeholder="Ingresa el ID del curso (ej: K101)"
-          />
-        </div>
-        <p class="help-text">Introduce el código único del curso para búsqueda rápida</p>
-      </div>
-
-      <!-- Botón de Búsqueda -->
-      <button class="search-button" (click)="buscarCurso()" [disabled]="!cursoSeleccionado && !cursoIdBusqueda">
-        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
-        </svg>
-        Buscar Curso
-      </button>
-    </div>
-
-    <!-- Nota informativa -->
-    <div class="info-note">
-      <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="16" x2="12" y2="12"></line>
-        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-      </svg>
-      <p>Podes buscar el curso seleccionándolo de la lista o ingresando directamente su código. Ambos métodos te llevarán a la página de registro de asistencia.</p>
-    </div>
-  <!-- ===================== -->
-    <!-- NUEVA SECCIÓN: RESULTADOS -->
-    <!-- ===================== -->
-    <div class="results-section" *ngIf="cursoSeleccionado || cursoIdBusqueda">
-      <h3 class="results-title">Asistencias del curso</h3>
-
-      <!-- Estado de carga -->
-      <div class="loading" *ngIf="cargando">
-        <svg class="spinner" viewBox="0 0 50 50">
-          <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-        </svg>
-        <span>Cargando asistencias...</span>
-      </div>
-
-      <!-- Error -->
-      <div class="error" *ngIf="!cargando && errorMsg">
-        {{ errorMsg }}
-      </div>
-
-      <!-- Tabla con asistencias -->
-      <div class="table-wrapper" *ngIf="!cargando && !errorMsg && asistencias?.length">
-        <table class="asist-table">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Alumno</th>
-              <th>Presente</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let a of asistencias">
-              <td>{{ a.fecha | date: 'yyyy-MM-dd' }}</td>
-              <td>{{ a.nombre || a.id }}</td>
-              <td>
-                <span class="pill" [class.ok]="a.presente" [class.no]="!a.presente">
-                  {{ a.presente ? 'Sí' : 'No' }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Sin resultados -->
-      <div class="empty" *ngIf="!cargando && !errorMsg && (!asistencias || asistencias.length === 0)">
-        No hay asistencias para mostrar.
-      </div>
-    </div>
-
+  <!-- Botón de guardar -->
+  <div class="acciones">
+    <button mat-raised-button color="primary"
+            (click)="guardarCambios()"
+            [disabled]="!hasChanges()">
+      Guardar cambios ({{ getChangesCount() }})
+    </button>
   </div>
 </div>
