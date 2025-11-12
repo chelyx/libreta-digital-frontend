@@ -4,6 +4,7 @@ import { ApiService } from 'src/core/service/api.service';
 import { UUID } from 'crypto';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Curso } from 'src/core/models/curso';
+import { AsistenciaAlumnoDto } from 'src/core/models/asistencia';
 
 interface AsistenciaResponse {
   cursoId: string;
@@ -163,7 +164,7 @@ guardarAsistencia(a: AsistenciaResponse): void {
     fecha: a.fecha
   };
 
-  this.api.actualizarAsistenciaAlumno(a.cursoId.toString(), asistenciaActualizada).subscribe({
+  this.apiService.actualizarAsistenciaAlumno(a.cursoId.toString(), asistenciaActualizada).subscribe({
     next: () => {
       console.log('[asistencia-table] Asistencia actualizada con éxito para alumno:', a.auth0Id);
       },
