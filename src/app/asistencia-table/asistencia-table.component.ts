@@ -27,7 +27,7 @@ cursoIdBusqueda: string = '';
     // UI
   cargando = false;
   errorMsg = '';
-  
+
   constructor(private api: ApiService) {}
 
   ngOnInit(): void {
@@ -47,7 +47,7 @@ cursoIdBusqueda: string = '';
 
   onBuscarPorId(): void {
       console.log('[v0] Buscando por ID:', this.cursoIdBusqueda);
- 
+
  const codigo = (this.cursoIdBusqueda || '').trim();
 
     if (!codigo) {
@@ -126,4 +126,28 @@ cursoIdBusqueda: string = '';
       console.warn('No se ha seleccionado ningún curso');
     }
   }
+
+  editarAsistencia(asistencia: AsistenciaResponse): void {
+  // activa modo edición
+  (asistencia as any)._editando = true;
+}
+
+estaEditando(a: AsistenciaResponse): boolean {
+  return (a as any)._editando === true;
+}
+
+cancelarEdicion(a: AsistenciaResponse): void {
+  (a as any)._editando = false;
+}
+
+cambiarPresente(a: AsistenciaResponse, valor: boolean): void {
+  a.presente = valor;
+}
+
+guardarAsistencia(a: AsistenciaResponse): void {
+  console.log('[asistencia-table] Guardando asistencia:', a);
+  (a as any)._editando = false;
+  // si querés persistirlo en backend:
+  // this.api.updateAsistencia(a.id, a).subscribe(...)
+}
 }
