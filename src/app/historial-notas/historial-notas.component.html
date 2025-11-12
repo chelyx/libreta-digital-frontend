@@ -47,13 +47,13 @@
     <div class="nota-card" *ngFor="let nota of notas" [class]="getEstadoClase(nota)">
       <div class="nota-header">
         <div class="nota-info">
-          <div class="materia-nombre">{{ nota.materia }}</div>
-          <div class="materia-codigo">{{ nota.codigo }}</div>
+          <div class="materia-nombre">{{ nota.nombreCurso }}</div>
+          <div class="materia-codigo">{{ nota.alumnoNombre }}</div>
         </div>
         <div class="nota-badge" [class]="getEstadoClase(nota)">
-          <span *ngIf="!nota.ausente && nota.nota !== null">{{ nota.nota }}</span>
-          <mat-icon *ngIf="nota.ausente">remove</mat-icon>
-          <mat-icon *ngIf="nota.nota === null && !nota.ausente">schedule</mat-icon>
+          <span *ngIf="nota.valor  !== null">{{ nota.valor }}</span>
+        <!--   <mat-icon *ngIf="nota.ausente">remove</mat-icon>-->
+       <!--    <mat-icon *ngIf="nota.nota === null && !nota.ausente">schedule</mat-icon>-->
         </div>
       </div>
 
@@ -64,7 +64,7 @@
         </div>
         <div class="detail-item">
           <mat-icon>description</mat-icon>
-          <span>{{ nota.tipoExamen }}</span>
+          <span>{{ nota.descripcion }}</span>
         </div>
         <div class="detail-item estado">
           <mat-icon>{{ getEstadoClase(nota) === 'aprobada' ? 'check_circle' : getEstadoClase(nota) === 'ausente' ? 'remove_circle' : 'cancel' }}</mat-icon>

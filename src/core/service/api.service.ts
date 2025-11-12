@@ -75,7 +75,7 @@ export class ApiService {
 
   
 getNotasPorAlumno(auth0Id: string): Observable<NotaResponse[]> {
-  return this.getProtegido(`api/notas/alumno/${encodeURIComponent(auth0Id)}`);
+  return this.getProtegido(`api/notas/${encodeURIComponent(auth0Id)}`);
 }
 
 getNotasDeAlumnoEnCurso(cursoId: UUID, auth0Id: string): Observable<NotaResponse[]> {

@@ -8,6 +8,7 @@ export interface NotaDto {
 export interface NotaResponse {
   id: UUID;
   cursoId: UUID;
+  nombreCurso: string;
   fecha: Date;
   alumnoId: string;
   alumnoNombre: string;
