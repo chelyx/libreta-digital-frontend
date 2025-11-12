@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UUID } from 'crypto';
 import { ApiService } from 'src/core/service/api.service';
-import { AsistenciaResponse } from 'src/core/models/asistencia';
+import { AsistenciaAlumnoDto, AsistenciaResponse } from 'src/core/models/asistencia';
 
 interface Curso {
 id: string;
@@ -133,11 +133,38 @@ cancelarEdicion(a: AsistenciaResponse): void {
 
 cambiarPresente(a: AsistenciaResponse, valor: boolean): void {
   a.presente = valor;
+ /* this.asistenciaActualizada.alumnoId = a.auth0Id;
+  this.asistenciaActualizada.presente = a.presente;
+  this.asistenciaActualizada.fecha = '2025-11-12';
+
+  this.api.actualizarAsistenciaAlumno(a.cursoId.toString(), this.asistenciaActualizada).subscribe({
+    next: () => {
+      console.log('[asistencia-table] Asistencia actualizada con éxito para alumno:', a.auth0Id);
+      },
+    error: (err) => {
+      console.error('[asistencia-table] Error al actualizar asistencia para alumno:', a.auth0Id, err);
+      }
+    });*/
 }
 
 guardarAsistencia(a: AsistenciaResponse): void {
   console.log('[asistencia-table] Guardando asistencia:', a);
   (a as any)._editando = false;
+  
+  const asistenciaActualizada: AsistenciaAlumnoDto = {
+    alumnoId: a.auth0Id,
+    presente: a.presente,
+    fecha: a.fecha
+  };
+
+  this.api.actualizarAsistenciaAlumno(a.cursoId.toString(), asistenciaActualizada).subscribe({
+    next: () => {
+      console.log('[asistencia-table] Asistencia actualizada con éxito para alumno:', a.auth0Id);
+      },
+    error: (err) => {
+      console.error('[asistencia-table] Error al actualizar asistencia para alumno:', a.auth0Id, err);
+      }
+    });
   // si querés persistirlo en backend:
   // this.api.updateAsistencia(a.id, a).subscribe(...)
 }

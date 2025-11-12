@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { UserValidatedClass } from '../models/user';
 import { Curso } from '../models/curso';
 import { UUID } from 'crypto';
-import {  AsistenciaResponse } from '../models/asistencia';
+import {  AsistenciaAlumnoDto, AsistenciaResponse } from '../models/asistencia';
 import {  NotaBulkDto, NotaResponse } from '../models/notas';
 
 @Injectable({
@@ -35,6 +35,16 @@ export class ApiService {
       })
     );
   }
+
+    putProtegido(endpoint: string, data?: any): Observable<any> {
+    return this.auth.getAccessTokenSilently().pipe(
+      switchMap(token => {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+        return this.http.put(`${this.apiUrl}/${endpoint}`, data, { headers });
+      })
+    );
+  }
+
 
   getRoles(): Observable<any> {
     return this.getProtegido('api/roles');
@@ -94,7 +104,13 @@ getNotasDeAlumnoEnCurso(cursoId: UUID, auth0Id: string): Observable<NotaResponse
 }
 
 getByCodigoYFecha(codigo: string, fecha: string) {
-  return this.http.get<Curso>(`api/cursos/busqueda/final`, { params: { codigo, fecha }});
+  return this.getProtegido(`api/cursos/busqueda/final?codigo=${encodeURIComponent(codigo)}&fecha=${encodeURIComponent(fecha)}`);
+}
+
+ actualizarAsistenciaAlumno(cursoId: string, dto: AsistenciaAlumnoDto): Observable<any> {
+    // Si ya usas un interceptor de Auth, no hace falta headers extra aquí.
+
+    return this.putProtegido(`api/asistencias/${cursoId}/alumno/actualizar`, dto);
 }
 
   registrarBFA(): Observable<any> {

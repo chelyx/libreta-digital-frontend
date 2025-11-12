@@ -16,3 +16,9 @@ export interface AsistenciaResponse {
   presente: boolean;
   fecha: string;
 }
+
+export interface AsistenciaAlumnoDto {
+  alumnoId: string;
+  fecha: string;
+  presente: boolean;
+}
