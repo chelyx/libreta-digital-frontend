@@ -7,4 +7,5 @@ export interface Curso {
   codigo: string;
   docenteAuth0Id: string;
   alumnos: User[];
+  fecha: string
 }

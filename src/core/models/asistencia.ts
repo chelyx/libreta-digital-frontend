@@ -17,8 +17,6 @@ export interface AsistenciaResponse {
   fecha: string;
 }
 
-
-
 export interface AsistenciaAlumnoDto {
   alumnoId: string;
   fecha: string;

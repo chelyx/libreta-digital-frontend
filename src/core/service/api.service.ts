@@ -83,10 +83,25 @@ export class ApiService {
     return this.getProtegido(`api/notas/curso/${cursoId}`);
   }
 
+  
+getNotasPorAlumno(auth0Id: string): Observable<NotaResponse[]> {
+  return this.getProtegido(`api/notas/${encodeURIComponent(auth0Id)}`);
+}
+
+getNotasDeAlumnoEnCurso(cursoId: UUID, auth0Id: string): Observable<NotaResponse[]> {
+  //ARREGLAR: NO EXPONER EL AUTH0ID EN LA URL
+  return this.getProtegido(`api/notas/curso/${cursoId}/alumno/${encodeURIComponent(auth0Id)}`);
+}
   registerUser(): Observable<any> {
     return this.postProtegido('api/user/register', {});
   }
 
+  getCursoPorCodigo(codigo: string) {
+  const safe = encodeURIComponent(codigo.trim());
+  // Si implementaste la variante con query param, cambia por:
+  // return this.getProtegido(`api/cursos/buscar?codigo=${safe}`);
+  return this.getProtegido(`api/cursos/codigo/${safe}`);
+}
 
 getByCodigoYFecha(codigo: string, fecha: string) {
   return this.getProtegido(`api/cursos/busqueda/final?codigo=${encodeURIComponent(codigo)}&fecha=${encodeURIComponent(fecha)}`);

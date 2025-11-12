@@ -1,157 +1,192 @@
+/* ===== CONTENEDOR PRINCIPAL ===== */
 .asistencia-container {
-  background-color: #f9f9f9;
-  padding-bottom: 80px;
-  display: flex;
-    flex-direction: column;
-    height: 80vh;
+  width: 100%;
+  background-color: #fff;
+  padding: 2rem 3rem;
+  box-sizing: border-box;
 }
 
+/* ===== ENCABEZADO ===== */
 .header-section {
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 auto;
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
-.asistencia-header {
-  background-color: #C41E3A;
-  color: white;
-  padding: 0 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-
-  .header-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
+.header-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #000;
 }
 
+/* ===== FILA HORIZONTAL ===== */
 .filtros-section {
-  background: white;
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-  }
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  width: 100%;
 }
 
-.contador-section {
-  padding: 0.5rem 1rem;
-  background: white;
-  border-bottom: 1px solid #eee;
-
-  .contador-text {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #666;
-    letter-spacing: 0.05em;
-  }
+/* ===== Fuerza los mat-form-field a estar EN LÍNEA ===== */
+::ng-deep mat-form-field {
+  display: inline-flex !important;
+  vertical-align: bottom !important;
+  width: auto !important;
+  flex: 1 1 auto !important;
+  min-width: 200px !important;
 }
 
-.alumnos-lista {
-  padding: 0.5rem 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex: 1 1 auto;
-  overflow-y: scroll;
+/* ===== Bloque de búsqueda por código ===== */
+.busqueda-id-section {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-end !important;
+  gap: 1rem !important;
+  flex: 1 1 auto !important;
 }
 
-.alumno-card {
-  background: white;
+/* ===== Botón Buscar ===== */
+.buscar-id-button {
+  height: 56px !important;
+  white-space: nowrap !important;
+  padding: 0 2rem !important;
+}
+
+/* ===== Ajustes visuales ===== */
+.help-text-section {
+  background: #e3f2fd;
+  color: #0d47a1;
+  font-size: 0.95rem;
   border-radius: 8px;
-  padding: 0.6rem 0.75rem;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-  border: 1px solid #eee;
-  transition: background-color 0.2s, transform 0.1s ease;
-
-  &:active {
-    transform: scale(0.99);
-  }
-
-  &.presente {
-    background-color: #e7f6e9;
-    border-color: #4CAF50;
-  }
+  gap: 0.5rem;
 }
 
-.alumno-info {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  .alumno-nombre {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #222;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .alumno-email {
-    font-size: 0.8rem;
-    color: #777;
-  }
-}
-
-.alumno-checkbox {
-  flex-shrink: 0;
-  ::ng-deep .mat-checkbox-inner-container {
-    width: 22px;
-    height: 22px;
-  }
-}
-
+/* ===== Botón Guardar ===== */
 .guardar-section {
   position: fixed;
   bottom: 0;
   left: 0;
-  right: 0;
-  padding: 0.75rem;
-  background: white;
-  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.08);
-  z-index: 10;
-
-  @media (min-width: 768px) {
-    max-width: 800px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
 }
 
 .guardar-button {
-  width: 100%;
-  height: 48px;
-  font-size: 1rem;
+  background-color: #d32f2f !important;
+  color: #fff !important;
   font-weight: 600;
-  background-color: #C41E3A !important;
-  color: white !important;
-  border-radius: 8px !important;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.guardar-button:hover {
+  background-color: #b71c1c !important;
+}
+/* ===== PANEL HORIZONTAL ===== */
+.panel-horizontal {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #fafafa;
+  border-radius: 12px;
+  padding: 2rem;
+  gap: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.panel-item {
+  flex: 1;
+  background-color: #fefefe;
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.panel-number {
+  background-color: #a52121;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-
-  &:hover:not([disabled]) {
-    background-color: #a01828 !important;
-  }
-
-  &[disabled] {
-    opacity: 0.6;
-  }
+  font-size: 0.9rem;
 }
 
-::ng-deep .mat-mdc-form-field-subscript-wrapper {
-  display: none !important;
+.panel-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #000;
+}
+
+.panel-subtext {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 0.5rem;
+}
+
+.panel-field {
+  width: 100%;
+}
+
+.buscar-id-button {
+  margin-top: 1rem;
+  height: 45px;
+  font-weight: 500;
+  background-color: #b71c1c !important;
+  color: white !important;
+  transition: background-color 0.2s ease;
+}
+
+.buscar-id-button:hover {
+  background-color: #8b1515 !important;
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .panel-horizontal {
+    flex-direction: column;
+  }
+}
+/* ===== NOTA INFORMATIVA (celeste) ===== */
+.info-note {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #e3f2fd; /* celeste claro */
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: #0d47a1; /* azul oscuro para texto */
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-top: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.info-icon {
+  flex-shrink: 0;
+  color: #0d47a1;
+  width: 20px;
+  height: 20px;
 }

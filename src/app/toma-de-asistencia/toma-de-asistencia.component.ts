@@ -11,13 +11,14 @@ templateUrl: './toma-de-asistencia.component.html',
 styleUrls: ['./toma-de-asistencia.component.scss'],
 })
 export class TomaDeAsistenciaComponent implements OnInit {
- @Input() cursos: Curso[] = [];
-  cursoSeleccionado?: Curso;
-  filtro = '';
-  asistencias: { [auth0Id: string]: boolean } = {};
-  saving = false;
+@Input() cursos: Curso[] = [];
+cursoSeleccionado?: Curso;
+filtro = '';
+cursoIdBusqueda = '';
+asistencias: { [auth0Id: string]: boolean } = {};
+saving = false;
 
-  constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
+constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
   }
@@ -32,13 +33,41 @@ export class TomaDeAsistenciaComponent implements OnInit {
       this.asistencias = {};
       return;
     }
+    this.cursoIdBusqueda = '';
     this.cursoSeleccionado = curso;
     this.asistencias = {};
     curso.alumnos.forEach((alumno) => {
       this.asistencias[alumno.auth0Id] = false;
     });
-
   }
+
+  onBuscarPorId(): void {
+  const codigo = (this.cursoIdBusqueda || '').trim();
+  if (!codigo) {
+    this.snackBar.open('Ingresá un código de curso', '', { duration: 3000 });
+    return;
+  }
+
+  const local = this.cursos.find(c => c.codigo?.toLowerCase() === codigo.toLowerCase());
+  if (local) {
+    this.onCursoChange(local);
+    this.snackBar.open(`Curso encontrado localmente: ${local.nombre}`, '', { duration: 2500 });
+    return;
+  }
+
+  // Si no está localmente, intentar buscar en backend
+  const safe = encodeURIComponent(codigo);
+  this.cursoService.getProtegido(`api/cursos/codigo/${safe}`).subscribe({
+    next: (curso: any) => {
+      this.onCursoChange(curso);
+      this.snackBar.open(`Curso encontrado desde servidor: ${curso.nombre || curso.codigo}`, '', { duration: 2500 });
+    },
+    error: () => {
+      this.snackBar.open('No se encontró un curso con ese código', '', { duration: 3000 });
+    }
+  });
+}
+
 
   get alumnosFiltrados(): User[] {
     if (!this.cursoSeleccionado) return [];
@@ -65,7 +94,6 @@ export class TomaDeAsistenciaComponent implements OnInit {
 
     console.log('Datos a enviar:', lista);
 
-    // acá harías el POST al endpoint de asistencia (ejemplo)
     this.cursoService.saveAsistencia(this.cursoSeleccionado!.id, lista).subscribe({
       next: (res: any) =>{
         this.saving = false
@@ -74,6 +102,5 @@ export class TomaDeAsistenciaComponent implements OnInit {
       },
       error: (err) => { console.error(err); this.saving = false; }
     });
-
   }
 }
