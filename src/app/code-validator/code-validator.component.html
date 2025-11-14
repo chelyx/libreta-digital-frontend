@@ -10,7 +10,7 @@
         <mat-label>Curso</mat-label>
         <mat-select [(value)]="cursoSeleccionado">
           <mat-option *ngFor="let c of cursos" [value]="c.id">
-            {{ c.nombre }}
+            {{ c.nombre }} - {{ c.fecha }}
           </mat-option>
         </mat-select>
       </mat-form-field>
