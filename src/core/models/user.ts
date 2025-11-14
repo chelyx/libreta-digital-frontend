@@ -1,19 +1,19 @@
 export class UserValidatedClass {
   email: string;
-  email_verified: boolean;
-  name: string;
-  nickname: string;
+  legajo: string;
+  nombre: string;
   picture: string;
-  updated_at: string;
+  auth0Id: string;
+
 
   constructor(data: any) {
     this.email = data.email;
-    this.email_verified = data.email_verified;
-    this.name = data.name;
-    this.nickname = data.nickname;
+    this.legajo = data.legajo;
+    this.nombre = data.nombre;
     this.picture = data.picture;
-    this.updated_at = data.updated_at;
+    this.auth0Id = data.auth0Id;
   }
+
 }
 
 export interface User {
@@ -21,4 +21,6 @@ export interface User {
   nombre: string;
   email: string;
   rol: string;
+  legajo?: string;
+  picture?: string;
 }

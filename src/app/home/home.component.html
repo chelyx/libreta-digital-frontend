@@ -45,11 +45,13 @@
       <app-code-generator *ngIf="currentPanel === PANELES.CODE_GENERATOR"></app-code-generator>
       <app-mis-materias *ngIf="currentPanel === PANELES.MATERIAS"></app-mis-materias>
       <app-toma-de-asistencia *ngIf="currentPanel === PANELES.ASISTENCIA" [cursos]="cursos"></app-toma-de-asistencia>
-      <app-code-validator *ngIf="currentPanel === PANELES.CODE_VALIDATOR"></app-code-validator>
+      <app-code-validator *ngIf="currentPanel === PANELES.CODE_VALIDATOR"  [cursos]="cursos"></app-code-validator>
       <app-carga-finales *ngIf="currentPanel === PANELES.CALIFICACIONES"></app-carga-finales>
       <app-asistencia-table *ngIf="currentPanel === PANELES.ASISTENCIA_TABLE" [cursos]="cursos" ></app-asistencia-table>
       <app-historial-notas *ngIf="currentPanel === PANELES.HISTORIAL_NOTAS"></app-historial-notas>
       <app-notas-table *ngIf="currentPanel === PANELES.EDITAR_NOTAS" [cursos]="cursos"></app-notas-table>
+
+      <!-- <app-attendance *ngIf="currentPanel === PANELES.ASISTENCIA" ></app-attendance> -->
     </div>
   </mat-drawer-content>
 </mat-drawer-container>

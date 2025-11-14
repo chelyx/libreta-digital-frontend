@@ -1,8 +1,24 @@
 <div class="validation-container">
-  <h2>Validar Asistencia</h2>
-  <p class="subtitle">Escaneá el código QR del alumno o ingresá el token manualmente</p>
+  <h2>Validar Identidad Alumnos</h2>
+  <p class="subtitle">Seleccioná el curso y escaneá el código QR del alumno o ingresá el token manualmente</p>
 
-  <!-- Vista de cámara -->
+        <!-- Selección del curso -->
+ <mat-card>
+    <mat-card-title>Seleccionar Curso</mat-card-title>
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Curso</mat-label>
+        <mat-select [(value)]="cursoSeleccionado">
+          <mat-option *ngFor="let c of cursos" [value]="c.id">
+            {{ c.nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <div *ngIf="true">
+ <!-- Vista de cámara -->
   <div class="scanner-wrapper" *ngIf="scanning; else manualMode">
     <div class="video-container">
       <video #video  autoplay muted playsinline></video>
@@ -39,20 +55,42 @@
       </div>
     </div>
   </ng-template>
+  </div>
 
   <!-- Lista de alumnos validados -->
-  <mat-card *ngIf="validatedStudents.length > 0" class="success-card">
-    <mat-card-header>
-      <mat-card-title>Alumnos Validados  ({{ validatedStudents.length }})</mat-card-title>
-    </mat-card-header>
+
+  <mat-card *ngIf="validatedStudents.length">
+    <mat-card-title>Alumnos Validados ({{ validatedStudents.length }})</mat-card-title>
+
     <mat-card-content>
-      <mat-list>
-        <mat-list-item *ngFor="let student of validatedStudents; let i = index">
-          <div class="s-card" [class.highlight]="student === lastValidated">
-            <img mat-card-avatar [src]="student.picture" alt="{{ student.name }}"> {{ student.name }} - {{ student.email }}
+
+      <div class="list">
+        <div class="item"
+             *ngFor="let s of validatedStudents"
+             [class.highlight]="lastValidated?.auth0Id=== s.auth0Id">
+
+          <img [src]="s.picture" class="avatar" />
+
+          <div class="info">
+            <b>{{ s.nombre }}</b>
+            <div>{{ s.email }} — Legajo {{ s.legajo }}</div>
           </div>
-        </mat-list-item>
-      </mat-list>
+
+          <button mat-icon-button (click)="remove(s.auth0Id)">
+            <mat-icon color="warn">delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button mat-button (click)="clear()">Limpiar</button>
+        <button mat-raised-button color="primary" (click)="save()">
+          Guardar Asistencia
+        </button>
+      </div>
+
     </mat-card-content>
   </mat-card>
+
+
 </div>

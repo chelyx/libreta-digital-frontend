@@ -1,9 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http';
 import jsQR from 'jsqr';
 import { ApiService } from 'src/core/service/api.service';
-import { UserValidatedClass } from 'src/core/models/user';
+import { User, UserValidatedClass } from 'src/core/models/user';
+import { Curso } from 'src/core/models/curso';
+import { UUID } from 'crypto';
 
 @Component({
   selector: 'app-code-validator',
@@ -11,17 +13,21 @@ import { UserValidatedClass } from 'src/core/models/user';
   styleUrls: ['./code-validator.component.scss']
 })
 export class CodeValidatorComponent implements OnInit, OnDestroy {
+  @Input() cursos: Curso[] = [];
   @ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas', { static: false }) canvasElement!: ElementRef<HTMLCanvasElement>;
 
   token: string = '';
+  cursoSeleccionado: UUID | '' = '';
   scanning: boolean = false;
-  validatedStudents: any[] = [];
+  validatedStudents: UserValidatedClass[] = [];
   lastValidated: any = null;
 
   videoStream: MediaStream | null = null;
   scanInterval: any = null;
   isReading = false;
+
+  saving: boolean = false;
 
   constructor(
     private apiService: ApiService,
@@ -177,6 +183,37 @@ validateToken() {
   });
 }
 
+remove(id: string) {
+    this.validatedStudents = this.validatedStudents.filter(s => s.auth0Id !== id);
+  }
+
+  clear() {
+    this.validatedStudents = [];
+    this.cursoSeleccionado = '';
+  }
+
+
+  save(): void {
+    if (!this.cursoSeleccionado) return;
+
+    this.saving = true;
+    const lista = this.validatedStudents.map((user) => ({
+      alumnoId: user.auth0Id,
+      presente: true,
+      fecha: new Date()
+    }));
+
+    console.log('Datos a enviar:', lista);
+
+    this.apiService.saveAsistencia(this.cursoSeleccionado, lista).subscribe({
+      next: (res: any) =>{
+        this.saving = false
+        this.snackBar.open(res.status, '',{ duration: 3000 });
+        this.clear();
+      },
+      error: (err) => { console.error(err); this.saving = false; }
+    });
+  }
 
   ngOnDestroy(): void {
     this.stopScanner();
