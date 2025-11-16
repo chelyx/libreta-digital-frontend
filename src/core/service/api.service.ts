@@ -4,7 +4,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { UserValidatedClass } from '../models/user';
+import { User} from '../models/user';
 import { Curso, ExamenEstadoDto } from '../models/curso';
 import { UUID } from 'crypto';
 import {  AsistenciaAlumnoDto, AsistenciaResponse } from '../models/asistencia';
@@ -54,7 +54,7 @@ export class ApiService {
     return this.postProtegido('api/codes/generate', {});
   }
 
-  validateCode(code: string): Observable<UserValidatedClass> {
+  validateCode(code: string): Observable<User> {
     return this.postProtegido('api/codes/validate', { code });
   }
 

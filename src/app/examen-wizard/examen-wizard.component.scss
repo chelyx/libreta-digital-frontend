@@ -6,12 +6,12 @@
 .steps-header {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1.5rem;
 
   div {
     padding: .5rem 1rem;
     border-radius: 6px;
     background: #ddd;
+    cursor: pointer;
     &.active {
       background: #800020; // bordo
       color: white;
@@ -22,7 +22,10 @@
 
 .steps-content {
   border-radius: 12px;
-  padding: 1.5rem;
   background: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,.1);
+}
+
+.full-width {
+  width: 350px
 }

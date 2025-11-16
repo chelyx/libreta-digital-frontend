@@ -3,9 +3,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http';
 import jsQR from 'jsqr';
 import { ApiService } from 'src/core/service/api.service';
-import { User, UserValidatedClass } from 'src/core/models/user';
+import { User } from 'src/core/models/user';
 import { Curso } from 'src/core/models/curso';
 import { UUID } from 'crypto';
+import { WizardService } from 'src/core/service/wizard.service';
 
 @Component({
   selector: 'app-code-validator',
@@ -14,14 +15,16 @@ import { UUID } from 'crypto';
 })
 export class CodeValidatorComponent implements OnInit, OnDestroy {
   @Input() curso: Curso = {} as Curso;
-  @Output() completed = new EventEmitter<void>();
+  @Output() completed = new EventEmitter<User[]>();
   @ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas', { static: false }) canvasElement!: ElementRef<HTMLCanvasElement>;
 
   token: string = '';
   cursoSeleccionado: UUID | '' = '';
   scanning: boolean = false;
-  validatedStudents: UserValidatedClass[] = [];
+  validatedStudents: User[] = [];
+  notEnrolledStudents: User[] = [];
+  absentStudents: User[] = [];
   lastValidated: any = null;
 
   videoStream: MediaStream | null = null;
@@ -32,11 +35,18 @@ export class CodeValidatorComponent implements OnInit, OnDestroy {
 
   constructor(
     private apiService: ApiService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private wizard: WizardService
   ) {}
 
   ngOnInit(): void {
     this.toggleScanner();
+    this.absentStudents = this.curso.alumnos.slice(); // copia inicial de todos los alumnos
+    this.wizard.asistencias.forEach(a => {
+      console.log(a)
+      this.validatedStudents.push(a);
+      this.absentStudents = this.absentStudents.filter(s => s.auth0Id !== a.auth0Id);
+    });
   }
 
   async toggleScanner() {
@@ -162,15 +172,17 @@ validateToken() {
   }
 
   this.apiService.validateCode(this.token).subscribe({
-    next: (response: UserValidatedClass) => {
+    next: (response: User) => {
       console.log('Token validado:', response);
-      this.validatedStudents.push(response);
-      this.lastValidated = response;
+      if(!this.alumnoPerteneceCurso(response.auth0Id)) {
+        this.notEnrolledStudents.push(response);
+        this.snackBar.open('El alumno no pertenece al curso seleccionado', 'Cerrar', { duration: 3000 });
+      } else {
+        this.validatedStudents.push(response);
+        this.absentStudents = this.absentStudents.filter(s => s.auth0Id !== response.auth0Id);
+        this.snackBar.open('Token validado correctamente', 'Cerrar', { duration: 2000 });
+      }
       this.token = '';
-
-      setTimeout(() => this.lastValidated = null, 3000);
-      this.snackBar.open('Token validado correctamente', 'Cerrar', { duration: 2000 });
-
       // Reanudar lectura tras un pequeño delay para evitar re-lecturas dobles
       setTimeout(() => this.isReading = true, 1200);
     },
@@ -184,11 +196,14 @@ validateToken() {
   });
 }
 
-remove(id: string) {
-    this.validatedStudents = this.validatedStudents.filter(s => s.auth0Id !== id);
+  alumnoPerteneceCurso(alumnoId: string): boolean {
+    return this.curso.alumnos.some(alumno => alumno.auth0Id === alumnoId);
   }
 
-
+  remove(user: User) {
+    this.validatedStudents = this.validatedStudents.filter(s => s.auth0Id !== user.auth0Id);
+    this.absentStudents.push(user)
+  }
 
   save(): void {
     if (!this.curso) return;
@@ -197,20 +212,33 @@ remove(id: string) {
     const lista = this.validatedStudents.map((user) => ({
       alumnoId: user.auth0Id,
       presente: true,
-      fecha: new Date()
+      fecha: new Date(this.curso.fecha)
     }));
 
-    console.log('Datos a enviar:', lista);
+   const listaAusentes = this.absentStudents.map((user) => ({
+      alumnoId: user.auth0Id,
+      presente: false,
+      fecha: new Date(this.curso.fecha)
+    }));
 
-    this.apiService.saveAsistencia(this.curso.id, lista).subscribe({
+    console.log('Datos a enviar:', [...lista, ...listaAusentes]);
+
+    this.apiService.saveAsistencia(this.curso.id, [...lista, ...listaAusentes]).subscribe({
       next: (res: any) =>{
         this.saving = false
-        this.snackBar.open(res.status, '',{ duration: 3000 });
-        this.completed.emit();
+        this.snackBar.open('Alumnos registrados correctamente', '',{ duration: 3000 });
+        this.completed.emit(this.validatedStudents);
       },
       error: (err) => { console.error(err); this.saving = false; }
     });
   }
+
+  get hasAnyStudents() {
+    return this.validatedStudents.length > 0 ||
+          this.absentStudents.length > 0 ||
+          this.notEnrolledStudents.length > 0;
+  }
+
 
   ngOnDestroy(): void {
     this.stopScanner();

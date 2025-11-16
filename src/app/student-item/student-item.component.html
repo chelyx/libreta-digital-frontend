@@ -1,0 +1,13 @@
+<div class="item" [ngClass]="status">
+  <img *ngIf="student.picture" [src]="student.picture" class="avatar" />
+
+  <div class="info">
+    <b>{{ student.nombre }}</b>
+    <div>{{ student.email}} - {{student.legajo}}</div>
+
+  </div>
+
+  <button *ngIf="status == 'valid'" mat-icon-button (click)="removeClick.emit()">
+    <mat-icon color="warn">delete</mat-icon>
+  </button>
+</div>

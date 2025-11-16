@@ -1,21 +1,21 @@
 <div class="wizard-container">
 
   <div class="steps-header">
-     <div [class.active]="currentStep === 0">0. Curso</div>
-    <div [class.active]="currentStep === 1">1. Asistencia</div>
-    <div [class.active]="currentStep === 2">2. Cargar Notas</div>
-    <div [class.active]="currentStep === 3">3. Enviar a BFA</div>
+     <div [class.active]="currentStep === 0" (click)="goToStep(0)">0. Mesa de Final</div>
+    <div [class.active]="currentStep === 1" (click)="goToStep(1)">1. Asistencia</div>
+    <div [class.active]="currentStep === 2" (click)="goToStep(2)">2. Cargar Notas</div>
+    <div [class.active]="currentStep === 3" (click)="goToStep(3)">3. Enviar a BFA</div>
   </div>
 
   <div class="steps-content">
 
     <div *ngIf="currentStep === 0">
-      <h2>Seleccionar Curso para el Examen Final</h2>
+      <h2>Seleccionar la Mesa del Examen Final</h2>
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Curso</mat-label>
-        <mat-select (selectionChange)="onCourseSelected($event.value)">
+        <mat-select (selectionChange)="onCourseSelected($event.value)" [(value)]="selectedCourse">
           <mat-option *ngFor="let c of cursos" [value]="c">
-            {{ c.nombre }} - {{ c.fecha }}
+            {{ c.nombre }} - {{ c.fecha | date:'dd/MM/yyyy' }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -24,13 +24,13 @@
     <app-code-validator
       *ngIf="currentStep === 1"
       [curso]="selectedCourse"
-      (completed)="onAttendanceComplete()">
+      (completed)="onAttendanceComplete($event)">
     </app-code-validator>
 
     <app-notas-table
       *ngIf="currentStep === 2"
       [curso]="selectedCourse"
-      (completed)="onGradesComplete()">
+      (completed)="onGradesComplete($event)">
     </app-notas-table>
 
      <div *ngIf="currentStep === 3">

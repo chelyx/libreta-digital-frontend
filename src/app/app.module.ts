@@ -40,6 +40,7 @@ import { AsistenciaTableComponent } from "./asistencia-table/asistencia-table.co
 import { HistorialNotasComponent } from "./historial-notas/historial-notas.component";
 import { NotasTableComponent } from './notas-table/notas-table.component';
 import { ExamenWizardComponent } from './examen-wizard/examen-wizard.component';
+import { StudentItemComponent } from './student-item/student-item.component';
 
 @NgModule({
 declarations: [
@@ -53,7 +54,8 @@ MisMateriasComponent,
 AsistenciaTableComponent,
 HistorialNotasComponent,
 NotasTableComponent,
-ExamenWizardComponent
+ExamenWizardComponent,
+StudentItemComponent
 ],
 imports: [
 QRCodeModule,

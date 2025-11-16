@@ -1,10 +1,9 @@
-export class UserValidatedClass {
-  email: string;
-  legajo: string;
-  nombre: string;
-  picture: string;
+export class User {
   auth0Id: string;
-
+  nombre: string;
+  email: string;
+  legajo?: string;
+  picture?: string;
 
   constructor(data: any) {
     this.email = data.email;
@@ -13,14 +12,4 @@ export class UserValidatedClass {
     this.picture = data.picture;
     this.auth0Id = data.auth0Id;
   }
-
-}
-
-export interface User {
-  auth0Id: string;
-  nombre: string;
-  email: string;
-  rol: string;
-  legajo?: string;
-  picture?: string;
 }

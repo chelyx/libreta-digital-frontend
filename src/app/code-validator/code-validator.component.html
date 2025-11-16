@@ -41,39 +41,69 @@
   </ng-template>
 
 
-  <!-- Lista de alumnos validados -->
+<mat-card *ngIf="hasAnyStudents">
+  <mat-card-title>
+    Alumnos — {{ validatedStudents.length }} / {{ curso.alumnos.length }}
+  </mat-card-title>
 
-  <mat-card *ngIf="validatedStudents.length">
-    <mat-card-title>Alumnos Validados ({{ validatedStudents.length }})</mat-card-title>
+  <mat-card-content>
 
-    <mat-card-content>
+    <!-- 🟢 Presentes -->
+    <ng-container *ngIf="validatedStudents.length">
+      <h4 class="section-title">Presentes ({{ validatedStudents.length }})</h4>
 
       <div class="list">
-        <div class="item"
-             *ngFor="let s of validatedStudents"
-             [class.highlight]="lastValidated?.auth0Id=== s.auth0Id">
-
-          <img [src]="s.picture" class="avatar" />
-
-          <div class="info">
-            <b>{{ s.nombre }}</b>
-            <div>{{ s.email }} — Legajo {{ s.legajo }}</div>
-          </div>
-
-          <button mat-icon-button (click)="remove(s.auth0Id)">
-            <mat-icon color="warn">delete</mat-icon>
-          </button>
-        </div>
+        <ng-container *ngFor="let s of validatedStudents">
+          <app-student-item
+            [student]="s"
+            [highlight]="lastValidated?.auth0Id === s.auth0Id"
+            (removeClick)="remove(s)">
+          </app-student-item>
+        </ng-container>
       </div>
 
+      <mat-divider></mat-divider>
+    </ng-container>
+
+    <!-- 🟡 Ausentes -->
+    <ng-container *ngIf="absentStudents.length">
+      <h4 class="section-title">Ausentes ({{ absentStudents.length }})</h4>
+
+      <div class="list">
+        <ng-container *ngFor="let s of absentStudents">
+          <app-student-item
+            [student]="s"
+            status="absent">
+          </app-student-item>
+        </ng-container>
+      </div>
+
+      <mat-divider></mat-divider>
+    </ng-container>
+
+    <!-- 🔴 No inscriptos -->
+    <ng-container *ngIf="notEnrolledStudents.length">
+      <h4 class="section-title">No inscriptos ({{ notEnrolledStudents.length }})</h4>
+
+      <div class="list">
+        <ng-container *ngFor="let s of notEnrolledStudents">
+          <app-student-item
+            [student]="s"
+            status="invalid">
+          </app-student-item>
+        </ng-container>
+      </div>
+    </ng-container>
+
+  </mat-card-content>
+
+</mat-card>
 
 
-    </mat-card-content>
-  </mat-card>
 
  <div class="actions">
-        <button mat-raised-button color="primary" (click)="save()">
-         Siguiente Paso
+        <button mat-raised-button color="primary" (click)="save()" [disabled]="validatedStudents.length == 0">
+         Guardar Asistencias
         </button>
       </div>
 </div>

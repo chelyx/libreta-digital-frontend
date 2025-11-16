@@ -3,6 +3,7 @@ import { Curso } from 'src/core/models/curso';
 import { NotaDto } from 'src/core/models/notas';
 import { ApiService } from 'src/core/service/api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { WizardService } from 'src/core/service/wizard.service';
 
 @Component({
 selector: 'app-notas-table',
@@ -11,29 +12,40 @@ styleUrls: ['./notas-table.component.scss']
 })
 export class NotasTableComponent implements OnInit {
 @Input() curso: Curso = {} as Curso;
- @Output() completed = new EventEmitter<void>();
+ @Output() completed = new EventEmitter<NotaDto[]>();
 // --- existentes (no tocar) ---
 // cursoSeleccionado: Curso | null = null;
 alumnosPresentes: { alumnoId: string; alumnoNombre: string; valor: number | 'AUS' | null }[] = [];
 
-constructor(private apiService: ApiService, private snackBar: MatSnackBar) {}
+constructor(private apiService: ApiService, private snackBar: MatSnackBar, private wizard: WizardService) {}
 
 ngOnInit(): void {
   this. cargarAlumnosConNotas();
 }
   cargarAlumnosConNotas() {
-     this.apiService.getAsistenciaPorCurso(this.curso.id).subscribe({
-    next: (asistencias) => {
-      this.alumnosPresentes = asistencias.map(a => ({
-        alumnoId: a.auth0Id,
-        alumnoNombre: a.nombre,
-        valor: a.presente ? null : 'AUS'
-      }) );
-    },
-    error: (err) => {
-      console.error('Error al cargar notas', err);
+    if (this.wizard.notas.length > 0) {
+      // si el wizard ya tiene notas guardadas, las usamos
+      this.alumnosPresentes = this.wizard.notas.map(nota => ({
+        alumnoId: nota.alumnoId,
+        alumnoNombre: this.curso.alumnos.find(a => a.auth0Id === nota.alumnoId)?.nombre || '',
+        valor: nota.valor === null ? 'AUS' : nota.valor
+      }));
+      return;
+    } else {
+      this.apiService.getAsistenciaPorCurso(this.curso.id).subscribe({
+        next: (asistencias) => {
+          this.alumnosPresentes = asistencias.map(a => ({
+            alumnoId: a.auth0Id,
+            alumnoNombre: a.nombre,
+            valor: a.presente ? null : 'AUS'
+          }) );
+        },
+        error: (err) => {
+          console.error('Error al cargar notas', err);
+        }
+      });
     }
-  });
+
   }
   guardarNotas() {
     if(!this.curso) {
@@ -57,7 +69,7 @@ ngOnInit(): void {
             verticalPosition: 'top',
             panelClass: ['success-snackbar']
           });
-          this.completed.emit();
+          this.completed.emit(notas);
         },
         error: (err) => {
           console.error('Error guardando notas', err);

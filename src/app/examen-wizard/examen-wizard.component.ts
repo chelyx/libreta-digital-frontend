@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { User } from '@auth0/auth0-angular';
 import { Curso, ExamenEstadoDto } from 'src/core/models/curso';
 import { ApiService } from 'src/core/service/api.service';
+import { WizardService } from 'src/core/service/wizard.service';
 
 @Component({
   selector: 'app-examen-wizard',
@@ -12,47 +14,42 @@ export class ExamenWizardComponent implements OnInit {
   currentStep = 0;
   estado: ExamenEstadoDto | null = null;
 
-   selectedCourse: any = null;
+   selectedCourse: Curso = {} as Curso;
 
      constructor(
-       private apiService: ApiService
+       private apiService: ApiService,
+       private wizard: WizardService
      ) {}
 
     ngOnInit() {
     // this.loadEstado();
-  }
+    }
 
-  loadEstado() {
-    this.apiService.getEstadoExamen(this.selectedCourse.id).subscribe(estado => {
-      this.estado = estado;
-
-     if (!estado.asistenciaCargada) this.currentStep = 1;
-      else if (!estado.notasCargadas) this.currentStep = 2;
-      else this.currentStep = 3; // por si agregás un paso final
-    });
-  }
-
-  onCourseSelected(course: any) {
+  onCourseSelected(course: Curso) {
     this.selectedCourse = course;
+    this.wizard.setCurso(course);
     this.currentStep = 1;
-    //no se si es util el load estados. TODO: check
-    // this.loadEstado();
   }
 
-  onGradesComplete() {
-    this.currentStep = 3;
-  }
 
-  onAttendanceComplete() {
+  onAttendanceComplete(lista: any) {
     this.currentStep = 2;
+    this.wizard.setAsistencias(lista);
   }
 
-  // // por si necesitás volver atrás
-  // goBack() {
-  //   if (this.currentStep > 1) this.currentStep--;
-  // }
+  onGradesComplete(notas:any) {
+    this.currentStep = 3;
+    this.wizard.setNotas(notas);
+  }
 
   sendToBFA() {
 
+  }
+
+  goToStep(step: number) {
+    this.currentStep = step;
+    if(step === 0) {
+       this.selectedCourse = this.wizard.cursoId
+    }
   }
 }

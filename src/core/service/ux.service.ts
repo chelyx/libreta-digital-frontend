@@ -57,13 +57,13 @@ constructor() {}
           // {label: "Cargar Nota", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false},
           // { label: "Validar Código QR", icon: "qr_code_scanner", panel: PANELES.CODE_VALIDATOR, main: true },
           { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
-          { label: "Examenes", icon: "school", panel: PANELES.EXAMEN_WIZARD, main: true }
+          { label: "Examenes Finales", icon: "school", panel: PANELES.EXAMEN_WIZARD, main: true }
         ]
 
       case "BEDEL":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
-          {label: "Cargar Nota", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false}, // TODO: hay que hacer otro componente para bedel.
+          {label: "Registro de Notas", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false}, // TODO: hay que hacer otro componente para bedel.
           { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false }
 
         ]
@@ -88,11 +88,11 @@ constructor() {}
       case ROLES.PROFESOR:
         return [
           {
-            title: "Examenes",
+            title: "Examenes Finales",
             description: "Flujo guiado para gestionar finales",
             icon: "school",
             panel: PANELES.EXAMEN_WIZARD,
-            buttonLabel: "Examenes",
+            buttonLabel: "Examenes Finales",
             color: "primary",
           },
         ]
