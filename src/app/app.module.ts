@@ -31,9 +31,6 @@ import { HomeComponent } from "./home/home.component"
 import { LoginComponent } from "./login/login.component"
 import { CodeValidatorComponent } from "./code-validator/code-validator.component"
 import { MisMateriasComponent } from "./mis-materias/mis-materias.component"
-import { SelectorMateriaMesaComponent } from "./carga-finales/selector-materia-mesa/selector-materia-mesa.component"
-import { CargaFinalesComponent } from "./carga-finales/carga-finales.component"
-import { TablaCargaNotasComponent } from "./carga-finales/tabla-carga-notas/tabla-carga-notas.component"
 import { QRCodeModule } from "angularx-qrcode"
 import { MatSidenavModule } from "@angular/material/sidenav"
 import { environment } from "../environments/environment"
@@ -42,6 +39,7 @@ import { OfflineInterceptor } from "src/core/service/interceptor"
 import { AsistenciaTableComponent } from "./asistencia-table/asistencia-table.component"
 import { HistorialNotasComponent } from "./historial-notas/historial-notas.component";
 import { NotasTableComponent } from './notas-table/notas-table.component';
+import { ExamenWizardComponent } from './examen-wizard/examen-wizard.component';
 
 @NgModule({
 declarations: [
@@ -52,12 +50,10 @@ HomeComponent,
 LoginComponent,
 CodeValidatorComponent,
 MisMateriasComponent,
-SelectorMateriaMesaComponent,
-CargaFinalesComponent,
-TablaCargaNotasComponent,
 AsistenciaTableComponent,
 HistorialNotasComponent,
-NotasTableComponent
+NotasTableComponent,
+ExamenWizardComponent
 ],
 imports: [
 QRCodeModule,

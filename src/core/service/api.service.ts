@@ -5,10 +5,10 @@ import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserValidatedClass } from '../models/user';
-import { Curso } from '../models/curso';
+import { Curso, ExamenEstadoDto } from '../models/curso';
 import { UUID } from 'crypto';
 import {  AsistenciaAlumnoDto, AsistenciaResponse } from '../models/asistencia';
-import {  NotaBulkDto, NotaResponse } from '../models/notas';
+import {  NotaBulkDto, NotaDto, NotaResponse } from '../models/notas';
 
 @Injectable({
   providedIn: 'root'
@@ -71,7 +71,7 @@ export class ApiService {
   }
 
 
-  saveNotas(cursoId: UUID, notas: any[]): Observable<any> {
+  saveNotas(cursoId: UUID, notas: NotaDto[]): Observable<any> {
     return this.postProtegido(`api/notas/curso/${cursoId}/bulk`, notas);
   }
 
@@ -83,7 +83,7 @@ export class ApiService {
     return this.getProtegido(`api/notas/curso/${cursoId}`);
   }
 
-  
+
 getNotasPorAlumno(auth0Id: string): Observable<NotaResponse[]> {
   return this.getProtegido(`api/notas/${encodeURIComponent(auth0Id)}`);
 }
@@ -124,5 +124,8 @@ getByCodigoYFecha(codigo: string, fecha: string) {
   }
 
 
+  getEstadoExamen(examenId: UUID): Observable<ExamenEstadoDto> {
+    return this.getProtegido(`api/cursos/${examenId}/estado`);
+  }
 
 }

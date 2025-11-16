@@ -1,8 +1,9 @@
 import { UUID } from "crypto";
 
 export interface NotaDto {
-  id: UUID;
-  valor:number;
+  alumnoId: string;
+  descripcion: string;
+  valor: number | null;
 }
 
 export interface NotaResponse {

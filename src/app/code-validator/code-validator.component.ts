@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, EventEmitter, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http';
 import jsQR from 'jsqr';
@@ -13,7 +13,8 @@ import { UUID } from 'crypto';
   styleUrls: ['./code-validator.component.scss']
 })
 export class CodeValidatorComponent implements OnInit, OnDestroy {
-  @Input() cursos: Curso[] = [];
+  @Input() curso: Curso = {} as Curso;
+  @Output() completed = new EventEmitter<void>();
   @ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas', { static: false }) canvasElement!: ElementRef<HTMLCanvasElement>;
 
@@ -187,14 +188,10 @@ remove(id: string) {
     this.validatedStudents = this.validatedStudents.filter(s => s.auth0Id !== id);
   }
 
-  clear() {
-    this.validatedStudents = [];
-    this.cursoSeleccionado = '';
-  }
 
 
   save(): void {
-    if (!this.cursoSeleccionado) return;
+    if (!this.curso) return;
 
     this.saving = true;
     const lista = this.validatedStudents.map((user) => ({
@@ -205,11 +202,11 @@ remove(id: string) {
 
     console.log('Datos a enviar:', lista);
 
-    this.apiService.saveAsistencia(this.cursoSeleccionado, lista).subscribe({
+    this.apiService.saveAsistencia(this.curso.id, lista).subscribe({
       next: (res: any) =>{
         this.saving = false
         this.snackBar.open(res.status, '',{ duration: 3000 });
-        this.clear();
+        this.completed.emit();
       },
       error: (err) => { console.error(err); this.saving = false; }
     });

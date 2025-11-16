@@ -1,75 +1,28 @@
 <div class="notas-container">
   <div class="page-header">
     <h1>Carga de Calificaciones</h1>
-    <p>Exámenes Finales</p>
   </div>
 
-  <div class="step-card">
+  <!-- <div class="step-card">
     <div class="step-header">
       <span class="step-badge">PASO 1</span>
       <h2>Seleccionar Mesa de Examen</h2>
     </div>
     <div class="step-body">
       <div class="form-field">
-        <mat-form-field appearance="outline" class="curso-select">
-          <mat-label>Materia</mat-label>
-          <mat-select [(ngModel)]="cursoSeleccionado" (selectionChange)="onCursoChange($event.value)">
-            <mat-option value="">Todas las materias</mat-option>
-            <mat-option *ngFor="let curso of cursos" [value]="curso.id">
-              {{ curso.nombre }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <div class="search-section">
-        <div class="search-header">
-          <div class="search-title-wrapper">
-            <h3>Buscar Mesa de Examen</h3>
-            <p class="search-subtitle">Completar ambos campos obligatoriamente</p>
-          </div>
-          <button mat-stroked-button
-                  class="clear-button"
-                  (click)="limpiarBusqueda()"
-                  *ngIf="busquedaNombreAlumno || busquedaFecha">
-            <mat-icon>clear</mat-icon>
-            Limpiar filtros
-          </button>
-        </div>
-
-        <div class="search-fields">
-          <!-- Cambiado: ahora es Código del curso, ya no dispara aplicarFiltros -->
-          <mat-form-field appearance="outline" class="search-input">
-            <mat-label>Código del curso</mat-label>
-            <mat-icon matPrefix>search</mat-icon>
-            <input matInput
-                   type="text"
-                   [(ngModel)]="codigoCurso"
-                   placeholder="Ej: ALG1-2025">
-          </mat-form-field>
-
-          <!-- Fecha para la búsqueda por código+fecha -->
-          <mat-form-field appearance="outline" class="search-input">
-            <mat-label>Fecha</mat-label>
-            <mat-icon matPrefix>calendar_today</mat-icon>
-            <input matInput
-                   type="date"
-                   [(ngModel)]="fechaCurso">
-          </mat-form-field>
-
-          <!-- NUEVO: botón Search que dispara la consulta conjunta -->
-          <button mat-raised-button color="primary"
-                  (click)="buscarCurso()"
-                  [disabled]="buscando">
-            {{ buscando ? 'Buscando...' : 'Search' }}
-          </button>
-        </div>
-
+          <mat-form-field appearance="outline" class="full">
+        <mat-label>Curso</mat-label>
+        <mat-select [(value)]="curso" (selectionChange)="onCursoChange($event.value)">
+          <mat-option *ngFor="let c of cursos" [value]="c">
+            {{ c.nombre }} - {{ c.fecha }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
       </div>
     </div>
-  </div>
+  </div> -->
 
-  <div class="step-card" *ngIf="cursoSeleccionado && notasFiltradas.length > 0">
+  <div class="step-card" *ngIf="curso && alumnosPresentes.length > 0">
     <div class="step-header">
       <span class="step-badge">PASO 2</span>
       <h2>Cargar Calificaciones</h2>
@@ -83,13 +36,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let alumno of notasFiltradas">
+        <tr *ngFor="let alumno of alumnosPresentes">
           <td class="nombre">{{ alumno.alumnoNombre }}</td>
           <td>
             <mat-form-field appearance="outline" class="nota-input">
-              <input matInput type="number"
+              <input matInput
                      [(ngModel)]="alumno.valor"
-                     min="1" max="10"
+                     [disabled]="alumno.valor == 'AUS'"
                      placeholder="Ingrese nota" />
             </mat-form-field>
           </td>
@@ -99,15 +52,14 @@
 
       <div class="acciones">
         <button mat-raised-button
-                (click)="guardarNotas()"
-                [disabled]="!hayCambios()">
-          Guardar notas ({{ getCambiosCount() }})
+                (click)="guardarNotas()">
+          Guardar notas
         </button>
       </div>
     </div>
   </div>
 
-  <div class="no-alumnos" *ngIf="cursoSeleccionado && notasFiltradas.length === 0">
+  <div class="no-alumnos" *ngIf="curso && alumnosPresentes.length === 0">
     No hay alumnos cargados para este curso.
   </div>
 </div>

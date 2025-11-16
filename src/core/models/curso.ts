@@ -9,3 +9,10 @@ export interface Curso {
   alumnos: User[];
   fecha: string
 }
+
+
+export interface ExamenEstadoDto {
+  examenId: UUID;
+  asistenciaCargada: boolean;
+  notasCargadas: boolean;
+}

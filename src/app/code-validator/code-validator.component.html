@@ -1,23 +1,7 @@
 <div class="validation-container">
   <h2>Validar Identidad Alumnos</h2>
-  <p class="subtitle">Seleccioná el curso y escaneá el código QR del alumno o ingresá el token manualmente</p>
+  <p class="subtitle">Escaneá el código QR del alumno o ingresá el token manualmente</p>
 
-        <!-- Selección del curso -->
- <mat-card>
-    <mat-card-title>Seleccionar Curso</mat-card-title>
-    <mat-card-content>
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Curso</mat-label>
-        <mat-select [(value)]="cursoSeleccionado">
-          <mat-option *ngFor="let c of cursos" [value]="c.id">
-            {{ c.nombre }} - {{ c.fecha }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </mat-card-content>
-  </mat-card>
-
-  <div *ngIf="true">
  <!-- Vista de cámara -->
   <div class="scanner-wrapper" *ngIf="scanning; else manualMode">
     <div class="video-container">
@@ -55,7 +39,7 @@
       </div>
     </div>
   </ng-template>
-  </div>
+
 
   <!-- Lista de alumnos validados -->
 
@@ -82,15 +66,14 @@
         </div>
       </div>
 
-      <div class="actions">
-        <button mat-button (click)="clear()">Limpiar</button>
-        <button mat-raised-button color="primary" (click)="save()">
-          Guardar Asistencia
-        </button>
-      </div>
+
 
     </mat-card-content>
   </mat-card>
 
-
+ <div class="actions">
+        <button mat-raised-button color="primary" (click)="save()">
+         Siguiente Paso
+        </button>
+      </div>
 </div>
