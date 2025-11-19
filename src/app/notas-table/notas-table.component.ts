@@ -38,7 +38,8 @@ ngOnInit(): void {
             alumnoId: a.auth0Id,
             alumnoNombre: a.nombre,
             valor: a.presente ? null : 'AUS'
-          }) );
+          })
+         );
         },
         error: (err) => {
           console.error('Error al cargar notas', err);
