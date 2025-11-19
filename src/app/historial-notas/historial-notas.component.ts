@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core"
 import { NotaResponse } from "src/core/models/notas"
 import { ApiService } from "src/core/service/api.service"
-import { CalificacionesService } from "src/core/service/calificaciones.service"
 
 export interface NotaHistorial {
 materia: string
@@ -24,7 +23,7 @@ notasAprobadas: NotaResponse[] = []
 notasDesaprobadas: NotaResponse[] = []
 promedio = 0
 
-constructor(private calificacionesService: CalificacionesService, private apiService: ApiService) {}
+constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.cargarHistorial()
@@ -34,7 +33,7 @@ constructor(private calificacionesService: CalificacionesService, private apiSer
     this.loading = true
 
     // Obtener notas del servicio
-    this.apiService.getNotasPorAlumno('auth0|alum1').subscribe({ //TODO: reemplazar auth0Id hardcodeado
+    this.apiService.getNotasPorAlumno().subscribe({
       next: (notas) => {
         this.notas = notas.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
         this.calcularEstadisticas()

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '@auth0/auth0-angular';
 import { Curso, ExamenEstadoDto } from 'src/core/models/curso';
 import { ApiService } from 'src/core/service/api.service';
@@ -14,12 +15,13 @@ export class ExamenWizardComponent implements OnInit {
   currentStep = 0;
   estado: ExamenEstadoDto | null = null;
 
-   selectedCourse: Curso = {} as Curso;
+  selectedCourse: Curso = {} as Curso;
 
-     constructor(
-       private apiService: ApiService,
-       private wizard: WizardService
-     ) {}
+  constructor(
+    private apiService: ApiService,
+    private wizard: WizardService,
+    private snackBar: MatSnackBar
+  ) {}
 
     ngOnInit() {
     // this.loadEstado();
@@ -43,7 +45,17 @@ export class ExamenWizardComponent implements OnInit {
   }
 
   sendToBFA() {
-
+    this.apiService.registrarBFA().subscribe({
+      next: () => {
+        this.snackBar.open('Datos enviados a BFA correctamente.');
+        this.wizard.setStep(0);
+        this.currentStep = 0;
+        this.selectedCourse = {} as Curso;
+      },
+      error: (err) => {
+        console.error('Error enviando datos a BFA:', err);
+      }
+    });
   }
 
   goToStep(step: number) {

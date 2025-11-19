@@ -48,7 +48,7 @@ constructor(private auth: AuthService, public userService: UserService, public u
   }
 
   getInfoByRole() {
- this.apiService.getMisCursos().subscribe({
+   this.apiService.getMisCursos().subscribe({
       next: (data) => (this.cursos = data),
       error: (err) => console.error('Error al cargar cursos', err)
     });

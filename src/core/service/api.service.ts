@@ -84,14 +84,10 @@ export class ApiService {
   }
 
 
-getNotasPorAlumno(auth0Id: string): Observable<NotaResponse[]> {
-  return this.getProtegido(`api/notas/${encodeURIComponent(auth0Id)}`);
+getNotasPorAlumno(): Observable<NotaResponse[]> {
+  return this.getProtegido(`api/notas/me`);
 }
 
-getNotasDeAlumnoEnCurso(cursoId: UUID, auth0Id: string): Observable<NotaResponse[]> {
-  //ARREGLAR: NO EXPONER EL AUTH0ID EN LA URL
-  return this.getProtegido(`api/notas/curso/${cursoId}/alumno/${encodeURIComponent(auth0Id)}`);
-}
   registerUser(): Observable<any> {
     return this.postProtegido('api/user/register', {});
   }
@@ -114,13 +110,7 @@ getByCodigoYFecha(codigo: string, fecha: string) {
 }
 
   registrarBFA(): Observable<any> {
-        let nota = {
-      legajoAlumno: 1673154,
-      materia: 'Sistemas de Información II',
-      nota: 10,
-      fecha: new Date().toUTCString()
-    }
-    return this.postProtegido('api/notas/registrar', nota);
+    return this.postProtegido('api/notas/sellar-temp', {});
   }
 
 
