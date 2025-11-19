@@ -1,0 +1,349 @@
+.historial-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  .page-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 0.5rem 0;
+
+    mat-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+      color: #a82a19;
+    }
+  }
+
+  .page-subtitle {
+    font-size: 1.125rem;
+    color: #666;
+    margin: 0;
+  }
+}
+
+.materias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.materia-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 6px 16px rgba(168, 42, 25, 0.15);
+    transform: translateY(-2px);
+  }
+
+  &.expandida {
+    grid-column: 1 / -1;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 2px solid #f0f0f0;
+    margin-bottom: 1rem;
+
+    .materia-info {
+      flex: 1;
+
+      .materia-nombre {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 0 0 0.25rem 0;
+      }
+
+      .materia-profesor {
+        font-size: 0.875rem;
+        color: #666;
+        margin: 0;
+      }
+    }
+
+    .expand-icon {
+      color: #a82a19;
+      transition: transform 0.3s;
+    }
+  }
+
+  mat-card-content {
+    padding: 0 1.5rem 1.5rem;
+  }
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .stat-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+
+      &.presente { color: #4caf50; }
+      &.ausente { color: #f44336; }
+      &.total { color: #2196f3; }
+    }
+
+    .stat-content {
+      display: flex;
+      flex-direction: column;
+
+      .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        line-height: 1;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
+}
+
+.progress-section {
+  margin-bottom: 1rem;
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+
+    .porcentaje-label {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .porcentaje-value {
+      font-size: 1.125rem;
+      font-weight: 700;
+
+      &.regular { color: #4caf50; }
+      &.alerta { color: #ff9800; }
+      &.critico { color: #f44336; }
+    }
+  }
+
+  mat-progress-bar {
+    height: 8px;
+    border-radius: 4px;
+  }
+}
+
+.estado-chip-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+
+  mat-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 600;
+
+    &.chip-regular {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    &.chip-alerta {
+      background-color: #fff3e0;
+      color: #e65100;
+    }
+
+    &.chip-critico {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    mat-icon {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+
+.detalle-asistencias {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #f0f0f0;
+  animation: slideDown 0.3s ease;
+
+  .detalle-titulo {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 1rem 0;
+  }
+
+  .detalle-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .detalle-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border-left: 4px solid transparent;
+      background: #f9f9f9;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+
+      &.estado-presente {
+        border-left-color: #4caf50;
+      }
+
+      &.estado-ausente {
+        border-left-color: #f44336;
+      }
+
+      &.estado-tarde {
+        border-left-color: #ff9800;
+      }
+
+      .detalle-icon {
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      .detalle-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .detalle-fecha {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: #1a1a1a;
+        }
+
+        .detalle-tema {
+          font-size: 0.75rem;
+          color: #666;
+        }
+      }
+
+      .detalle-badge {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        text-transform: capitalize;
+        background: #e0e0e0;
+        color: #666;
+      }
+    }
+  }
+}
+
+.leyenda-container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .leyenda-titulo {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 1rem 0;
+  }
+
+  .leyenda-items {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+
+    .leyenda-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .leyenda-color {
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+
+        &.regular { background-color: #4caf50; }
+        &.alerta { background-color: #ff9800; }
+        &.critico { background-color: #f44336; }
+      }
+
+      span {
+        font-size: 0.875rem;
+        color: #666;
+      }
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .materias-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .leyenda-items {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}

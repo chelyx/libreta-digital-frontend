@@ -4,6 +4,7 @@ import { Curso } from 'src/core/models/curso';
 import { ApiService } from 'src/core/service/api.service';
 import { UserService, ROLES } from 'src/core/service/userService';
 import { UxService, PANELES, Actions, MainCard } from 'src/core/service/ux.service';
+import { HistorialAsistenciaComponent } from '../historial-asistencia/historial-asistencia.component';
 
 @Component({
 selector: 'app-home',

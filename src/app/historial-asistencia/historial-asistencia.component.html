@@ -1,0 +1,109 @@
+<div class="historial-container">
+  <div class="header-section">
+    <h1 class="page-title">
+      <mat-icon>history</mat-icon>
+      Historial de Asistencias
+    </h1>
+    <p class="page-subtitle">Revisa tu asistencia a todas las materias</p>
+  </div>
+
+  <div class="materias-grid">
+    <mat-card *ngFor="let materia of materias" class="materia-card" [class.expandida]="materiaExpandida === materia.nombre">
+      <mat-card-header class="card-header" (click)="toggleDetalle(materia.nombre)">
+        <div class="materia-info">
+          <h2 class="materia-nombre">{{ materia.nombre }}</h2>
+          <p class="materia-profesor">{{ materia.profesor }}</p>
+        </div>
+        <mat-icon class="expand-icon">
+          {{ materiaExpandida === materia.nombre ? 'expand_less' : 'expand_more' }}
+        </mat-icon>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="stats-container">
+          <div class="stat-item">
+            <mat-icon class="stat-icon presente">check_circle</mat-icon>
+            <div class="stat-content">
+              <span class="stat-number">{{ materia.asistencias }}</span>
+              <span class="stat-label">Presentes</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <mat-icon class="stat-icon ausente">cancel</mat-icon>
+            <div class="stat-content">
+              <span class="stat-number">{{ materia.ausencias }}</span>
+              <span class="stat-label">Ausencias</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <mat-icon class="stat-icon total">school</mat-icon>
+            <div class="stat-content">
+              <span class="stat-number">{{ materia.totalClases }}</span>
+              <span class="stat-label">Total</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="porcentaje-label">Porcentaje de asistencia</span>
+            <span class="porcentaje-value" [class]="materia.estado">
+              {{ materia.porcentaje | number:'1.1-1' }}%
+            </span>
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="materia.porcentaje"
+            [color]="getProgressBarColor(materia.estado)">
+          </mat-progress-bar>
+        </div>
+
+        <div class="estado-chip-container">
+          <mat-chip-set>
+            <mat-chip [class]="'chip-' + materia.estado" highlighted>
+              <mat-icon>{{ materia.estado === 'regular' ? 'check' : materia.estado === 'alerta' ? 'warning' : 'error' }}</mat-icon>
+              {{ materia.estado === 'regular' ? 'Regular' : materia.estado === 'alerta' ? 'En Alerta' : 'Crítico' }}
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+
+        <div class="detalle-asistencias" *ngIf="materiaExpandida === materia.nombre">
+          <h3 class="detalle-titulo">Detalle por clase</h3>
+          <div class="detalle-lista">
+            <div
+              *ngFor="let detalle of materia.detalles"
+              class="detalle-item"
+              [class]="getEstadoColor(detalle.estado)">
+              <mat-icon class="detalle-icon">{{ getEstadoIcon(detalle.estado) }}</mat-icon>
+              <div class="detalle-content">
+                <span class="detalle-fecha">{{ detalle.fecha | date:'dd/MM/yyyy' }}</span>
+                <span class="detalle-tema">{{ detalle.tema }}</span>
+              </div>
+              <span class="detalle-badge">{{ detalle.estado }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="leyenda-container">
+    <h3 class="leyenda-titulo">Leyenda</h3>
+    <div class="leyenda-items">
+      <div class="leyenda-item">
+        <div class="leyenda-color regular"></div>
+        <span>Regular: 80% o más</span>
+      </div>
+      <div class="leyenda-item">
+        <div class="leyenda-color alerta"></div>
+        <span>Alerta: 70% - 79%</span>
+      </div>
+      <div class="leyenda-item">
+        <div class="leyenda-color critico"></div>
+        <span>Crítico: Menos de 70%</span>
+      </div>
+    </div>
+  </div>
+</div>
