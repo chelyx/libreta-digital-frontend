@@ -10,7 +10,8 @@ ASISTENCIA = "asistencia",
 ASISTENCIA_TABLE = "asistencia-table",
 HISTORIAL_NOTAS = "historial-notas",
 EDITAR_NOTAS = 'editar-notas',
-EXAMEN_WIZARD = 'examen-wizard'
+EXAMEN_WIZARD = 'examen-wizard',
+HISTORIAL_ASISTENCIA = 'historial-asistencia'
 }
 export interface Actions {
 label: string
@@ -50,7 +51,8 @@ constructor() {}
         return [
          { label: "Historial de Notas", icon: "assignment", panel: PANELES.HISTORIAL_NOTAS, main: false },
           { label: "Generar Código QR", icon: "qr_code", panel: PANELES.CODE_GENERATOR, main: true },
-        ]
+          { label: 'Historial de Asistencia',icon: 'history', panel: PANELES.HISTORIAL_ASISTENCIA, main: false }
+ ]
       case "PROFESOR":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },

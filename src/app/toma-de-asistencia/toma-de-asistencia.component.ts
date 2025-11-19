@@ -51,7 +51,7 @@ constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
   const local = this.cursos.find(c => c.codigo?.toLowerCase() === codigo.toLowerCase());
   if (local) {
     this.onCursoChange(local);
-    this.snackBar.open(`Curso encontrado localmente: ${local.nombre}`, '', { duration: 2500 });
+    //this.snackBar.open(`Curso encontrado localmente: ${local.nombre}`, '', { duration: 2500 });
     return;
   }
 

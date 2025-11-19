@@ -39,19 +39,34 @@
             <button mat-raised-button [color]="card.color">{{ card.buttonLabel }}</button>
           </div>
         </div>
+
+        <!-- QUICK ACTIONS - Todas las opciones del menú -->
+        <div class="quick-actions-section" *ngIf="actions.length > 0">
+          <h3 class="section-title">Acciones Rápidas</h3>
+          <div class="quick-actions-grid">
+            <button
+              mat-stroked-button
+              *ngFor="let action of actions"
+              class="quick-action-button"
+              (click)="navigateToPanel(action.panel)">
+              <mat-icon>{{ action.icon }}</mat-icon>
+              <span>{{ action.label }}</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- PANELS -->
       <app-code-generator *ngIf="currentPanel === PANELES.CODE_GENERATOR"></app-code-generator>
       <app-mis-materias *ngIf="currentPanel === PANELES.MATERIAS"></app-mis-materias>
       <app-toma-de-asistencia *ngIf="currentPanel === PANELES.ASISTENCIA" [cursos]="cursos"></app-toma-de-asistencia>
-      <!-- <app-code-validator *ngIf="currentPanel === PANELES.CODE_VALIDATOR"  [cursos]="cursos"></app-code-validator> -->
       <app-asistencia-table *ngIf="currentPanel === PANELES.ASISTENCIA_TABLE" [cursos]="cursos" ></app-asistencia-table>
       <app-historial-notas *ngIf="currentPanel === PANELES.HISTORIAL_NOTAS"></app-historial-notas>
-      <!-- <app-notas-table *ngIf="currentPanel === PANELES.EDITAR_NOTAS" [cursos]="cursos"></app-notas-table> -->
       <app-examen-wizard *ngIf="currentPanel === PANELES.EXAMEN_WIZARD" [cursos]="cursos"></app-examen-wizard>
-
-      <!-- <app-attendance *ngIf="currentPanel === PANELES.ASISTENCIA" ></app-attendance> -->
+      <div *ngIf="currentPanel === PANELES.HISTORIAL_ASISTENCIA" class="dummy-panel">
+        <h2>Historial de Asistencia</h2>
+        <p>Esta funcionalidad estará disponible próximamente.</p>
+      </div>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>
