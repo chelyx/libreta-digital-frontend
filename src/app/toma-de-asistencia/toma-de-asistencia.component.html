@@ -4,12 +4,10 @@
 </div>
 
 <!-- Panel de filtros y búsqueda horizontal -->
-
 <div class="panel-horizontal">
 
   <!-- Sección 1 -->
   <div class="panel-item">
-
     <div class="panel-header">
       <div class="panel-number">1</div>
       <div class="panel-title">Seleccionar Curso</div>
@@ -68,24 +66,36 @@
     </button>
   </div>
 </div>
+
 <!-- Lista de alumnos -->
 <div class="alumnos-lista" *ngIf="cursoSeleccionado">
   <div
     class="alumno-card"
     *ngFor="let a of alumnosFiltrados; trackBy: trackByAuth0Id"
-    [class.presente]="asistencias[a.auth0Id]"
   >
     <div class="alumno-info">
       <div class="alumno-nombre">{{ a.nombre }}</div>
       <div class="alumno-email">{{ a.email }}</div>
     </div>
 
-    <mat-checkbox
-      color="primary"
-      [(ngModel)]="asistencias[a.auth0Id]"
-      class="alumno-checkbox"
-    >
-    </mat-checkbox>
+    <div class="asistencia-buttons">
+      <button
+        mat-raised-button
+        class="btn-asistencia btn-si"
+        [class.selected]="asistencias[a.auth0Id] === true"
+        (click)="asistencias[a.auth0Id] = true"
+      >
+        SÍ
+      </button>
+      <button
+        mat-raised-button
+        class="btn-asistencia btn-no"
+        [class.selected]="asistencias[a.auth0Id] === false"
+        (click)="asistencias[a.auth0Id] = false"
+      >
+        NO
+      </button>
+    </div>
   </div>
 
   <!-- Estado vacío -->

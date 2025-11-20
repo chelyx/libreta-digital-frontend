@@ -6,92 +6,23 @@
   box-sizing: border-box;
 }
 
-/* ===== ENCABEZADO ===== */
-.header-section {
+/* ===== BANNER TÍTULO ===== */
+.titulo-banner {
+  background: linear-gradient(135deg, #a82a19 0%, #d32f2f 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
   text-align: center;
-  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(168, 42, 25, 0.2);
 }
 
-.header-title {
+.titulo-banner-text {
   font-size: 2rem;
   font-weight: 600;
-  color: #000;
+  margin: 0;
 }
 
-/* ===== FILA HORIZONTAL ===== */
-.filtros-section {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-  gap: 1rem;
-  width: 100%;
-}
-
-/* ===== Fuerza los mat-form-field a estar EN LÍNEA ===== */
-::ng-deep mat-form-field {
-  display: inline-flex !important;
-  vertical-align: bottom !important;
-  width: auto !important;
-  flex: 1 1 auto !important;
-  min-width: 200px !important;
-}
-
-/* ===== Bloque de búsqueda por código ===== */
-.busqueda-id-section {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: flex-end !important;
-  gap: 1rem !important;
-  flex: 1 1 auto !important;
-}
-
-/* ===== Botón Buscar ===== */
-.buscar-id-button {
-  height: 56px !important;
-  white-space: nowrap !important;
-  padding: 0 2rem !important;
-}
-
-/* ===== Ajustes visuales ===== */
-.help-text-section {
-  background: #e3f2fd;
-  color: #0d47a1;
-  font-size: 0.95rem;
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* ===== Botón Guardar ===== */
-.guardar-section {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: #fff;
-  border-top: 1px solid #ddd;
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-}
-
-.guardar-button {
-  background-color: #d32f2f !important;
-  color: #fff !important;
-  font-weight: 600;
-  padding: 0.75rem 2rem;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-}
-
-.guardar-button:hover {
-  background-color: #b71c1c !important;
-}
 /* ===== PANEL HORIZONTAL ===== */
 .panel-horizontal {
   display: flex;
@@ -102,7 +33,7 @@
   padding: 2rem;
   gap: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .panel-item {
@@ -112,6 +43,7 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  border: 1px solid #f0f0f0;
 }
 
 .panel-header {
@@ -122,28 +54,29 @@
 }
 
 .panel-number {
-  background-color: #a52121;
+  background-color: #a82a19;
   color: #fff;
   font-weight: bold;
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .panel-title {
   font-weight: 600;
   font-size: 1.1rem;
-  color: #000;
+  color: #1a1a1a;
 }
 
 .panel-subtext {
-  font-size: 0.9rem;
-  color: #777;
+  font-size: 0.875rem;
+  color: #666;
   margin-top: 0.5rem;
+  margin-bottom: 0;
 }
 
 .panel-field {
@@ -152,41 +85,224 @@
 
 .buscar-id-button {
   margin-top: 1rem;
-  height: 45px;
+  height: 48px;
   font-weight: 500;
-  background-color: #b71c1c !important;
+  background-color: #a82a19 !important;
   color: white !important;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-.buscar-id-button:hover {
-  background-color: #8b1515 !important;
+.buscar-id-button:hover:not([disabled]) {
+  background-color: #8b1c14 !important;
+  box-shadow: 0 4px 12px rgba(168, 42, 25, 0.3);
 }
 
-/* Responsive */
+/* ===== LISTA DE ALUMNOS ===== */
+.alumnos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 5rem;
+  padding: 0 0.5rem;
+}
+
+.alumno-card {
+  background: white;
+  border: 2px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.alumno-card:hover {
+  border-color: #a82a19;
+  box-shadow: 0 4px 16px rgba(168, 42, 25, 0.1);
+  transform: translateY(-2px);
+}
+
+.alumno-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.alumno-nombre {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.alumno-email {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+/* ===== BOTONES SÍ/NO ===== */
+.asistencia-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-asistencia {
+  min-width: 80px;
+  height: 44px;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn-si {
+  background-color: #f5f5f5 !important;
+  color: #666 !important;
+  border-color: #e0e0e0 !important;
+}
+
+.btn-si.selected {
+  background-color: #4caf50 !important;
+  color: white !important;
+  border-color: #4caf50 !important;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  transform: scale(1.05);
+}
+
+.btn-si:hover:not(.selected) {
+  background-color: #e8f5e9 !important;
+  color: #2e7d32 !important;
+  border-color: #4caf50 !important;
+}
+
+.btn-no {
+  background-color: #f5f5f5 !important;
+  color: #666 !important;
+  border-color: #e0e0e0 !important;
+}
+
+.btn-no.selected {
+  background-color: #f44336 !important;
+  color: white !important;
+  border-color: #f44336 !important;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+  transform: scale(1.05);
+}
+
+.btn-no:hover:not(.selected) {
+  background-color: #ffebee !important;
+  color: #c62828 !important;
+  border-color: #f44336 !important;
+}
+
+/* ===== ESTADO VACÍO ===== */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #999;
+
+  mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+}
+
+/* ===== BOTÓN GUARDAR ===== */
+.guardar-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-top: 2px solid #e0e0e0;
+  padding: 1.25rem;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.guardar-button {
+  background-color: #a82a19 !important;
+  color: white !important;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0 3rem;
+  height: 56px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.guardar-button:hover:not([disabled]) {
+  background-color: #8b1c14 !important;
+  box-shadow: 0 6px 20px rgba(168, 42, 25, 0.4);
+  transform: translateY(-2px);
+}
+
+.guardar-button[disabled] {
+  background-color: #ccc !important;
+  cursor: not-allowed;
+}
+
+/* ===== NOTA INFORMATIVA ===== */
+.info-note {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #e3f2fd;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  color: #0d47a1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-top: 1.5rem;
+  box-shadow: 0 2px 8px rgba(13, 71, 161, 0.1);
+  border-left: 4px solid #1976d2;
+}
+
+.info-icon {
+  flex-shrink: 0;
+  color: #1976d2;
+  width: 22px;
+  height: 22px;
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1000px) {
   .panel-horizontal {
     flex-direction: column;
   }
 }
-/* ===== NOTA INFORMATIVA (celeste) ===== */
-.info-note {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background-color: #e3f2fd; /* celeste claro */
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
-  color: #0d47a1; /* azul oscuro para texto */
-  font-size: 0.95rem;
-  line-height: 1.4;
-  margin-top: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
 
-.info-icon {
-  flex-shrink: 0;
-  color: #0d47a1;
-  width: 20px;
-  height: 20px;
+@media (max-width: 600px) {
+  .alumno-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .asistencia-buttons {
+    justify-content: stretch;
+
+    .btn-asistencia {
+      flex: 1;
+    }
+  }
+
+  .titulo-banner-text {
+    font-size: 1.5rem;
+  }
 }
