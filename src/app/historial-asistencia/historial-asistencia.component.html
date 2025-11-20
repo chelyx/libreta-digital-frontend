@@ -11,7 +11,10 @@
     <mat-card *ngFor="let materia of materias" class="materia-card" [class.expandida]="materiaExpandida === materia.nombre">
       <mat-card-header class="card-header" (click)="toggleDetalle(materia.nombre)">
         <div class="materia-info">
-          <h2 class="materia-nombre">{{ materia.nombre }}</h2>
+          <h2 class="materia-nombre">
+            {{ materia.nombre }}
+            <span class="codigo-curso">{{ materia.codigoCurso }}</span>
+          </h2>
           <p class="materia-profesor">{{ materia.profesor }}</p>
         </div>
         <mat-icon class="expand-icon">
@@ -63,8 +66,8 @@
         <div class="estado-chip-container">
           <mat-chip-set>
             <mat-chip [class]="'chip-' + materia.estado" highlighted>
-              <mat-icon>{{ materia.estado === 'regular' ? 'check' : materia.estado === 'alerta' ? 'warning' : 'error' }}</mat-icon>
-              {{ materia.estado === 'regular' ? 'Regular' : materia.estado === 'alerta' ? 'En Alerta' : 'Crítico' }}
+              <mat-icon>{{ materia.estado === 'regular' ? 'check' : 'error' }}</mat-icon>
+              {{ materia.estado === 'regular' ? 'Regular' : 'Crítico' }}
             </mat-chip>
           </mat-chip-set>
         </div>
@@ -77,10 +80,7 @@
               class="detalle-item"
               [class]="getEstadoColor(detalle.estado)">
               <mat-icon class="detalle-icon">{{ getEstadoIcon(detalle.estado) }}</mat-icon>
-              <div class="detalle-content">
-                <span class="detalle-fecha">{{ detalle.fecha | date:'dd/MM/yyyy' }}</span>
-                <span class="detalle-tema">{{ detalle.tema }}</span>
-              </div>
+              <span class="detalle-fecha">{{ detalle.fecha | date:'dd/MM/yyyy' }}</span>
               <span class="detalle-badge">{{ detalle.estado }}</span>
             </div>
           </div>
@@ -94,11 +94,7 @@
     <div class="leyenda-items">
       <div class="leyenda-item">
         <div class="leyenda-color regular"></div>
-        <span>Regular: 80% o más</span>
-      </div>
-      <div class="leyenda-item">
-        <div class="leyenda-color alerta"></div>
-        <span>Alerta: 70% - 79%</span>
+        <span>Regular: 70% o más</span>
       </div>
       <div class="leyenda-item">
         <div class="leyenda-color critico"></div>
