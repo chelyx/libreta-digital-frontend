@@ -11,8 +11,10 @@ ASISTENCIA_TABLE = "asistencia-table",
 HISTORIAL_NOTAS = "historial-notas",
 EDITAR_NOTAS = 'editar-notas',
 EXAMEN_WIZARD = 'examen-wizard',
-HISTORIAL_ASISTENCIA = 'historial-asistencia'
+HISTORIAL_ASISTENCIA = 'historial-asistencia',
+BUSCAR_FINAL = 'buscar-final'  // <-- NUEVO PANEL
 }
+
 export interface Actions {
 label: string
 icon: string
@@ -35,6 +37,7 @@ providedIn: "root",
 export class UxService {
 public role = ""
 private panel = new BehaviorSubject<string>("")
+
 constructor() {}
 
   setPanel(panel: string) {
@@ -49,26 +52,27 @@ constructor() {}
     switch (this.role) {
       case ROLES.ALUMNO:
         return [
-         { label: "Historial de Notas", icon: "assignment", panel: PANELES.HISTORIAL_NOTAS, main: false },
+          { label: "Historial de Notas", icon: "assignment", panel: PANELES.HISTORIAL_NOTAS, main: false },
           { label: "Generar Código QR", icon: "qr_code", panel: PANELES.CODE_GENERATOR, main: true },
-          { label: 'Historial de Asistencia',icon: 'history', panel: PANELES.HISTORIAL_ASISTENCIA, main: false }
- ]
+          { label: 'Historial de Asistencia', icon: 'history', panel: PANELES.HISTORIAL_ASISTENCIA, main: false }
+        ]
+
       case "PROFESOR":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
-          // {label: "Cargar Nota", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false},
-          // { label: "Validar Código QR", icon: "qr_code_scanner", panel: PANELES.CODE_VALIDATOR, main: true },
           { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
-          { label: "Examenes Finales", icon: "school", panel: PANELES.EXAMEN_WIZARD, main: true }
+          { label: "Examenes Finales", icon: "school", panel: PANELES.EXAMEN_WIZARD, main: true },
+          { label: "Buscar Final", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false }  // <-- SOLO PROFES/BEDELES
         ]
 
       case "BEDEL":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
-          {label: "Registro de Notas", icon: "check", panel: PANELES.EDITAR_NOTAS, main:false}, // TODO: hay que hacer otro componente para bedel.
-          { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false }
-
+          { label: "Registro de Notas", icon: "check", panel: PANELES.EDITAR_NOTAS, main: false },
+          { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
+          { label: "Buscar Final", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false }  // <-- SOLO PROFES/BEDELES
         ]
+
       default:
         return []
     }

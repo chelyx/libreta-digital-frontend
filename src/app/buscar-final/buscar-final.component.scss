@@ -1,0 +1,458 @@
+/* ===== BANNER TÍTULO ===== */
+.titulo-banner {
+  background: linear-gradient(135deg, #a82a19 0%, #d32f2f 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(168, 42, 25, 0.2);
+}
+
+.titulo-banner-text {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ===== PANEL DE BÚSQUEDA ===== */
+.busqueda-panel {
+  background-color: #fafafa;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.panel-number {
+  background-color: #a82a19;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.panel-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #1a1a1a;
+}
+
+.fecha-field {
+  width: 100%;
+  max-width: 400px;
+}
+
+.panel-subtext {
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+/* ===== GRID DE FINALES ===== */
+.finales-grid {
+  margin-bottom: 2rem;
+}
+
+.finales-header {
+  margin-bottom: 1.5rem;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+  }
+}
+
+.final-card {
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+
+  &:hover {
+    border-color: #a82a19;
+    box-shadow: 0 6px 16px rgba(168, 42, 25, 0.15);
+    transform: translateY(-2px);
+  }
+
+  mat-card-content {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.final-info {
+  flex: 1;
+}
+
+.final-materia {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.final-codigo {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #a82a19;
+  background-color: rgba(168, 42, 25, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+}
+
+.final-detalles {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.detalle-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #666;
+  font-size: 0.9rem;
+
+  mat-icon {
+    font-size: 1.125rem;
+    width: 1.125rem;
+    height: 1.125rem;
+    color: #a82a19;
+  }
+}
+
+.arrow-icon {
+  color: #a82a19;
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* ===== ESTADO VACÍO ===== */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #999;
+
+  mat-icon {
+    font-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  p {
+    font-size: 1.125rem;
+    margin: 0;
+  }
+}
+
+/* ===== DETALLE DEL FINAL ===== */
+.detalle-final {
+  margin-bottom: 5rem;
+}
+
+.detalle-header {
+  background: linear-gradient(135deg, #a82a19 0%, #d32f2f 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 4px 12px rgba(168, 42, 25, 0.2);
+
+  button {
+    color: white;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+  }
+}
+
+.detalle-info {
+  flex: 1;
+}
+
+.detalle-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+  opacity: 0.95;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    mat-icon {
+      font-size: 1.125rem;
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+  }
+}
+
+/* ===== LISTA DE ALUMNOS CON NOTAS ===== */
+.alumnos-notas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0 0.5rem;
+}
+
+.alumno-nota-card {
+  background: white;
+  border: 2px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  &:hover {
+    border-color: #a82a19;
+    box-shadow: 0 4px 16px rgba(168, 42, 25, 0.1);
+  }
+
+  &.ausente {
+    background-color: #ffebee;
+    border-color: #ffcdd2;
+  }
+}
+
+.alumno-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.alumno-nombre {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.alumno-email {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.nota-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nota-field {
+  width: 100px;
+
+  input {
+    text-align: center;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+}
+
+.ausente-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f44336;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+
+  mat-icon {
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.ausente-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-presente,
+.btn-ausente {
+  min-width: 90px;
+  height: 40px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn-presente {
+  background-color: #f5f5f5 !important;
+  color: #666 !important;
+  border-color: #e0e0e0 !important;
+
+  &.selected {
+    background-color: #4caf50 !important;
+    color: white !important;
+    border-color: #4caf50 !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  }
+
+  &:hover:not(.selected) {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    border-color: #4caf50 !important;
+  }
+}
+
+.btn-ausente {
+  background-color: #f5f5f5 !important;
+  color: #666 !important;
+  border-color: #e0e0e0 !important;
+
+  &.selected {
+    background-color: #f44336 !important;
+    color: white !important;
+    border-color: #f44336 !important;
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+  }
+
+  &:hover:not(.selected) {
+    background-color: #ffebee !important;
+    color: #c62828 !important;
+    border-color: #f44336 !important;
+  }
+}
+
+/* ===== BOTÓN GUARDAR ===== */
+.guardar-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-top: 2px solid #e0e0e0;
+  padding: 1.25rem;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.guardar-button {
+  background-color: #a82a19 !important;
+  color: white !important;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0 3rem;
+  height: 56px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover:not([disabled]) {
+    background-color: #8b1c14 !important;
+    box-shadow: 0 6px 20px rgba(168, 42, 25, 0.4);
+    transform: translateY(-2px);
+  }
+
+  &[disabled] {
+    background-color: #ccc !important;
+    cursor: not-allowed;
+  }
+}
+
+/* ===== NOTA INFORMATIVA ===== */
+.info-note {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #e3f2fd;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  color: #0d47a1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-top: 1.5rem;
+  box-shadow: 0 2px 8px rgba(13, 71, 161, 0.1);
+  border-left: 4px solid #1976d2;
+}
+
+.info-icon {
+  flex-shrink: 0;
+  color: #1976d2;
+  width: 22px;
+  height: 22px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .alumno-nota-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .nota-controls {
+    flex-direction: column;
+    align-items: stretch;
+
+    .nota-field {
+      width: 100%;
+    }
+
+    .ausente-buttons {
+      justify-content: stretch;
+
+      button {
+        flex: 1;
+      }
+    }
+  }
+
+  .final-detalles {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .detalle-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

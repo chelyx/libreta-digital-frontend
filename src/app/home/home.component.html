@@ -64,6 +64,9 @@
       <app-historial-notas *ngIf="currentPanel === PANELES.HISTORIAL_NOTAS"></app-historial-notas>
       <app-examen-wizard *ngIf="currentPanel === PANELES.EXAMEN_WIZARD" [cursos]="cursos"></app-examen-wizard>
       <app-historial-asistencia *ngIf="currentPanel === PANELES.HISTORIAL_ASISTENCIA"></app-historial-asistencia>
+      <app-buscar-final
+        *ngIf="currentPanel === PANELES.BUSCAR_FINAL">
+      </app-buscar-final>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>

@@ -1,0 +1,181 @@
+<!-- Banner de título principal -->
+<div class="titulo-banner">
+  <h1 class="titulo-banner-text">Gestión de Finales</h1>
+</div>
+
+<!-- Panel de búsqueda por fecha -->
+<div class="busqueda-panel">
+  <div class="panel-header">
+    <div class="panel-number">1</div>
+    <div class="panel-title">Buscar Final por Fecha</div>
+  </div>
+
+  <mat-form-field appearance="outline" class="fecha-field">
+    <mat-label>Selecciona una fecha</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [(ngModel)]="fechaSeleccionada"
+      (dateChange)="onFechaChange()"
+      placeholder="DD/MM/YYYY"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="fechaSeleccionada"
+      (click)="limpiarFecha()"
+      aria-label="Limpiar fecha"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <p class="panel-subtext">Selecciona una fecha para ver los finales programados</p>
+</div>
+
+<!-- Lista de finales encontrados -->
+<div class="finales-grid" *ngIf="finalesFiltrados.length > 0 && !finalSeleccionado">
+  <div class="finales-header">
+    <h2>Finales encontrados ({{ finalesFiltrados.length }})</h2>
+  </div>
+
+  <mat-card
+    *ngFor="let final of finalesFiltrados"
+    class="final-card"
+    (click)="seleccionarFinal(final)"
+  >
+    <mat-card-content>
+      <div class="final-info">
+        <div class="final-materia">
+          {{ final.materia }}
+          <span class="final-codigo">{{ final.codigoCurso }}</span>
+        </div>
+        <div class="final-detalles">
+          <div class="detalle-item">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ final.hora }}</span>
+          </div>
+          <div class="detalle-item">
+            <mat-icon>room</mat-icon>
+            <span>{{ final.aula }}</span>
+          </div>
+          <div class="detalle-item">
+            <mat-icon>people</mat-icon>
+            <span>{{ final.cantidadAlumnos }} alumnos</span>
+          </div>
+        </div>
+      </div>
+      <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Mensaje cuando no hay finales -->
+<div class="empty-state" *ngIf="fechaSeleccionada && finalesFiltrados.length === 0 && !finalSeleccionado">
+  <mat-icon>event_busy</mat-icon>
+  <p>No se encontraron finales para esta fecha</p>
+</div>
+
+<!-- Vista de detalle del final seleccionado -->
+<div class="detalle-final" *ngIf="finalSeleccionado">
+  <div class="detalle-header">
+    <button mat-icon-button (click)="finalSeleccionado = null; alumnos = []">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="detalle-info">
+      <h2>{{ finalSeleccionado.materia }} - {{ finalSeleccionado.codigoCurso }}</h2>
+      <div class="detalle-meta">
+        <span>
+          <mat-icon>event</mat-icon>
+          {{ finalSeleccionado.fecha | date:'dd/MM/yyyy' }}
+        </span>
+        <span>
+          <mat-icon>schedule</mat-icon>
+          {{ finalSeleccionado.hora }}
+        </span>
+        <span>
+          <mat-icon>room</mat-icon>
+          {{ finalSeleccionado.aula }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de alumnos con notas -->
+  <div class="alumnos-notas-lista">
+    <div
+      class="alumno-nota-card"
+      *ngFor="let alumno of alumnos; trackBy: trackByAuth0Id"
+      [class.ausente]="alumno.ausente"
+    >
+      <div class="alumno-info">
+        <div class="alumno-nombre">{{ alumno.nombre }}</div>
+        <div class="alumno-email">{{ alumno.email }}</div>
+      </div>
+
+      <div class="nota-controls">
+        <mat-form-field appearance="outline" class="nota-field" *ngIf="!alumno.ausente">
+          <mat-label>Nota</mat-label>
+          <input
+            matInput
+            type="number"
+            min="0"
+            max="10"
+            step="0.5"
+            [value]="alumno.nota"
+            (input)="onNotaChange(alumno, $any($event.target).value)"
+            placeholder="0-10"
+          />
+        </mat-form-field>
+
+        <div class="ausente-badge" *ngIf="alumno.ausente">
+          <mat-icon>cancel</mat-icon>
+          AUSENTE
+        </div>
+
+        <div class="ausente-buttons">
+          <button
+            mat-raised-button
+            class="btn-presente"
+            [class.selected]="!alumno.ausente"
+            (click)="marcarAusente(alumno, false)"
+          >
+            Presente
+          </button>
+          <button
+            mat-raised-button
+            class="btn-ausente"
+            [class.selected]="alumno.ausente"
+            (click)="marcarAusente(alumno, true)"
+          >
+            Ausente
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón Guardar -->
+  <div class="guardar-section">
+    <button
+      mat-raised-button
+      class="guardar-button"
+      (click)="guardarNotas()"
+      [disabled]="saving"
+    >
+      <mat-icon>save</mat-icon>
+      {{ saving ? 'Guardando...' : 'Guardar Notas' }}
+    </button>
+  </div>
+</div>
+
+<div class="info-note" *ngIf="!finalSeleccionado">
+  <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="12" y1="16" x2="12" y2="12"></line>
+    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+  </svg>
+  <p>Selecciona una fecha para buscar los exámenes finales programados y gestionar las notas de los alumnos.</p>
+</div>

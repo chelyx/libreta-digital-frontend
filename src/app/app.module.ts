@@ -51,6 +51,9 @@ import { TomaDeAsistenciaComponent } from './toma-de-asistencia/toma-de-asistenc
 import { StudentItemComponent } from './student-item/student-item.component';
 import { HistorialAsistenciaComponent } from './historial-asistencia/historial-asistencia.component';
 
+// NUEVO COMPONENTE BUSCAR FINAL
+import { BuscarFinalComponent } from './buscar-final/buscar-final.component';
+
 // Environment & Interceptors
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -70,7 +73,10 @@ ExamenWizardComponent,
 MisMateriasComponent,
 TomaDeAsistenciaComponent,
 StudentItemComponent,
-HistorialAsistenciaComponent
+HistorialAsistenciaComponent,
+
+// AGREGADO AHORA
+BuscarFinalComponent
 ],
 imports: [
 BrowserModule,
@@ -132,4 +138,4 @@ AuthModule.forRoot({
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
