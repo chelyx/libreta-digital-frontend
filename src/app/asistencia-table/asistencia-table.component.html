@@ -28,7 +28,18 @@
           <label class="label">Buscar por Código de Curso</label>
         </div>
         <div class="search-input-wrapper">
-          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg
+            class="search-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <circle cx="11" cy="11" r="8"></circle>
             <path d="m21 21-4.35-4.35"></path>
           </svg>
@@ -43,8 +54,23 @@
         <p class="help-text">Introduce el código único del curso para búsqueda rápida</p>
       </div>
 
-      <button class="search-button" (click)="buscarCurso()" [disabled]="!cursoSeleccionado && !cursoIdBusqueda">
-        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <button
+        class="search-button"
+        (click)="buscarCurso()"
+        [disabled]="!cursoSeleccionado && !cursoIdBusqueda"
+      >
+        <svg
+          class="button-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.35-4.35"></path>
         </svg>
@@ -53,12 +79,25 @@
     </div>
 
     <div class="info-note">
-      <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        class="info-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="16" x2="12" y2="12"></line>
         <line x1="12" y1="8" x2="12.01" y2="8"></line>
       </svg>
-      <p>Podes buscar el curso seleccionándolo de la lista o ingresando directamente su código.</p>
+      <p>
+        Podes buscar el curso seleccionándolo de la lista o ingresando directamente su código.
+      </p>
     </div>
 
     <div class="results-section" *ngIf="cursoSeleccionado || cursoIdBusqueda">
@@ -68,7 +107,7 @@
         <svg class="spinner" viewBox="0 0 50 50">
           <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
         </svg>
-        <span>Cargando asistencias...</span>
+        <span>Cargando asistencias.</span>
       </div>
 
       <div class="error" *ngIf="!cargando && errorMsg">
@@ -79,7 +118,7 @@
         <table class="asist-table">
           <thead>
           <tr>
-            <th>Fecha</th>
+            <!-- Fecha eliminada, solo 3 columnas -->
             <th>Alumno</th>
             <th>Presente</th>
             <th class="acciones-column">Acciones</th>
@@ -87,8 +126,11 @@
           </thead>
           <tbody>
           <tr *ngFor="let a of asistencias">
-            <td>{{ a.fecha }}</td>
-            <td>{{ a.nombre || a.id }}</td>
+            <!-- Alumno + fecha juntos en una sola celda -->
+            <td class="alumno-cell">
+              <span class="alumno-nombre">{{ a.nombre || a.id }}</span>
+              <span class="alumno-fecha">- {{ a.fecha }}</span>
+            </td>
             <td>
               <div *ngIf="!estaEditando(a)">
                   <span class="pill" [class.ok]="a.presente" [class.no]="!a.presente">
@@ -96,38 +138,48 @@
                   </span>
               </div>
               <div *ngIf="estaEditando(a)" class="edit-buttons">
-                <button class="toggle-button"
-                        [class.active]="a.presente"
-                        (click)="cambiarPresente(a, true)">
+                <button
+                  class="toggle-button"
+                  [class.active]="a.presente"
+                  (click)="cambiarPresente(a, true)"
+                >
                   Sí
                 </button>
-                <button class="toggle-button"
-                        [class.active]="!a.presente"
-                        (click)="cambiarPresente(a, false)">
+                <button
+                  class="toggle-button"
+                  [class.active]="!a.presente"
+                  (click)="cambiarPresente(a, false)"
+                >
                   No
                 </button>
               </div>
             </td>
             <td class="acciones-column">
               <div *ngIf="!estaEditando(a)">
-                <button mat-icon-button
-                        class="edit-button"
-                        (click)="editarAsistencia(a)"
-                        matTooltip="Editar asistencia">
+                <button
+                  mat-icon-button
+                  class="edit-button"
+                  (click)="editarAsistencia(a)"
+                  matTooltip="Editar asistencia"
+                >
                   <mat-icon>edit</mat-icon>
                 </button>
               </div>
               <div *ngIf="estaEditando(a)" class="action-buttons">
-                <button mat-icon-button
-                        class="save-button"
-                        (click)="guardarAsistencia(a)"
-                        matTooltip="Guardar">
+                <button
+                  mat-icon-button
+                  class="save-button"
+                  (click)="guardarAsistencia(a)"
+                  matTooltip="Guardar"
+                >
                   <mat-icon>check</mat-icon>
                 </button>
-                <button mat-icon-button
-                        class="cancel-button"
-                        (click)="cancelarEdicion(a)"
-                        matTooltip="Cancelar">
+                <button
+                  mat-icon-button
+                  class="cancel-button"
+                  (click)="cancelarEdicion(a)"
+                  matTooltip="Cancelar"
+                >
                   <mat-icon>close</mat-icon>
                 </button>
               </div>
@@ -137,10 +189,12 @@
         </table>
       </div>
 
-      <div class="empty" *ngIf="!cargando && !errorMsg && (!asistencias || asistencias.length === 0)">
+      <div
+        class="empty"
+        *ngIf="!cargando && !errorMsg && (!asistencias || asistencias.length === 0)"
+      >
         No hay asistencias para mostrar.
       </div>
     </div>
-
   </div>
 </div>
