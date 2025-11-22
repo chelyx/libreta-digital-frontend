@@ -118,4 +118,8 @@ getByCodigoYFecha(codigo: string, fecha: string) {
     return this.getProtegido(`api/cursos/${examenId}/estado`);
   }
 
+  uploadActa(formData: FormData): Observable<string> {
+    return this.postProtegido('api/notas/upload-acta', formData);
+  }
+
 }

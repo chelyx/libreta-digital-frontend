@@ -4,7 +4,8 @@
      <div [class.active]="currentStep === 0" (click)="goToStep(0)">0. Mesa de Final</div>
     <div [class.active]="currentStep === 1" (click)="goToStep(1)">1. Asistencia</div>
     <div [class.active]="currentStep === 2" (click)="goToStep(2)">2. Cargar Notas</div>
-    <div [class.active]="currentStep === 3" (click)="goToStep(3)">3. Enviar a BFA</div>
+    <div [class.active]="currentStep === 3" (click)="goToStep(3)">3. Foto del Acta</div>
+  <div [class.active]="currentStep === 4" (click)="goToStep(4)">4. Enviar a BFA</div>
   </div>
 
   <div class="steps-content">
@@ -33,7 +34,12 @@
       (completed)="onGradesComplete($event)">
     </app-notas-table>
 
-     <div *ngIf="currentStep === 3">
+    <app-acta-uploader
+      *ngIf="currentStep === 3"
+      (completed)="onActaUploaded($event)">
+    </app-acta-uploader>
+
+     <div *ngIf="currentStep === 4">
       <h2>Enviar Notas a la BFA</h2>
       <p>Las notas han sido cargadas exitosamente. Haga clic en el botón de abajo para sellar las notas en la BFA.</p>
       <button mat-raised-button color="primary" (click)="sendToBFA()">

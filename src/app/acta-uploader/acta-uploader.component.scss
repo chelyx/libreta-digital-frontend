@@ -1,0 +1,63 @@
+// Contenedor general del paso
+.uploader-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+// Input de archivo (para que no quede feo)
+input[type="file"] {
+  padding: .4rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f5f5f5;
+  width: fit-content;
+}
+
+// Botones
+button {
+  margin-top: .5rem;
+}
+
+// --- Cámara ---
+.camera-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
+
+  video {
+    width: 100%;
+    max-height: 350px;
+    border-radius: 12px;
+    background: #000;
+    object-fit: cover;
+  }
+}
+
+// --- Preview ---
+.preview-wrapper {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+
+  .preview-img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 12px;
+    border: 2px solid #800020; // bordó
+    object-fit: contain;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  }
+}
+
+.button-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}

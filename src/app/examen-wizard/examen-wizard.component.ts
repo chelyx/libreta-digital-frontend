@@ -44,6 +44,11 @@ export class ExamenWizardComponent implements OnInit {
     this.wizard.setNotas(notas);
   }
 
+  onActaUploaded(url: string) {
+    this.currentStep = 4;
+    //this.wizard.setActaUrl(url);
+  }
+
   sendToBFA() {
     this.apiService.registrarBFA().subscribe({
       next: () => {

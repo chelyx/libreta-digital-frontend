@@ -1,0 +1,55 @@
+<div class="uploader-container">
+<h2>Subir Foto del Acta</h2>
+
+<input
+  #fileInput
+  type="file"
+  accept="image/*"
+  hidden
+  (change)="onFileSelected($event)"
+/>
+
+<div class="button-row" *ngIf="!showCamera && !file">
+  <button mat-raised-button color="accent" (click)="fileInput.click()">
+    <mat-icon>upload</mat-icon>
+    Subir archivo
+  </button>
+
+  <button mat-raised-button color="accent" (click)="openCamera()">
+    Usar Cámara
+  </button>
+</div>
+
+
+<!-- Video para mostrar la cámara -->
+<div *ngIf="showCamera" class="camera-wrapper">
+  <video #video autoplay></video>
+  <button mat-raised-button color="primary" (click)="takePhoto()">Tomar Foto</button>
+  <button mat-button (click)="closeCamera()">Cancelar</button>
+</div>
+
+<!-- Preview de la foto elegida -->
+<div *ngIf="preview" class="preview-wrapper">
+  <img [src]="preview" class="preview-img" />
+</div>
+
+
+  <div class="button-row">
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="restart()"
+      *ngIf="file">
+        Elegir Otra Foto
+    </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="upload()"
+      *ngIf="file">
+        Subir Foto
+    </button>
+  </div>
+
+</div>

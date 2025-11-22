@@ -58,6 +58,7 @@ import { BuscarFinalComponent } from './buscar-final/buscar-final.component';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { OfflineInterceptor } from '../core/service/interceptor';
+import { ActaUploaderComponent } from './acta-uploader/acta-uploader.component';
 
 @NgModule({
 declarations: [
@@ -76,7 +77,8 @@ StudentItemComponent,
 HistorialAsistenciaComponent,
 
 // AGREGADO AHORA
-BuscarFinalComponent
+BuscarFinalComponent,
+  ActaUploaderComponent
 ],
 imports: [
 BrowserModule,
