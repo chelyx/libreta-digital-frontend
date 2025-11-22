@@ -29,6 +29,7 @@ asistencias: AsistenciaResponse[] = [];
 cargando = false;
 errorMsg = '';
 
+// 🔴 AHORA LA CLAVE ES (alumno + fecha), NO SOLO auth0Id
 private asistenciasBackup: Map<string, AsistenciaResponse> = new Map();
 
 constructor(private api: ApiService) {}
@@ -134,14 +135,23 @@ constructor(private api: ApiService) {}
   // ================================
   //           EDICIÓN
   // ================================
+
+  // 👉 clave única por asistencia: auth0Id + fecha (ya normalizada)
+  private getAsistenciaKey(a: AsistenciaResponse): string {
+    const fecha = this.formatearFechaISO(a.fecha);
+    return `${a.auth0Id}-${fecha}`;
+  }
+
   estaEditando(a: AsistenciaResponse): boolean {
-    return this.asistenciasBackup.has(a.auth0Id);
+    const key = this.getAsistenciaKey(a);
+    return this.asistenciasBackup.has(key);
   }
 
   editarAsistencia(a: AsistenciaResponse): void {
-    if (!this.asistenciasBackup.has(a.auth0Id)) {
+    const key = this.getAsistenciaKey(a);
+    if (!this.asistenciasBackup.has(key)) {
       // guardamos copia para poder cancelar
-      this.asistenciasBackup.set(a.auth0Id, { ...a });
+      this.asistenciasBackup.set(key, { ...a });
     }
   }
 
@@ -150,10 +160,11 @@ constructor(private api: ApiService) {}
   }
 
   cancelarEdicion(a: AsistenciaResponse): void {
-    const original = this.asistenciasBackup.get(a.auth0Id);
+    const key = this.getAsistenciaKey(a);
+    const original = this.asistenciasBackup.get(key);
     if (original) {
       Object.assign(a, original);
-      this.asistenciasBackup.delete(a.auth0Id);
+      this.asistenciasBackup.delete(key);
     }
   }
 
@@ -164,6 +175,8 @@ constructor(private api: ApiService) {}
       fecha: this.formatearFechaISO(a.fecha),
     };
 
+    const key = this.getAsistenciaKey(a);
+
     this.api
       .actualizarAsistenciaAlumno(String((a as any).cursoId), asistenciaActualizada)
       .subscribe({
@@ -172,7 +185,7 @@ constructor(private api: ApiService) {}
             '[asistencia-table] Asistencia actualizada con éxito para alumno:',
             a.auth0Id,
           );
-          this.asistenciasBackup.delete(a.auth0Id);
+          this.asistenciasBackup.delete(key);
         },
         error: (err: any) => {
           console.error(
