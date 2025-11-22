@@ -9,57 +9,82 @@ nombre: string;
 codigo: string;
 }
 
+interface AsistenciasPorAlumno {
+auth0Id: string;
+nombre: string;
+registros: AsistenciaResponse[];
+}
+
 @Component({
 selector: 'app-asistencia-table',
 templateUrl: './asistencia-table.component.html',
-styleUrls: ['./asistencia-table.component.scss']
+styleUrls: ['./asistencia-table.component.scss'],
 })
 export class AsistenciaTableComponent implements OnInit {
 @Input() cursos: Curso[] = [];
 
-cursoSeleccionado: string = '';
+cursoSeleccionado: string | null = null;
 cursoIdBusqueda: string = '';
 asistencias: AsistenciaResponse[] = [];
 cargando = false;
 errorMsg = '';
 
+private asistenciasBackup: Map<string, AsistenciaResponse> = new Map();
+
 constructor(private api: ApiService) {}
 
-  ngOnInit(): void {
-    console.log('[asistencia-table] Cursos recibidos:', this.cursos);
+  ngOnInit(): void {}
+
+  // ================================
+  //   AGRUPAR ASISTENCIAS POR ALUMNO
+  // ================================
+  get asistenciasPorAlumno(): AsistenciasPorAlumno[] {
+    const map = new Map<string, AsistenciasPorAlumno>();
+
+    for (const a of this.asistencias) {
+      const id = (a as any).auth0Id || (a as any).id;
+      const nombre = (a as any).nombre || id;
+
+      if (!id) continue;
+
+      if (!map.has(id)) {
+        map.set(id, {
+          auth0Id: id,
+          nombre,
+          registros: [],
+        });
+      }
+      map.get(id)!.registros.push(a);
+    }
+
+    return Array.from(map.values());
   }
 
+  // ================================
+  //        BUSQUEDAS Y CURSOS
+  // ================================
   onCursoChange(): void {
     if (!this.cursoSeleccionado) {
       this.asistencias = [];
       return;
     }
-
     this.cursoIdBusqueda = '';
-    this.cargando = true;
-    this.errorMsg = '';
+    this.cargarAsistencias(this.cursoSeleccionado);
+  }
 
-    console.log('[asistencia-table] Cargando asistencias del curso:', this.cursoSeleccionado);
-
-    this.api.getAsistenciaPorCurso(this.cursoSeleccionado as unknown as UUID).subscribe({
-      next: (res) => {
-        this.asistencias = res || [];
-        this.cargando = false;
-        console.log('[asistencia-table] Asistencias cargadas:', this.asistencias);
-      },
-      error: (err) => {
-        console.error('[asistencia-table] Error al cargar asistencias', err);
-        this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
-        this.cargando = false;
-      }
-    });
+  buscarCurso(): void {
+    if (this.cursoSeleccionado) {
+      this.cargarAsistencias(this.cursoSeleccionado);
+    } else if (this.cursoIdBusqueda.trim()) {
+      this.onBuscarPorId();
+    } else {
+      this.errorMsg = 'Selecciona un curso o ingresa un código para buscar.';
+    }
   }
 
   onBuscarPorId(): void {
-    const codigo = (this.cursoIdBusqueda || '').trim();
-
+    const codigo = this.cursoIdBusqueda.trim();
     if (!codigo) {
-      this.errorMsg = 'Ingresá un código de curso';
       return;
     }
 
@@ -71,107 +96,101 @@ constructor(private api: ApiService) {}
       next: (curso: Curso) => {
         if (curso && curso.id) {
           this.cursoSeleccionado = curso.id;
-          this.api.getAsistenciaPorCurso(curso.id as unknown as UUID).subscribe({
-            next: (res) => {
-              this.asistencias = res || [];
-              this.cargando = false;
-            },
-            error: (err) => {
-              console.error('[asistencia-table] getAsistenciaPorCurso error', err);
-              this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
-              this.cargando = false;
-            }
-          });
+          this.cargarAsistencias(curso.id);
         } else {
           this.errorMsg = 'No se encontró un curso con ese código.';
           this.cargando = false;
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('[asistencia-table] getCursoPorCodigo error', err);
         this.errorMsg =
           err?.status === 404
             ? 'No se encontró un curso con ese código'
             : 'Ocurrió un error buscando el curso';
         this.cargando = false;
-      }
+      },
     });
   }
 
-  buscarCurso(): void {
-    const cursoId = this.cursoSeleccionado || this.cursoIdBusqueda;
-    if (cursoId) {
-      console.log('[asistencia-table] Buscando curso con ID:', cursoId);
-      this.api.getAsistenciaPorCurso(cursoId as unknown as UUID).subscribe({
-        next: (res) => {
-          this.asistencias = res || [];
-          this.cargando = false;
-        },
-        error: (err) => {
-          console.error('[asistencia-table] getAsistenciaPorCurso error', err);
-          this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
-          this.cargando = false;
-        }
-      });
-    } else {
-      console.warn('No se ha seleccionado ningún curso');
+  private cargarAsistencias(cursoId: string): void {
+    this.cargando = true;
+    this.errorMsg = '';
+    this.asistencias = [];
+
+    this.api.getAsistenciaPorCurso(cursoId as unknown as UUID).subscribe({
+      next: (res: AsistenciaResponse[]) => {
+        this.asistencias = res || [];
+        this.cargando = false;
+      },
+      error: (err: any) => {
+        console.error('[asistencia-table] cargarAsistencias error', err);
+        this.errorMsg = 'No se pudieron cargar las asistencias del curso.';
+        this.cargando = false;
+      },
+    });
+  }
+
+  // ================================
+  //           EDICIÓN
+  // ================================
+  estaEditando(a: AsistenciaResponse): boolean {
+    return this.asistenciasBackup.has(a.auth0Id);
+  }
+
+  editarAsistencia(a: AsistenciaResponse): void {
+    if (!this.asistenciasBackup.has(a.auth0Id)) {
+      // guardamos copia para poder cancelar
+      this.asistenciasBackup.set(a.auth0Id, { ...a });
     }
   }
 
-  editarAsistencia(asistencia: AsistenciaResponse): void {
-  // activa modo edición
-  (asistencia as any)._editando = true;
-}
+  cambiarPresente(a: AsistenciaResponse, presente: boolean): void {
+    a.presente = presente;
+  }
 
-estaEditando(a: AsistenciaResponse): boolean {
-  return (a as any)._editando === true;
-}
+  cancelarEdicion(a: AsistenciaResponse): void {
+    const original = this.asistenciasBackup.get(a.auth0Id);
+    if (original) {
+      Object.assign(a, original);
+      this.asistenciasBackup.delete(a.auth0Id);
+    }
+  }
 
-cancelarEdicion(a: AsistenciaResponse): void {
-  (a as any)._editando = false;
-}
+  guardarAsistencia(a: AsistenciaResponse): void {
+    const asistenciaActualizada: AsistenciaAlumnoDto = {
+      alumnoId: a.auth0Id,
+      presente: a.presente,
+      fecha: this.formatearFechaISO(a.fecha),
+    };
 
-cambiarPresente(a: AsistenciaResponse, valor: boolean): void {
-  a.presente = valor;
- /* this.asistenciaActualizada.alumnoId = a.auth0Id;
-  this.asistenciaActualizada.presente = a.presente;
-  this.asistenciaActualizada.fecha = '2025-11-12';
+    this.api
+      .actualizarAsistenciaAlumno(String((a as any).cursoId), asistenciaActualizada)
+      .subscribe({
+        next: () => {
+          console.log(
+            '[asistencia-table] Asistencia actualizada con éxito para alumno:',
+            a.auth0Id,
+          );
+          this.asistenciasBackup.delete(a.auth0Id);
+        },
+        error: (err: any) => {
+          console.error(
+            '[asistencia-table] Error al actualizar asistencia para alumno:',
+            a.auth0Id,
+            err,
+          );
+        },
+      });
+  }
 
-  this.api.actualizarAsistenciaAlumno(a.cursoId.toString(), this.asistenciaActualizada).subscribe({
-    next: () => {
-      console.log('[asistencia-table] Asistencia actualizada con éxito para alumno:', a.auth0Id);
-      },
-    error: (err) => {
-      console.error('[asistencia-table] Error al actualizar asistencia para alumno:', a.auth0Id, err);
-      }
-    });*/
-}
-
-formatearFechaISO(fechaStr: string): string {
-  // si tenés "20/11/2025" y querés pasarlo a "2025-11-20"
-  const [dia, mes, anio] = fechaStr.split('/');
-  return `${anio}-${mes}-${dia}`;
-}
-
-guardarAsistencia(a: AsistenciaResponse): void {
-  console.log('[asistencia-table] Guardando asistencia:', a);
-  (a as any)._editando = false;
-
-  const asistenciaActualizada: Object = {
-    alumnoId: a.auth0Id,
-    presente: a.presente,
-    fecha: this.formatearFechaISO(a.fecha)
-  };
-
-  this.api.actualizarAsistenciaAlumno(a.cursoId.toString(), asistenciaActualizada).subscribe({
-    next: () => {
-      console.log('[asistencia-table] Asistencia actualizada con éxito para alumno:', a.auth0Id);
-      },
-    error: (err) => {
-      console.error('[asistencia-table] Error al actualizar asistencia para alumno:', a.auth0Id, err);
-      }
-    });
-  // si querés persistirlo en backend:
-  // this.api.updateAsistencia(a.id, a).subscribe(...)
-}
+  private formatearFechaISO(fecha: string | Date): string {
+    if (fecha instanceof Date) {
+      return fecha.toISOString().split('T')[0];
+    }
+    if (typeof fecha === 'string') {
+      return fecha.split('T')[0];
+    }
+    return '';
+  }
 }
