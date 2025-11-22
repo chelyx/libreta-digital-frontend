@@ -23,7 +23,7 @@ styleUrls: ['./asistencia-table.component.scss'],
 export class AsistenciaTableComponent implements OnInit {
 @Input() cursos: Curso[] = [];
 
-cursoSeleccionado: string | null = null;
+cursoSeleccionado: string = '';
 cursoIdBusqueda: string = '';
 asistencias: AsistenciaResponse[] = [];
 cargando = false;

@@ -62,15 +62,14 @@ constructor() {}
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
           { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
           { label: "Examenes Finales", icon: "school", panel: PANELES.EXAMEN_WIZARD, main: true },
-          { label: "Buscar Final", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false }  // <-- SOLO PROFES/BEDELES
+          { label: "Gestion de Finales", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false }  // <-- SOLO PROFES/BEDELES
         ]
 
       case "BEDEL":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
-          { label: "Registro de Notas", icon: "check", panel: PANELES.EDITAR_NOTAS, main: false },
           { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
-          { label: "Buscar Final", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false }  // <-- SOLO PROFES/BEDELES
+          { label: "Gestión de Finales", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false }  // <-- SOLO PROFES/BEDELES
         ]
 
       default:
