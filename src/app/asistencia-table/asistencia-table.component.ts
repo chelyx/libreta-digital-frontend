@@ -168,34 +168,38 @@ constructor(private api: ApiService) {}
     }
   }
 
-  guardarAsistencia(a: AsistenciaResponse): void {
-    const asistenciaActualizada: AsistenciaAlumnoDto = {
-      alumnoId: a.auth0Id,
-      presente: a.presente,
-      fecha: this.formatearFechaISO(a.fecha),
-    };
+ guardarAsistencia(a: AsistenciaResponse): void {
+  const asistenciaActualizada: AsistenciaAlumnoDto = {
+    alumnoId: a.auth0Id,
+    presente: a.presente,
+    // 👇 Enviamos la fecha EXACTA que vino del backend
+    fecha: a.fecha as any,
+  };
 
-    const key = this.getAsistenciaKey(a);
+  const key = this.getAsistenciaKey(a);
 
-    this.api
-      .actualizarAsistenciaAlumno(String((a as any).cursoId), asistenciaActualizada)
-      .subscribe({
-        next: () => {
-          console.log(
-            '[asistencia-table] Asistencia actualizada con éxito para alumno:',
-            a.auth0Id,
-          );
-          this.asistenciasBackup.delete(key);
-        },
-        error: (err: any) => {
-          console.error(
-            '[asistencia-table] Error al actualizar asistencia para alumno:',
-            a.auth0Id,
-            err,
-          );
-        },
-      });
-  }
+  // salimos del modo edición (optimista)
+  this.asistenciasBackup.delete(key);
+
+  this.api
+    .actualizarAsistenciaAlumno(String((a as any).cursoId), asistenciaActualizada)
+    .subscribe({
+      next: () => {
+        console.log(
+          '[asistencia-table] Asistencia actualizada con éxito para alumno:',
+          a.auth0Id
+        );
+      },
+      error: (err: any) => {
+        console.error(
+          '[asistencia-table] Error al actualizar asistencia para alumno:',
+          a.auth0Id,
+          err
+        );
+      },
+    });
+}
+
 
   private formatearFechaISO(fecha: string | Date): string {
     if (fecha instanceof Date) {
