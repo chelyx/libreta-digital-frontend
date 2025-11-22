@@ -87,7 +87,7 @@
           </thead>
           <tbody>
           <tr *ngFor="let a of asistencias">
-            <td>{{ a.fecha | date: 'yyyy-MM-dd' }}</td>
+            <td>{{ a.fecha }}</td>
             <td>{{ a.nombre || a.id }}</td>
             <td>
               <div *ngIf="!estaEditando(a)">

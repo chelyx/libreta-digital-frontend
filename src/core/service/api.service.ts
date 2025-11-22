@@ -103,7 +103,7 @@ getByCodigoYFecha(codigo: string, fecha: string) {
   return this.getProtegido(`api/cursos/busqueda/final?codigo=${encodeURIComponent(codigo)}&fecha=${encodeURIComponent(fecha)}`);
 }
 
- actualizarAsistenciaAlumno(cursoId: string, dto: AsistenciaAlumnoDto): Observable<any> {
+ actualizarAsistenciaAlumno(cursoId: string, dto: Object): Observable<any> {
     // Si ya usas un interceptor de Auth, no hace falta headers extra aquí.
 
     return this.putProtegido(`api/asistencias/${cursoId}/alumno/actualizar`, dto);
@@ -113,9 +113,12 @@ getByCodigoYFecha(codigo: string, fecha: string) {
     return this.postProtegido('api/notas/sellar-temp', {});
   }
 
-
   getEstadoExamen(examenId: UUID): Observable<ExamenEstadoDto> {
     return this.getProtegido(`api/cursos/${examenId}/estado`);
+  }
+
+    getMisAsistencias(): Observable<AsistenciaResponse[]> {
+    return this.getProtegido('api/asistencias/me');
   }
 
 }

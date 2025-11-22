@@ -11,6 +11,7 @@ export interface Asistencia {
 export interface AsistenciaResponse {
   id: UUID;
   cursoId: UUID;
+  cursoNombre: string;
   auth0Id: string;
   nombre: string;
   presente: boolean;
