@@ -86,10 +86,18 @@ constructor(private cursoService: ApiService, private snackBar: MatSnackBar) {}
     if (!this.cursoSeleccionado) return;
 
     this.saving = true;
+
+    function ahoraUTC3(): Date {
+    const ahoraUTC = new Date();
+  // UTC-3 significa restar 3 horas
+    ahoraUTC.setHours(ahoraUTC.getHours() - 3);
+  return ahoraUTC;
+}
+
     const lista = Object.entries(this.asistencias).map(([auth0Id, presente]) => ({
       alumnoId: auth0Id,
       presente,
-      fecha: new Date()
+      fecha: ahoraUTC3() 
     }));
 
     console.log('Datos a enviar:', lista);

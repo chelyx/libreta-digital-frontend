@@ -1,100 +1,116 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/core/service/api.service';
+import { AsistenciaAlumnoDto, AsistenciaResponse } from 'src/core/models/asistencia';
 
 interface AsistenciaMateria {
-nombre: string;
-codigoCurso: string;  // <-- AGREGADO
-profesor: string;
-totalClases: number;
-asistencias: number;
-ausencias: number;
-porcentaje: number;
-estado: 'regular' | 'critico';
-detalles: DetalleAsistencia[];
+  nombre: string;
+  //codigoCurso: string;
+  //profesor: string;
+  totalClases: number;
+  asistencias: number;
+  ausencias: number;
+  porcentaje: number;
+  estado: 'regular' | 'critico';
+  detalles: DetalleAsistencia[];
 }
 
 interface DetalleAsistencia {
-fecha: Date;
-estado: 'presente' | 'ausente' | 'tarde';
+  fecha: string;
+  estado: 'presente' | 'ausente' | 'tarde';
 }
 
 @Component({
-selector: 'app-historial-asistencia',
-templateUrl: './historial-asistencia.component.html',
-styleUrls: ['./historial-asistencia.component.scss']
+  selector: 'app-historial-asistencia',
+  templateUrl: './historial-asistencia.component.html',
+  styleUrls: ['./historial-asistencia.component.scss']
 })
 export class HistorialAsistenciaComponent implements OnInit {
-materias: AsistenciaMateria[] = [];
-materiaExpandida: string | null = null;
 
-ngOnInit() {
-    this.materias = [
-      {
-        nombre: 'Matemática Discreta',
-        codigoCurso: 'K5612',  // <-- AGREGADO
-        profesor: 'Prof. García',
-        totalClases: 20,
-        asistencias: 18,
-        ausencias: 2,
-        porcentaje: 90,
-        estado: 'regular',
-        detalles: [
-          { fecha: new Date('2025-01-15'), estado: 'presente' },
-          { fecha: new Date('2025-01-22'), estado: 'presente' },
-          { fecha: new Date('2025-01-29'), estado: 'ausente' },
-          { fecha: new Date('2025-02-05'), estado: 'presente' }
-        ]
-      },
-      {
-        nombre: 'Física I',
-        codigoCurso: 'K9456',  // <-- AGREGADO
-        profesor: 'Prof. Rodríguez',
-        totalClases: 18,
-        asistencias: 16,
-        ausencias: 2,
-        porcentaje: 88.9,
-        estado: 'regular',
-        detalles: [
-          { fecha: new Date('2025-01-16'), estado: 'presente' },
-          { fecha: new Date('2025-01-23'), estado: 'presente' },
-          { fecha: new Date('2025-01-30'), estado: 'presente' }
-        ]
-      },
-      {
-        nombre: 'Programación',
-        codigoCurso: 'K8945',  // <-- AGREGADO
-        profesor: 'Prof. Martínez',
-        totalClases: 22,
-        asistencias: 15,
-        ausencias: 7,
-        porcentaje: 68.2,
-        estado: 'critico',
-        detalles: [
-          { fecha: new Date('2025-01-17'), estado: 'presente' },
-          { fecha: new Date('2025-01-24'), estado: 'ausente' },
-          { fecha: new Date('2025-01-31'), estado: 'ausente' },
-          { fecha: new Date('2025-02-07'), estado: 'presente' }
-        ]
-      },
-      {
-        nombre: 'Redes de Datos',
-        codigoCurso: 'K7894',  // <-- AGREGADO
-        profesor: 'Prof. Echazu',
-        totalClases: 15,
-        asistencias: 12,
-        ausencias: 3,
-        porcentaje: 80,
-        estado: 'regular',
-        detalles: [
-          { fecha: new Date('2025-01-18'), estado: 'presente' },
-          { fecha: new Date('2025-01-25'), estado: 'ausente' },
-          { fecha: new Date('2025-02-01'), estado: 'presente' }
-        ]
-      }
-    ];
+  materias: AsistenciaMateria[] = [];
+  materiaExpandida: string | null = null;
+
+  constructor(private apiService: ApiService) { }
+
+  ngOnInit(): void {
+    this.cargarMisAsistencias();
   }
 
-  toggleDetalle(nombreMateria: string) {
-    this.materiaExpandida = this.materiaExpandida === nombreMateria ? null : nombreMateria;
+  private cargarMisAsistencias(): void {
+    this.apiService.getMisAsistencias().subscribe({
+      next: (asistencias: AsistenciaResponse[]) => {
+        const materiasAgrupadas: AsistenciaMateria[] = [];
+
+        asistencias.forEach((asistencia) => {
+          // Soporta tanto cursoNombre (TS) como nombreCurso (backend)
+          const nombreCurso =
+            (asistencia as any).nombreCurso ??
+            'Sin nombre';
+
+          // Busco si ya tengo una materia creada para este curso
+          let materia = materiasAgrupadas.find(m => m.nombre === nombreCurso);
+
+          // Si no existe, la creo
+          if (!materia) {
+            materia = {
+              nombre: nombreCurso,
+              totalClases: 0,
+              asistencias: 0,
+              ausencias: 0,
+              porcentaje: 0,
+              estado: 'regular',
+              detalles: []
+            };
+            materiasAgrupadas.push(materia);
+          }
+
+          // Actualizo contadores
+          materia.totalClases++;
+
+          if (asistencia.presente) {
+            materia.asistencias++;
+          } else {
+            materia.ausencias++;
+          }
+
+          // Agrego el detalle de esa clase
+          materia.detalles.push({
+            fecha: asistencia.fecha,
+            estado: asistencia.presente ? 'presente' : 'ausente'
+          });
+        });
+
+        // Calculo porcentaje y estado por materia
+        this.materias = materiasAgrupadas.map(materia => {
+          const porcentaje = materia.totalClases > 0
+            ? +(materia.asistencias * 100 / materia.totalClases).toFixed(1)
+            : 0;
+
+          const estado: 'regular' | 'critico' =
+            porcentaje >= 70 ? 'regular' : 'critico';
+
+          return {
+            ...materia,
+            porcentaje,
+            estado
+          };
+        });
+
+        // Opcional: ordeno por nombre
+        this.materias.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+        // Para verificar en consola qué nombres están llegando
+        console.log('Materias agrupadas:', this.materias);
+      },
+      error: (err) => {
+        console.error('Error al cargar mis asistencias', err);
+        this.materias = [];
+      }
+    });
+  }
+
+  toggleDetalle(nombreMateria: string): void {
+    this.materiaExpandida =
+      this.materiaExpandida === nombreMateria ? null : nombreMateria;
   }
 
   getEstadoIcon(estado: 'presente' | 'ausente' | 'tarde'): string {

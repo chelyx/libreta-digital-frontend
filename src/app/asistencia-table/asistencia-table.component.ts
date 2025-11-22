@@ -147,14 +147,20 @@ cambiarPresente(a: AsistenciaResponse, valor: boolean): void {
     });*/
 }
 
+formatearFechaISO(fechaStr: string): string {
+  // si tenés "20/11/2025" y querés pasarlo a "2025-11-20"
+  const [dia, mes, anio] = fechaStr.split('/');
+  return `${anio}-${mes}-${dia}`;
+}
+
 guardarAsistencia(a: AsistenciaResponse): void {
   console.log('[asistencia-table] Guardando asistencia:', a);
   (a as any)._editando = false;
-  
-  const asistenciaActualizada: AsistenciaAlumnoDto = {
+
+  const asistenciaActualizada: Object = {
     alumnoId: a.auth0Id,
     presente: a.presente,
-    fecha: a.fecha
+    fecha: this.formatearFechaISO(a.fecha)
   };
 
   this.api.actualizarAsistenciaAlumno(a.cursoId.toString(), asistenciaActualizada).subscribe({
