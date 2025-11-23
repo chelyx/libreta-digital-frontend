@@ -51,6 +51,7 @@
     text-align: center;
     font-weight: 600;
     font-size: 1.25rem;
+    cursor: pointer;
   }
 }
 
@@ -60,7 +61,7 @@
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-  margin: 0 auto;
+  //margin: 0 auto;
 //  overflow-y: auto;
   flex: 1;
 }
@@ -69,7 +70,7 @@
 .dashboard {
  // width: 100%;
   //max-width: 1200px;
-  padding: 2rem 1rem;
+  //padding: 2rem 1rem;
 }
 
 .welcome-section {
@@ -83,9 +84,9 @@
     cursor: pointer;
     transition: transform 0.2s;
 
-    &:hover {
-      transform: scale(1.05);
-    }
+    // &:hover {
+    //   transform: scale(1.05);
+    // }
   }
 
   .welcome-title {
@@ -169,6 +170,11 @@
       margin-right: 0.5rem;
     }
   }
+}
+
+.quick-actions-grid {
+  display: flex;
+  gap: 0.5rem;
 }
 
 // Responsive
