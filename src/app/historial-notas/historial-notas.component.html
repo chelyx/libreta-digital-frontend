@@ -70,6 +70,13 @@
           <mat-icon>{{ getEstadoClase(nota) === 'aprobada' ? 'check_circle' : getEstadoClase(nota) === 'ausente' ? 'remove_circle' : 'cancel' }}</mat-icon>
           <span>{{ getEstadoTexto(nota) }}</span>
         </div>
+        <div class="detail-item" *ngIf="nota.selladoBFA" matTooltip="Descargar sello BFA">
+          <button mat-icon-button (click)="descargarNota(nota)">
+            <mat-icon>download</mat-icon>
+          </button>
+          <span>Descargar comprobante</span>
+        </div>
+
       </div>
     </div>
   </div>

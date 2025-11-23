@@ -8,6 +8,7 @@ export interface Curso {
   docenteAuth0Id: string;
   alumnos: User[];
   fecha: string
+  esFinal: boolean;
 }
 
 

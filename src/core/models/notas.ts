@@ -15,6 +15,7 @@ export interface NotaResponse {
   alumnoNombre: string;
   descripcion: string;
   valor: number;
+  selladoBFA: boolean;
 }
 
 export interface NotaBulkDto {

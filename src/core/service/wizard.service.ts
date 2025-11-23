@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { UUID } from 'crypto';
 import { Curso } from '../models/curso';
+import { NotaDto, NotaResponse } from '../models/notas';
 
 export interface WizardState {
   currentStep: number;
   cursoId: Curso;
   asistencias: any[];
-  notas: any[];
+  notas: NotaResponse[];
 }
 
 const STORAGE_KEY = 'wizard-final-examen';
@@ -63,7 +64,7 @@ export class WizardService {
     this.saveState();
   }
 
-  setNotas(list: any[]) {
+  setNotas(list: NotaResponse[]) {
     this.state.notas = list;
     this.saveState();
   }

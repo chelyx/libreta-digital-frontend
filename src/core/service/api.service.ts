@@ -17,12 +17,19 @@ export class ApiService {
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, @Inject(AuthService) private auth: AuthService) {}
-  getProtegido(endpoint: string): Observable<any> {
+  getProtegido(endpoint: string, responseType?: string): Observable<any> {
     return this.auth.getAccessTokenSilently().pipe(
       switchMap(token => {
         console.log('Access Token:', token); // Para depuración
         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        return this.http.get(`${this.apiUrl}/${endpoint}`, { headers });
+        const options: any = {
+          headers
+        };
+        // Si necesita blob, lo ponemos acá
+        if (responseType) {
+          options.responseType = 'blob';
+        }
+        return this.http.get(`${this.apiUrl}/${endpoint}`, options);
       })
     );
   }
@@ -109,8 +116,8 @@ getByCodigoYFecha(codigo: string, fecha: string) {
     return this.putProtegido(`api/asistencias/${cursoId}/alumno/actualizar`, dto);
 }
 
-  registrarBFA(): Observable<any> {
-    return this.postProtegido('api/notas/sellar-temp', {});
+  registrarBFA(notas: UUID[]): Observable<any> {
+    return this.postProtegido('api/notas/sellar-this', notas);
   }
 
   getEstadoExamen(examenId: UUID): Observable<ExamenEstadoDto> {
@@ -123,6 +130,16 @@ getByCodigoYFecha(codigo: string, fecha: string) {
 
   getMisAsistencias(): Observable<AsistenciaResponse[]> {
     return this.getProtegido('api/asistencias/me');
+  }
+
+
+  descargarJson(notaId: UUID) {
+    return this.getProtegido(`api/notas/${notaId}/json`, 'blob');
+
+  }
+
+  descargarRd(notaId: UUID) {
+    return this.getProtegido(`api/notas/${notaId}/rd`, 'blob');
   }
 
 }

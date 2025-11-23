@@ -15,7 +15,7 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Curso</mat-label>
         <mat-select (selectionChange)="onCourseSelected($event.value)" [(value)]="selectedCourse">
-          <mat-option *ngFor="let c of cursos" [value]="c">
+          <mat-option *ngFor="let c of cursosFinales" [value]="c">
             {{ c.nombre }} - {{ c.fecha | date:'dd/MM/yyyy' }}
           </mat-option>
         </mat-select>

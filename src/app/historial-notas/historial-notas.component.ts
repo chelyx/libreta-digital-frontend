@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core"
+import { Observable } from "rxjs"
 import { NotaResponse } from "src/core/models/notas"
 import { ApiService } from "src/core/service/api.service"
 
@@ -68,4 +69,34 @@ constructor(private apiService: ApiService) {}
    // if (nota.nota === null) return "Pendiente"
     return nota.valor >= 6 ? "Aprobado" : "Desaprobado"
   }
+
+  descargarNota(nota: NotaResponse){
+    this.descargarArchivo(
+        this.apiService.descargarJson(nota.id),
+        nota.id.toString() +'.json',
+        'application/json'
+      );
+
+    this.descargarArchivo(
+      this.apiService.descargarRd(nota.id),
+      nota.id.toString() +'_sello.rd',
+      'text/plain'
+    );
+  }
+
+  private descargarArchivo(obs: Observable<Blob>, nombre: string, tipo: string) {
+    obs.subscribe(data => {
+      const blob = new Blob([data], { type: tipo });
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = nombre;
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Curso } from 'src/core/models/curso';
-import { NotaDto } from 'src/core/models/notas';
+import { NotaDto, NotaResponse } from 'src/core/models/notas';
 import { ApiService } from 'src/core/service/api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { WizardService } from 'src/core/service/wizard.service';
@@ -12,7 +12,7 @@ styleUrls: ['./notas-table.component.scss']
 })
 export class NotasTableComponent implements OnInit {
 @Input() curso: Curso = {} as Curso;
- @Output() completed = new EventEmitter<NotaDto[]>();
+ @Output() completed = new EventEmitter<NotaResponse[]>();
 // --- existentes (no tocar) ---
 // cursoSeleccionado: Curso | null = null;
 alumnosPresentes: { alumnoId: string; alumnoNombre: string; valor: number | 'AUS' | null }[] = [];
@@ -40,6 +40,14 @@ ngOnInit(): void {
             valor: a.presente ? null : 'AUS'
           })
          );
+         this.alumnosPresentes.sort((a, b) => {
+            // Primero AUS al final
+            if (a.valor === 'AUS' && b.valor !== 'AUS') return 1;
+            if (b.valor === 'AUS' && a.valor !== 'AUS') return -1;
+
+            // Después orden alfabético
+            return a.alumnoNombre.localeCompare(b.alumnoNombre);
+          });
         },
         error: (err) => {
           console.error('Error al cargar notas', err);
@@ -62,7 +70,7 @@ ngOnInit(): void {
 
     this.apiService.saveNotas( this.curso.id, notas)
       .subscribe({
-        next: (res) => {
+        next: (res: NotaResponse[]) => {
           console.log('Notas guardadas correctamente', res);
           this.snackBar.open('✓ Notas cargadas exitosamente', 'Cerrar', {
             duration: 3000,
@@ -70,7 +78,7 @@ ngOnInit(): void {
             verticalPosition: 'top',
             panelClass: ['success-snackbar']
           });
-          this.completed.emit(notas);
+          this.completed.emit(res);
         },
         error: (err) => {
           console.error('Error guardando notas', err);

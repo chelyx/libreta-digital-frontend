@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '@auth0/auth0-angular';
 import { Curso, ExamenEstadoDto } from 'src/core/models/curso';
+import { NotaDto, NotaResponse } from 'src/core/models/notas';
 import { ApiService } from 'src/core/service/api.service';
 import { WizardService } from 'src/core/service/wizard.service';
 
@@ -16,6 +17,7 @@ export class ExamenWizardComponent implements OnInit {
   estado: ExamenEstadoDto | null = null;
 
   selectedCourse: Curso = {} as Curso;
+  cursosFinales: Curso[] = [];
 
   constructor(
     private apiService: ApiService,
@@ -25,6 +27,7 @@ export class ExamenWizardComponent implements OnInit {
 
     ngOnInit() {
     // this.loadEstado();
+      this.cursosFinales = this.cursos.filter(c => c.esFinal);
     }
 
   onCourseSelected(course: Curso) {
@@ -39,7 +42,7 @@ export class ExamenWizardComponent implements OnInit {
     this.wizard.setAsistencias(lista);
   }
 
-  onGradesComplete(notas:any) {
+  onGradesComplete(notas:NotaResponse[]) {
     this.currentStep = 3;
     this.wizard.setNotas(notas);
   }
@@ -50,7 +53,8 @@ export class ExamenWizardComponent implements OnInit {
   }
 
   sendToBFA() {
-    this.apiService.registrarBFA().subscribe({
+    let notasIds = this.wizard.notas.map(n => n.id)
+    this.apiService.registrarBFA(notasIds).subscribe({
       next: () => {
         this.snackBar.open('Datos enviados a BFA correctamente.');
         this.wizard.setStep(0);
