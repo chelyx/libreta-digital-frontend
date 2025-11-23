@@ -7,20 +7,28 @@
 }
 
 /* ===== BANNER TÍTULO ===== */
-.titulo-banner {
-  background: linear-gradient(135deg, #a82a19 0%, #d32f2f 100%);
-  color: white;
-  padding: 2rem;
-  border-radius: 12px;
-  margin-bottom: 2rem;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(168, 42, 25, 0.2);
-}
+// .titulo-banner {
+//   background: linear-gradient(135deg, #a82a19 0%, #d32f2f 100%);
+//   color: white;
+//   padding: 2rem;
+//   border-radius: 12px;
+//   margin-bottom: 2rem;
+//   text-align: center;
+//   box-shadow: 0 4px 12px rgba(168, 42, 25, 0.2);
+// }
 
-.titulo-banner-text {
+// .titulo-banner-text {
+//   font-size: 2rem;
+//   font-weight: 600;
+//   margin: 0;
+// }
+
+.title {
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0;
+  color: #111827;
+  margin-bottom: 1.5rem;
 }
 
 /* ===== PANEL HORIZONTAL ===== */
@@ -103,6 +111,7 @@
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 5rem;
+  margin-top: 0.5rem;
   padding: 0 0.5rem;
 }
 
@@ -110,7 +119,7 @@
   background: white;
   border: 2px solid #f0f0f0;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 0.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -185,17 +194,17 @@
 }
 
 .btn-no.selected {
-  background-color: #f44336 !important;
+  background-color: #9b231b !important;
   color: white !important;
-  border-color: #f44336 !important;
+  border-color: #9b231b !important;
   box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
   transform: scale(1.05);
 }
 
 .btn-no:hover:not(.selected) {
   background-color: #ffebee !important;
-  color: #c62828 !important;
-  border-color: #f44336 !important;
+  color: #9b231b !important;
+  border-color: #9b231b !important;
 }
 
 /* ===== ESTADO VACÍO ===== */
@@ -257,28 +266,6 @@
   cursor: not-allowed;
 }
 
-/* ===== NOTA INFORMATIVA ===== */
-.info-note {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background-color: #e3f2fd;
-  border-radius: 10px;
-  padding: 1rem 1.25rem;
-  color: #0d47a1;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-top: 1.5rem;
-  box-shadow: 0 2px 8px rgba(13, 71, 161, 0.1);
-  border-left: 4px solid #1976d2;
-}
-
-.info-icon {
-  flex-shrink: 0;
-  color: #1976d2;
-  width: 22px;
-  height: 22px;
-}
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1000px) {

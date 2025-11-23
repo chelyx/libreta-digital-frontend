@@ -30,6 +30,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 // QR Code
 import { QRCodeModule } from 'angularx-qrcode';
@@ -59,6 +60,7 @@ import { environment } from '../environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { OfflineInterceptor } from '../core/service/interceptor';
 import { ActaUploaderComponent } from './acta-uploader/acta-uploader.component';
+import { BuscadorCursoComponent } from './buscador-curso/buscador-curso.component';
 
 @NgModule({
 declarations: [
@@ -78,7 +80,8 @@ HistorialAsistenciaComponent,
 
 // AGREGADO AHORA
 BuscarFinalComponent,
-  ActaUploaderComponent
+  ActaUploaderComponent,
+  BuscadorCursoComponent
 ],
 imports: [
 BrowserModule,
@@ -112,6 +115,7 @@ MatProgressBarModule,
 MatChipsModule,
 MatSnackBarModule,
 MatProgressSpinnerModule,
+MatAutocompleteModule,
 
 // QR Code
 QRCodeModule,

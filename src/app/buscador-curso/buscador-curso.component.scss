@@ -1,0 +1,34 @@
+.search-section {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.option-header {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+
+/* ===== NOTA INFORMATIVA ===== */
+.info-note {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #e3f2fd;
+  border-radius: 10px;
+  padding: 0rem 0.25rem;
+  color: #0d47a1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(13, 71, 161, 0.1);
+  border-left: 4px solid #1976d2;
+}
+
+.info-icon {
+  flex-shrink: 0;
+  color: #1976d2;
+  width: 22px;
+  height: 22px;
+}

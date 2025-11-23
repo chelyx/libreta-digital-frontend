@@ -1,126 +1,15 @@
 <div class="main-content">
   <div class="content-wrapper">
     <h2 class="title">Historial de Asistencia</h2>
-    <p class="subtitle">Registro completo de Asistencias</p>
+    <app-buscador-curso [cursos]="cursos" (selected)="onCursoChange($event)" >
 
-    <!-- ================================
-              BUSCADORES
-    =================================-->
-    <div class="search-section">
-      <div class="search-option">
-        <div class="option-header">
-          <span class="step-number">1</span>
-          <label class="label">Seleccionar Curso</label>
-        </div>
-
-        <select
-          class="select-input"
-          [(ngModel)]="cursoSeleccionado"
-          (change)="onCursoChange()"
-        >
-          <option disabled selected value="" >Seleccione un curso</option>
-
-          <option *ngFor="let curso of cursos" [value]="curso.id">
-            {{ curso.nombre }} - {{ curso.codigo }}
-          </option>
-        </select>
-
-        <p class="help-text">Elige un curso de la lista disponible</p>
-      </div>
-
-      <div class="divider">
-        <span class="divider-text">o</span>
-      </div>
-
-      <div class="search-option">
-        <div class="option-header">
-          <span class="step-number">2</span>
-          <label class="label">Buscar por Código de Curso</label>
-        </div>
-
-        <div class="search-input-wrapper">
-          <svg
-            class="search-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.35-4.35"></path>
-          </svg>
-
-          <input
-            type="text"
-            class="search-input"
-            placeholder="Ingresa el Código del curso (ej: K101)"
-            [(ngModel)]="cursoIdBusqueda"
-            (input)="onBuscarPorId()"
-          />
-        </div>
-
-        <p class="help-text">
-          Introduce el código único del curso para búsqueda rápida
-        </p>
-      </div>
-
-      <button
-        class="search-button"
-        (click)="buscarCurso()"
-        [disabled]="!cursoSeleccionado && !cursoIdBusqueda"
-      >
-        <svg
-          class="button-icon"
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
-        </svg>
-        Buscar Curso
-      </button>
-    </div>
-
-    <div class="info-note">
-      <svg
-        class="info-icon"
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="16" x2="12" y2="12"></line>
-        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-      </svg>
-      <p>
-        Podes buscar el curso seleccionándolo de la lista o ingresando directamente su
-        código.
-      </p>
-    </div>
+    </app-buscador-curso>
 
     <!-- ================================
               TABLA AGRUPADA
     =================================-->
-    <div class="content-block" *ngIf="cursoSeleccionado || cursoIdBusqueda">
-      <h3 class="section-title">Asistencias del curso</h3>
+    <div class="content-block" *ngIf="cursoSeleccionado">
+      <h3 class="section-title">Asistencias de {{cursoSeleccionado.nombre}} - {{cursoSeleccionado.codigo}}</h3>
       <p class="section-subtitle">
         Visualiza y gestiona el registro de asistencias por alumno
       </p>

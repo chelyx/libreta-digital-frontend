@@ -1,77 +1,15 @@
 <!-- Banner de título principal -->
 <div class="titulo-banner">
-  <h1 class="titulo-banner-text">Toma de asistencia</h1>
+  <h1 class="title">Toma de Asistencia</h1>
 </div>
 
-<!-- Panel de filtros y búsqueda horizontal -->
-<div class="panel-horizontal">
-
-  <!-- Sección 1 -->
-  <div class="panel-item">
-    <div class="panel-header">
-      <div class="panel-number">1</div>
-      <div class="panel-title">Seleccionar Curso</div>
-    </div>
-    <mat-form-field appearance="outline" class="panel-field">
-      <mat-label>Curso</mat-label>
-      <mat-select
-        [(ngModel)]="cursoSeleccionado"
-        (selectionChange)="onCursoChange($event.value)"
-      >
-        <mat-option *ngFor="let c of cursos" [value]="c">
-          {{ c.nombre }}
-        </mat-option>
-      </mat-select>
-      <button
-        mat-icon-button
-        matSuffix
-        *ngIf="cursoSeleccionado"
-        (click)="onCursoChange('')"
-        aria-label="Limpiar curso"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
-    <p class="panel-subtext">Elige un curso de la lista disponible</p>
-  </div>
-
-  <!-- Sección 2 -->
-  <div class="panel-item">
-    <div class="panel-header">
-      <div class="panel-number">2</div>
-      <div class="panel-title">Buscar por Código de Curso</div>
-    </div>
-    <mat-form-field appearance="outline" class="panel-field">
-      <mat-label>Código del curso</mat-label>
-      <input
-        matInput
-        placeholder="Ej: K101"
-        [(ngModel)]="cursoIdBusqueda"
-        (keyup.enter)="onBuscarPorId()"
-      />
-      <mat-icon matPrefix>tag</mat-icon>
-    </mat-form-field>
-    <p class="panel-subtext">
-      Introduce el código único del curso para búsqueda rápida
-    </p>
-    <button
-      mat-raised-button
-      color="primary"
-      class="buscar-id-button"
-      (click)="onBuscarPorId()"
-      [disabled]="!cursoIdBusqueda.trim()"
-    >
-      <mat-icon>search</mat-icon>
-      Buscar Curso
-    </button>
-  </div>
-</div>
+ <app-buscador-curso [cursos]="cursos" (selected)="onCursoChange($event)" >    </app-buscador-curso>
 
 <!-- Lista de alumnos -->
 <div class="alumnos-lista" *ngIf="cursoSeleccionado">
   <div
     class="alumno-card"
-    *ngFor="let a of alumnosFiltrados; trackBy: trackByAuth0Id"
+    *ngFor="let a of alumnos; trackBy: trackByAuth0Id"
   >
     <div class="alumno-info">
       <div class="alumno-nombre">{{ a.nombre }}</div>
@@ -99,7 +37,7 @@
   </div>
 
   <!-- Estado vacío -->
-  <div class="empty-state" *ngIf="alumnosFiltrados.length === 0">
+  <div class="empty-state" *ngIf="alumnos.length === 0">
     <mat-icon>search_off</mat-icon>
     <p>No se encontraron alumnos</p>
   </div>
@@ -116,13 +54,4 @@
     <mat-icon>save</mat-icon>
     {{ saving ? 'Guardando...' : 'Guardar' }}
   </button>
-</div>
-
-<div class="info-note">
-  <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="10"></circle>
-    <line x1="12" y1="16" x2="12" y2="12"></line>
-    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-  </svg>
-  <p>Podes buscar el curso seleccionándolo de la lista o ingresando directamente su código.</p>
 </div>

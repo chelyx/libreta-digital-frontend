@@ -2,12 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ApiService } from 'src/core/service/api.service';
 import { UUID } from 'crypto';
 import { AsistenciaAlumnoDto, AsistenciaResponse } from 'src/core/models/asistencia';
+import { Curso } from 'src/core/models/curso';
 
-interface Curso {
-id: string;
-nombre: string;
-codigo: string;
-}
+// interface Curso {
+// id: string;
+// nombre: string;
+// codigo: string;
+// }
 
 interface AsistenciasPorAlumno {
 auth0Id: string;
@@ -23,8 +24,7 @@ styleUrls: ['./asistencia-table.component.scss'],
 export class AsistenciaTableComponent implements OnInit {
 @Input() cursos: Curso[] = [];
 
-cursoSeleccionado: string = '';
-cursoIdBusqueda: string = '';
+cursoSeleccionado: Curso | null = null;
 asistencias: AsistenciaResponse[] = [];
 cargando = false;
 errorMsg = '';
@@ -63,54 +63,16 @@ constructor(private api: ApiService) {}
   // ============================================================
   // BUSCAR CURSO
   // ============================================================
-  onCursoChange(): void {
-    if (!this.cursoSeleccionado) {
-      this.asistencias = [];
-      return;
-    }
-    this.cursoIdBusqueda = '';
+  onCursoChange(curso: Curso): void {
+    this.cursoSeleccionado = curso
     this.cargarAsistencias(this.cursoSeleccionado);
   }
 
-  buscarCurso(): void {
-    if (this.cursoSeleccionado) {
-      this.cargarAsistencias(this.cursoSeleccionado);
-    } else if (this.cursoIdBusqueda.trim()) {
-      this.onBuscarPorId();
-    } else {
-      this.errorMsg = 'Selecciona un curso o ingresa un código.';
-    }
-  }
-
-  onBuscarPorId(): void {
-    const codigo = this.cursoIdBusqueda.trim();
-    if (!codigo) return;
-
+  private cargarAsistencias(curso: Curso): void {
     this.cargando = true;
     this.errorMsg = '';
 
-    this.api.getCursoPorCodigo(codigo).subscribe({
-      next: (curso: Curso) => {
-        if (curso && curso.id) {
-          this.cursoSeleccionado = curso.id;
-          this.cargarAsistencias(curso.id);
-        } else {
-          this.errorMsg = 'No se encontró un curso con ese código.';
-          this.cargando = false;
-        }
-      },
-      error: () => {
-        this.errorMsg = 'No se encontró un curso con ese código.';
-        this.cargando = false;
-      },
-    });
-  }
-
-  private cargarAsistencias(cursoId: string): void {
-    this.cargando = true;
-    this.errorMsg = '';
-
-    this.api.getAsistenciaPorCurso(cursoId as unknown as UUID).subscribe({
+    this.api.getAsistenciaPorCurso(curso.id).subscribe({
       next: (res: AsistenciaResponse[]) => {
         this.asistencias = res || [];
         this.cargando = false;
