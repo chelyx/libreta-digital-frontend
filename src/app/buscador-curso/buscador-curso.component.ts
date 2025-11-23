@@ -13,14 +13,16 @@ export class BuscadorCursoComponent {
   cursoSeleccionadoTexto: string = '';
 
   cursosFiltrados: Curso[] = [];
+  cursosAnuales: Curso[] = []
 
   ngOnInit() {
-    this.cursosFiltrados = this.cursos;
+    this.cursosAnuales = this.cursos.filter(c => !c.esFinal);
+    this.cursosFiltrados = this.cursosAnuales;
   }
 
   filtrarCursos(valor: string) {
     const filter = valor.toLowerCase();
-    this.cursosFiltrados = this.cursos.filter(c =>
+    this.cursosFiltrados = this.cursosAnuales.filter(c =>
       c.nombre.toLowerCase().includes(filter) ||
       c.codigo.toLowerCase().includes(filter)
     );
