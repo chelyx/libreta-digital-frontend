@@ -49,7 +49,7 @@ constructor(private apiService: ApiService) {}
 
   private calcularEstadisticas(): void {
     this.notasAprobadas = this.notas.filter((n) => n.valor >= 6)
-    this.notasDesaprobadas = this.notas.filter((n) => n.valor < 6)
+    this.notasDesaprobadas = this.notas.filter((n) => n.valor < 6 && n.valor !== null)
 
     const notasValidas = this.notas.filter((n) => n.valor !== null)
     if (notasValidas.length > 0) {
@@ -66,7 +66,7 @@ constructor(private apiService: ApiService) {}
 
   getEstadoTexto(nota: NotaResponse): string {
    // if (nota.ausente) return "Ausente"
-   // if (nota.nota === null) return "Pendiente"
+    if (nota.valor === null) return "Ausente"
     return nota.valor >= 6 ? "Aprobado" : "Desaprobado"
   }
 

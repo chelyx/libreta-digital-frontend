@@ -51,9 +51,16 @@
           <div class="materia-codigo">{{ nota.alumnoNombre }}</div>
         </div>
         <div class="nota-badge" [class]="getEstadoClase(nota)">
-          <span *ngIf="nota.valor  !== null">{{ nota.valor }}</span>
-        <!--   <mat-icon *ngIf="nota.ausente">remove</mat-icon>-->
-       <!--    <mat-icon *ngIf="nota.nota === null && !nota.ausente">schedule</mat-icon>-->
+
+          <div class="nota-badge" [class]="getEstadoClase(nota)">
+            <!-- Si tiene valor numérico, mostrarlo -->
+            <span *ngIf="nota.valor !== null">{{ nota.valor }}</span>
+
+            <!-- Si valor es null, mostrar AUS -->
+            <span *ngIf="nota.valor === null">AUS</span>
+          </div>
+          <!--   <mat-icon *ngIf="nota.ausente">remove</mat-icon>-->
+          <!--    <mat-icon *ngIf="nota.nota === null && !nota.ausente">schedule</mat-icon>-->
         </div>
       </div>
 
@@ -67,7 +74,8 @@
           <span>{{ nota.descripcion }}</span>
         </div>
         <div class="detail-item estado">
-          <mat-icon>{{ getEstadoClase(nota) === 'aprobada' ? 'check_circle' : getEstadoClase(nota) === 'ausente' ? 'remove_circle' : 'cancel' }}</mat-icon>
+          <mat-icon>{{ getEstadoClase(nota) === 'aprobada' ? 'check_circle' : getEstadoClase(nota) === 'ausente' ?
+            'remove_circle' : 'cancel' }}</mat-icon>
           <span>{{ getEstadoTexto(nota) }}</span>
         </div>
         <div class="detail-item" *ngIf="nota.selladoBFA" matTooltip="Descargar sello BFA">
