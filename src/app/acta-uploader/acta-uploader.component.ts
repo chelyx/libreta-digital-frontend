@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiService } from 'src/core/service/api.service';
 
 @Component({
@@ -19,7 +20,8 @@ export class ActaUploaderComponent {
   showCamera = false;
   mediaStream: MediaStream | null = null;
 
-  constructor(private apiService: ApiService, private  cdr: ChangeDetectorRef) {}
+
+  constructor(private apiService: ApiService, private  cdr: ChangeDetectorRef, private snackBar: MatSnackBar) {}
 
   // --- Selección desde archivo ---
   onFileSelected(event: any) {
@@ -105,8 +107,12 @@ export class ActaUploaderComponent {
 
     // this.http.post('http://localhost:8080/uploadActa', formData, { responseType: 'text' })
     //   .subscribe(url => this.completed.emit(url));
-    this.apiService.uploadActa(formData).subscribe(res =>
-      console.log(res)
+    this.apiService.uploadActa(formData).subscribe(res => {
+ console.log(res)
+ this.snackBar.open('Imagen cargada correctamente', 'Cerrar', {
+            duration: 3000
+          });
+    }
     )
   }
 }
