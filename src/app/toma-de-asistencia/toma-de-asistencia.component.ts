@@ -25,18 +25,27 @@ export class TomaDeAsistenciaComponent implements OnInit {
     this.onCursoChange('')
   }
 
-  onCursoChange(curso: Curso | ''): void {
-    if (curso === '') {
-      this.cursoSeleccionado = undefined;
-      this.asistencias = {};
-      return;
-    }
-    this.cursoSeleccionado = curso;
-    this.asistencias = {};
-    curso.alumnos.forEach((alumno) => {
-      this.asistencias[alumno.auth0Id] = true;
-    });
-  }
+ onCursoChange(curso: Curso | ''): void {
+   if (curso === '') {
+     this.cursoSeleccionado = undefined;
+     this.asistencias = {};
+     return;
+   }
+
+   this.cursoSeleccionado = curso;
+   this.asistencias = {};
+
+   // ✅ Ordenar alumnos alfabéticamente por nombre
+   this.cursoSeleccionado.alumnos = [...curso.alumnos].sort((a, b) =>
+     a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' })
+   );
+
+   // Inicializar asistencias como presentes
+   this.cursoSeleccionado.alumnos.forEach((alumno) => {
+     this.asistencias[alumno.auth0Id] = true;
+   });
+ }
+
 
   get alumnos(): User[] {
     if (!this.cursoSeleccionado) return [];
