@@ -34,7 +34,7 @@ export class TomaDeAsistenciaComponent implements OnInit {
     this.cursoSeleccionado = curso;
     this.asistencias = {};
     curso.alumnos.forEach((alumno) => {
-      this.asistencias[alumno.auth0Id] = false;
+      this.asistencias[alumno.auth0Id] = true;
     });
   }
 
