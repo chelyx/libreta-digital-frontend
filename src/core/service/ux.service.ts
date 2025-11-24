@@ -103,8 +103,19 @@ constructor() {}
             panel: PANELES.EXAMEN_WIZARD,
             buttonLabel: "Examenes Finales",
             color: "primary",
-          },
+          }
         ]
+        case ROLES.BEDEL:
+          return [
+            {
+              title: "Toma de Asistencia",
+              description: "Registro rápido de asistencia por curso",
+              icon: "groups",
+              panel: PANELES.ASISTENCIA,
+              buttonLabel: "Toma de Asistencia",
+              color: "primary",
+            }
+          ]
       default:
         return []
     }

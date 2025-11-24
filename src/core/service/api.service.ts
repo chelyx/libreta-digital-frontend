@@ -150,4 +150,8 @@ getCursoByFecha(fecha: string) {
     return this.getProtegido(`api/asistencias/historial/${cursoId}`)
   }
 
+  guardarHistorialAsistencias(historial: HistorialAsistenciaDto, cursoId: UUID): Observable<any> {
+    return this.postProtegido(`api/asistencias/${cursoId}/guardar-historial`, historial);
+  }
+
 }

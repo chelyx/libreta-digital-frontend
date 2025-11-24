@@ -27,7 +27,7 @@ export interface AsistenciaAlumnoDto {
 export interface AlumnoAsistenciaDto {
   auth0Id: string;
   nombre: string;
-  asistencias: Map<string, string>; // e.g. { "2025-11-24": "P" }
+  asistencias: Record<string, "P" | "A">;
 }
 
 export interface HistorialAsistenciaDto {

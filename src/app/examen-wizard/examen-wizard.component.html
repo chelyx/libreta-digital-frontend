@@ -3,8 +3,8 @@
   <div class="steps-header">
      <div [class.active]="currentStep === 0" (click)="goToStep(0)">0. Mesa de Final</div>
     <div [class.active]="currentStep === 1" (click)="goToStep(1)">1. Asistencia</div>
-    <div [class.active]="currentStep === 2" (click)="goToStep(2)">2. Cargar Notas</div>
-    <div [class.active]="currentStep === 3" (click)="goToStep(3)">3. Foto del Acta</div>
+    <div [class.active]="currentStep === 2" (click)="goToStep(2)">2. Foto del Acta</div>
+    <div [class.active]="currentStep === 3" (click)="goToStep(3)">3. Cargar Notas</div>
   <div [class.active]="currentStep === 4" (click)="goToStep(4)">4. Enviar a BFA</div>
   </div>
 
@@ -29,13 +29,13 @@
     </app-code-validator>
 
     <app-notas-table
-      *ngIf="currentStep === 2"
+      *ngIf="currentStep === 3"
       [curso]="selectedCourse"
       (completed)="onGradesComplete($event)">
     </app-notas-table>
 
     <app-acta-uploader
-      *ngIf="currentStep === 3"
+      *ngIf="currentStep === 2"
       (completed)="onActaUploaded($event)">
     </app-acta-uploader>
 

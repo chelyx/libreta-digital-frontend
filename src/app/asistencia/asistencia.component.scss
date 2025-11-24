@@ -1,121 +1,88 @@
+.toolbar {
+  margin: 16px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tabla-wrapper {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
 .tabla-asistencias {
   width: 100%;
   border-collapse: collapse;
+  background: white;
   border-radius: 8px;
   overflow: hidden;
-  font-size: 14px;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-}
-
-/* Encabezado */
-.tabla-asistencias thead {
-  background: #f5f5f5;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 
 .tabla-asistencias th {
-  padding: 10px 12px;
+  background: #f5f5f5;
+  padding: 12px;
   text-align: center;
   font-weight: 600;
-  color: #555;
-  border-bottom: 1px solid #e0e0e0;
-  white-space: nowrap;
+  border-bottom: 1px solid #ddd;
 }
 
-/* Filas */
 .tabla-asistencias td {
-  padding: 10px 8px;
-  border-bottom: 1px solid #eee;
+  padding: 10px;
   text-align: center;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s ease, transform 0.15s ease;
+  &.name {
+    text-align: start;
+  }
 }
 
-/* Hover sobre fila */
-.tabla-asistencias tbody tr:hover {
-  background: #fafafa;
+/* MODO EDICIÓN — resaltamos que se puede clickear */
+.edit-mode td {
+  cursor: pointer;
 }
 
-/* Nombre del alumno alineado a la izquierda */
-.tabla-asistencias td:first-child {
-  text-align: left;
-  font-weight: 500;
-  color: #333;
+.edit-mode td:hover {
+  background: #e3f2fd;
+  // transform: scale(1.04);
 }
 
-/* Pastillas de presente/ausente */
+/* ESTADOS */
 .estado {
   display: inline-block;
   padding: 4px 8px;
   border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 14px;
+  min-width: 36px;
+  border: 2px solid transparent;   /* 👈 Esto fija el espacio del borde */
+  box-sizing: border-box;
 }
 
-/* Material green */
+
+
+/* Presente */
 .estado.presente {
   background: #c8e6c9;
-  color: #1b5e20;
+  color: #256029;
 }
 
-/* Material red */
+/* Ausente */
 .estado.ausente {
   background: #ffcdd2;
   color: #b71c1c;
 }
 
-/* Gris para sin datos */
-.estado.sin-data {
+/* Justificado */
+.estado.justificado {
+  background: #fff9c4;
+  color: #8a6d00;
+}
+
+/* Vacío */
+.estado.vacio {
   background: #eeeeee;
-  color: #616161;
+  color: #555;
 }
 
-/* Scroll horizontal cuando hay muchas fechas */
-.tabla-wrapper {
-  overflow-x: auto;
-  padding-bottom: 8px;
-}
-
-
-.celda-editable {
-  cursor: pointer;
-  user-select: none;
-}
-
-.celda-editable:hover {
-  background: #f1f1f1;
-}
-
-/* Estilos de chip */
-.chip {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  font-size: 16px;
-  transition: 0.2s ease;
-}
-
-.chip.presente {
-  background: #c8e6c9;
-  border: 1px solid #66bb6a;
-}
-
-.chip.ausente {
-  background: #ffcdd2;
-  border: 1px solid #ef5350;
-}
-
-.chip.sin-data {
-  background: #eeeeee;
-  border: 1px solid #bdbdbd;
-}
-
-.toolbar {
-  margin-bottom: 12px;
-  display: flex;
-  justify-content: flex-end;
-}
 
 .btn-editar {
   background: #b91c1c;
@@ -126,4 +93,25 @@
   cursor: pointer;
   font-size: 14px;
   transition: 0.2s ease;
+}
+
+/* En edición las celdas mantienen su color pero se ven "editables" */
+// .edit-mode .estado {
+//   border: 2px dashed rgba(0,0,0,0.4);
+//   box-sizing: border-box;
+// }
+
+/* Hover más claro, sin borrar color */
+.edit-mode td:hover .estado {
+  filter: brightness(1.05);
+
+}
+.edit-mode .estado.presente {
+  border: 2px dashed #256029;
+   background: #eeeeee;
+}
+
+.edit-mode .estado.ausente {
+  border: 2px dashed #b71c1c;
+   background: #eeeeee;
 }
