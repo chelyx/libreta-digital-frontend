@@ -12,10 +12,10 @@ import { ApiService } from 'src/core/service/api.service';
 export class AsistenciaComponent {
   @Input() cursos: Curso[] = [];
  cursoSeleccionado: Curso | null = null;
-  asistencias: AlumnoAsistenciaDto[] = [];
+
   historial: HistorialAsistenciaDto = {} as HistorialAsistenciaDto;
   alumnos: User[] = []
-  dias: string[] = [];
+
   editMode = false;
   constructor(private apiService: ApiService){}
 
@@ -23,26 +23,45 @@ export class AsistenciaComponent {
 
   }
 
+  guardarCambios() {
+    if(!this.cursoSeleccionado) return
+    const dto: HistorialAsistenciaDto = {
+      fechas: this.historial.fechas,
+      alumnos: this.historial.alumnos.map(a => ({
+        auth0Id: a.auth0Id,
+        nombre: a.nombre,
+        asistencias: a.asistencias
+      }))
+    };
+
+    this.apiService.guardarHistorialAsistencias(dto, this.cursoSeleccionado?.id).subscribe(res => {
+      console.log(res)
+    });
+  }
+
 
   toggleEditMode() {
+    if (this.editMode) {
+      this.guardarCambios();
+    }
     this.editMode = !this.editMode;
   }
   onCursoChange(curso: Curso): void {
-    this.cursoSeleccionado = curso
-    this.alumnos = this.cursoSeleccionado.alumnos;
-    this.apiService.getHistorialAsistencias(this.cursoSeleccionado.id).subscribe(res => {
-        res.alumnos = res.alumnos.map(a => ({
-        ...a,
-        asistencias: new Map(Object.entries(a.asistencias))
-      }));
+  this.cursoSeleccionado = curso;
+  this.alumnos = curso.alumnos;
 
-      this.historial = res;
-      this.asistencias = res.alumnos;
-      this.dias = res.fechas
-      console.log(res);
-    });
+  this.apiService.getHistorialAsistencias(curso.id).subscribe(res => {
+    // Convertimos asistencias obj → Map
+    // res.alumnos = res.alumnos.map(a => ({
+    //   ...a,
+    //   asistencias: new Map(Object.entries(a.asistencias))
+    // }));
 
-  }
+    this.historial = res;
+    console.log("HISTORIAL CARGADO", this.historial);
+  });
+}
+
 
   getEstadoClase(valor: string | undefined) {
     switch (valor) {
@@ -52,23 +71,13 @@ export class AsistenciaComponent {
     }
   }
 
-  toggleAsistencia(alumno: AlumnoAsistenciaDto, fecha: string) {
-    if(!this.editMode) {
-      return
-    }
-  const actual = alumno.asistencias.get(fecha);
+  toggleAsistencia(alumno: any, fecha: string) {
+    if (!this.editMode) return;
 
-  let nuevo;
-  if (!actual) nuevo = 'P';
-  else if (actual === 'P') nuevo = 'A';
-  else nuevo = null;
-
-  if (nuevo) alumno.asistencias.set(fecha, nuevo);
-  else alumno.asistencias.delete(fecha);
-
-  // Opcional: enviar al backend
-  // this.asistenciaService.actualizar(alumno.auth0Id, fecha, nuevo).subscribe(...)
-}
+    const actual = alumno.asistencias[fecha];
+    const nuevo = actual === 'P' ? 'A' : 'P';
+    alumno.asistencias[fecha] = nuevo;
+  }
 
 
 }
