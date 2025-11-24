@@ -62,6 +62,11 @@ import { OfflineInterceptor } from '../core/service/interceptor';
 import { ActaUploaderComponent } from './acta-uploader/acta-uploader.component';
 import { BuscadorCursoComponent } from './buscador-curso/buscador-curso.component';
 import { AsistenciaComponent } from './asistencia/asistencia.component';
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeEsAr from '@angular/common/locales/es-AR';
+
+registerLocaleData(localeEsAr);
 
 @NgModule({
 declarations: [
@@ -142,7 +147,7 @@ AuthModule.forRoot({
     })
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: OfflineInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: OfflineInterceptor, multi: true },{ provide: LOCALE_ID, useValue: 'es-AR' }
   ],
   bootstrap: [AppComponent]
 })
