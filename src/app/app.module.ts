@@ -61,6 +61,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { OfflineInterceptor } from '../core/service/interceptor';
 import { ActaUploaderComponent } from './acta-uploader/acta-uploader.component';
 import { BuscadorCursoComponent } from './buscador-curso/buscador-curso.component';
+import { AsistenciaComponent } from './asistencia/asistencia.component';
 
 @NgModule({
 declarations: [
@@ -81,7 +82,8 @@ HistorialAsistenciaComponent,
 // AGREGADO AHORA
 BuscarFinalComponent,
   ActaUploaderComponent,
-  BuscadorCursoComponent
+  BuscadorCursoComponent,
+  AsistenciaComponent
 ],
 imports: [
 BrowserModule,

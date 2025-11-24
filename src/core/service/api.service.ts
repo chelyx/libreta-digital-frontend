@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { User} from '../models/user';
 import { Curso, ExamenEstadoDto } from '../models/curso';
 import { UUID } from 'crypto';
-import {  AsistenciaAlumnoDto, AsistenciaResponse } from '../models/asistencia';
+import {  AsistenciaAlumnoDto, AsistenciaResponse, HistorialAsistenciaDto } from '../models/asistencia';
 import {  NotaBulkDto, NotaDto, NotaResponse } from '../models/notas';
 
 @Injectable({
@@ -140,6 +140,10 @@ getByCodigoYFecha(codigo: string, fecha: string) {
 
   descargarRd(notaId: UUID) {
     return this.getProtegido(`api/notas/${notaId}/rd`, 'blob');
+  }
+
+  getHistorialAsistencias(cursoId: UUID): Observable<HistorialAsistenciaDto> {
+    return this.getProtegido(`api/asistencias/historial/${cursoId}`)
   }
 
 }

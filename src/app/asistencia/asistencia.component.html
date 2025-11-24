@@ -1,0 +1,39 @@
+
+    <app-buscador-curso [cursos]="cursos" (selected)="onCursoChange($event)" >
+
+    </app-buscador-curso>
+<div class="toolbar" *ngIf="alumnos.length > 0">
+  <button (click)="toggleEditMode()" class="btn-editar">
+    {{ editMode ? 'Guardar edición' : 'Editar asistencias' }}
+  </button>
+</div>
+
+<div class="tabla-wrapper" *ngIf="alumnos.length> 0">
+  <table class="tabla-asistencias">
+    <thead>
+      <tr>
+        <th>Alumno</th>
+        <th *ngFor="let fecha of historial?.fechas">
+          {{ fecha | date:'dd/MM' }}
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let alumno of historial?.alumnos">
+        <td>{{ alumno.nombre }}</td>
+
+        <td *ngFor="let fecha of historial?.fechas"
+            (click)="toggleAsistencia(alumno, fecha)">
+
+          <span class="estado"
+                [ngClass]="getEstadoClase(alumno.asistencias.get(fecha))">
+            {{ alumno.asistencias.get(fecha) || '-' }}
+          </span>
+
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>

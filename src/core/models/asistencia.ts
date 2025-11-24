@@ -23,3 +23,16 @@ export interface AsistenciaAlumnoDto {
   fecha: string;
   presente: boolean;
 }
+
+export interface AlumnoAsistenciaDto {
+  auth0Id: string;
+  nombre: string;
+  asistencias: Map<string, string>; // e.g. { "2025-11-24": "P" }
+}
+
+export interface HistorialAsistenciaDto {
+  fechas: string[];
+  alumnos: AlumnoAsistenciaDto[];
+}
+
+

@@ -1,0 +1,129 @@
+.tabla-asistencias {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 14px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* Encabezado */
+.tabla-asistencias thead {
+  background: #f5f5f5;
+}
+
+.tabla-asistencias th {
+  padding: 10px 12px;
+  text-align: center;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 1px solid #e0e0e0;
+  white-space: nowrap;
+}
+
+/* Filas */
+.tabla-asistencias td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+/* Hover sobre fila */
+.tabla-asistencias tbody tr:hover {
+  background: #fafafa;
+}
+
+/* Nombre del alumno alineado a la izquierda */
+.tabla-asistencias td:first-child {
+  text-align: left;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Pastillas de presente/ausente */
+.estado {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Material green */
+.estado.presente {
+  background: #c8e6c9;
+  color: #1b5e20;
+}
+
+/* Material red */
+.estado.ausente {
+  background: #ffcdd2;
+  color: #b71c1c;
+}
+
+/* Gris para sin datos */
+.estado.sin-data {
+  background: #eeeeee;
+  color: #616161;
+}
+
+/* Scroll horizontal cuando hay muchas fechas */
+.tabla-wrapper {
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+
+.celda-editable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.celda-editable:hover {
+  background: #f1f1f1;
+}
+
+/* Estilos de chip */
+.chip {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: 0.2s ease;
+}
+
+.chip.presente {
+  background: #c8e6c9;
+  border: 1px solid #66bb6a;
+}
+
+.chip.ausente {
+  background: #ffcdd2;
+  border: 1px solid #ef5350;
+}
+
+.chip.sin-data {
+  background: #eeeeee;
+  border: 1px solid #bdbdbd;
+}
+
+.toolbar {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-editar {
+  background: #b91c1c;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease;
+}

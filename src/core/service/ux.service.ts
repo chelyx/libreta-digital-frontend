@@ -12,6 +12,7 @@ HISTORIAL_NOTAS = "historial-notas",
 EDITAR_NOTAS = 'editar-notas',
 EXAMEN_WIZARD = 'examen-wizard',
 HISTORIAL_ASISTENCIA = 'historial-asistencia',
+ASISTENCIA2 = 'asistencia-2',
 BUSCAR_FINAL = 'buscar-final'  // <-- NUEVO PANEL
 }
 
@@ -54,13 +55,15 @@ constructor() {}
         return [
           { label: "Historial de Notas", icon: "assignment", panel: PANELES.HISTORIAL_NOTAS, main: false },
           { label: "Generar Código QR", icon: "qr_code", panel: PANELES.CODE_GENERATOR, main: true },
-          { label: 'Historial de Asistencia', icon: 'history', panel: PANELES.HISTORIAL_ASISTENCIA, main: false }
+          { label: 'Historial de Asistencia', icon: 'history', panel: PANELES.HISTORIAL_ASISTENCIA, main: false },
+
         ]
 
       case "PROFESOR":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
           { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
+          { label: "Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA2, main: false },
           { label: "Examenes Finales", icon: "school", panel: PANELES.EXAMEN_WIZARD, main: true },
           { label: "Gestion de Finales", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false }  // <-- SOLO PROFES/BEDELES
         ]
@@ -69,7 +72,8 @@ constructor() {}
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
           { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
-          { label: "Gestión de Finales", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false }  // <-- SOLO PROFES/BEDELES
+          { label: "Gestión de Finales", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false },  // <-- SOLO PROFES/BEDELES
+          { label: "Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA2, main: false },
         ]
 
       default:
