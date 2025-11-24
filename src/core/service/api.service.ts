@@ -110,6 +110,10 @@ getByCodigoYFecha(codigo: string, fecha: string) {
   return this.getProtegido(`api/cursos/busqueda/final?codigo=${encodeURIComponent(codigo)}&fecha=${encodeURIComponent(fecha)}`);
 }
 
+getCursoByFecha(fecha: string) {
+  return this.getProtegido(`api/cursos/busqueda/docente-fecha?&fecha=${encodeURIComponent(fecha)}`);
+}
+
  actualizarAsistenciaAlumno(cursoId: string, dto: Object): Observable<any> {
     // Si ya usas un interceptor de Auth, no hace falta headers extra aquí.
 
