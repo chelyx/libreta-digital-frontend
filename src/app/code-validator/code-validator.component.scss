@@ -119,4 +119,15 @@
     gap: 8px;
     padding: 6px 0;
   }
+.actions {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2000;
+}
+
+.validation-container {
+  padding-bottom: 120px; // evita que tape contenido
+}
+
 }
