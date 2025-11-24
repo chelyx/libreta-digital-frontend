@@ -56,7 +56,9 @@ export class ExamenWizardComponent implements OnInit {
     let notasIds = this.wizard.notas.map(n => n.id)
     this.apiService.registrarBFA(notasIds).subscribe({
       next: () => {
-        this.snackBar.open('Datos enviados a BFA correctamente.');
+        this.snackBar.open('Datos enviados a BFA correctamente.', 'Cerrar', {
+            duration: 3000
+          });
         this.wizard.setStep(0);
         this.currentStep = 0;
         this.selectedCourse = {} as Curso;
