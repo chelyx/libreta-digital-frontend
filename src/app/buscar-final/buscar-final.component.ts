@@ -1,88 +1,49 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/core/service/api.service';
 
 interface Final {
-id: string;
-materia: string;
-codigoCurso: string;
-fecha: Date;
-hora: string;
-aula: string;
-cantidadAlumnos: number;
+  id: string;
+  materia: string;
+  codigoCurso: string;
+  fecha: Date;
+  hora: string;
+  aula: string;
+  cantidadAlumnos: number;
 }
 
 interface AlumnoNota {
-auth0Id: string;
-nombre: string;
-email: string;
-nota?: number | null;
-ausente: boolean;
+  auth0Id: string;
+  nombre: string;
+  email: string;
+  nota?: number | null;
+  ausente: boolean;
 }
 
 @Component({
-selector: 'app-buscar-final',
-templateUrl: './buscar-final.component.html',
-styleUrls: ['./buscar-final.component.scss']
+  selector: 'app-buscar-final',
+  templateUrl: './buscar-final.component.html',
+  styleUrls: ['./buscar-final.component.scss']
 })
 export class BuscarFinalComponent implements OnInit {
 
-fechaSeleccionada: Date | null = null;
-finales: Final[] = [];
-finalesFiltrados: Final[] = [];
-finalSeleccionado: Final | null = null;
-alumnos: AlumnoNota[] = [];
-saving = false;
+  fechaSeleccionada: Date | null = null;
+  finales: Final[] = [];
+  finalesFiltrados: Final[] = [];
+  finalSeleccionado: Final | null = null;
+  alumnos: AlumnoNota[] = [];
+  saving = false;
 
-// --------- DATOS DUMMY DE FINALES ----------
-finalesEjemplo: Final[] = [
-{
-id: 'f1',
-materia: 'Matemática',
-codigoCurso: 'MAT-101',
-// año, mes (0-based), día  -> febrero = 1
-fecha: new Date(2025, 1, 15),
-      hora: '09:00',
-      aula: 'Aula 301',
-      cantidadAlumnos: 25
-    },
-    {
-      id: 'f2',
-      materia: 'Física',
-      codigoCurso: 'FIS-202',
-      fecha: new Date(2025, 1, 15),
-      hora: '14:00',
-      aula: 'Aula 205',
-      cantidadAlumnos: 30
-    },
-    {
-      id: 'f3',
-      materia: 'Programación',
-      codigoCurso: 'PRO-300',
-      fecha: new Date(2025, 1, 20),
-      hora: '10:00',
-      aula: 'Lab 1',
-      cantidadAlumnos: 20
-    },
-    {
-      id: 'f4',
-      materia: 'Historia',
-      codigoCurso: 'HIS-150',
-      fecha: new Date(2025, 1, 22),
-      hora: '16:00',
-      aula: 'Aula 401',
-      cantidadAlumnos: 28
-    }
-  ];
+  // Cursos devueltos por el backend para la fecha seleccionada
+  cursosPorFecha: any[] = [];
 
-  // --------- DATOS DUMMY DE ALUMNOS ----------
-  alumnosEjemplo: AlumnoNota[] = [
-    { auth0Id: '1', nombre: 'Juan Pérez',        email: 'juan.perez@ejemplo.com',        ausente: false },
-    { auth0Id: '2', nombre: 'María García',      email: 'maria.garcia@ejemplo.com',      ausente: false },
-    { auth0Id: '3', nombre: 'Carlos López',      email: 'carlos.lopez@ejemplo.com',      ausente: false },
-    { auth0Id: '4', nombre: 'Ana Martínez',      email: 'ana.martinez@ejemplo.com',      ausente: false },
-    { auth0Id: '5', nombre: 'Pedro Rodríguez',   email: 'pedro.rodriguez@ejemplo.com',   ausente: false }
-  ];
+  // Por ahora vacíos, ya no usamos dummy en esta versión
+  finalesEjemplo: Final[] = [];
+  alumnosEjemplo: AlumnoNota[] = [];
+
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
+    // Podés dejar los dummy para pruebas iniciales si querés
     this.finales = this.finalesEjemplo;
   }
 
@@ -93,30 +54,84 @@ fecha: new Date(2025, 1, 15),
       this.finalesFiltrados = [];
       this.finalSeleccionado = null;
       this.alumnos = [];
+      this.cursosPorFecha = [];
       return;
     }
 
-    const fBusq = this.fechaSeleccionada;
+    // Formatear la fecha seleccionada a dd/MM/yyyy
+    const d = this.fechaSeleccionada;
+    const dia = d.getDate().toString().padStart(2, '0');
+    const mes = (d.getMonth() + 1).toString().padStart(2, '0');
+    const anio = d.getFullYear();
+    const fechaFormateada = `${dia}/${mes}/${anio}`; // dd/MM/yyyy
 
-    this.finalesFiltrados = this.finales.filter(f => {
-      const d = f.fecha;
-      return (
-        d.getFullYear() === fBusq.getFullYear() &&
-        d.getMonth() === fBusq.getMonth() &&
-        d.getDate() === fBusq.getDate()
-      );
-    });
-
+    // Limpiar estado actual
+    this.finalesFiltrados = [];
     this.finalSeleccionado = null;
     this.alumnos = [];
+    this.cursosPorFecha = [];
+
+    // Llamar al backend usando ApiService.getCursoByFecha
+    this.apiService.getCursoByFecha(fechaFormateada).subscribe({
+      next: (cursos: any[]) => {
+        // Guardamos los cursos completos para luego obtener los alumnos reales
+        this.cursosPorFecha = cursos || [];
+
+        // Mapear la respuesta a la interfaz Final usada por el componente
+        this.finalesFiltrados = this.cursosPorFecha.map(curso =>
+          this.mapCursoToFinal(curso)
+        );
+      },
+      error: (err) => {
+        console.error('Error al obtener cursos por fecha', err);
+        this.finalesFiltrados = [];
+        this.cursosPorFecha = [];
+      }
+    });
+  }
+
+  // Mapea el objeto curso recibido del backend a la interfaz Final
+  private mapCursoToFinal(curso: any): Final {
+    return {
+      id: curso.id || curso.cursoId || '',
+      materia: curso.nombre || curso.materia || curso.nombreCurso || 'Sin nombre',
+      codigoCurso: curso.codigo || curso.codigoCurso || '',
+      fecha: curso.fecha ? new Date(curso.fecha) : (this.fechaSeleccionada ?? new Date()),
+      hora: curso.hora || '',
+      aula: curso.aula || '',
+      cantidadAlumnos: curso.cantidadAlumnos ??
+        (Array.isArray(curso.alumnos) ? curso.alumnos.length : 0)
+    };
   }
 
   // ---------- SELECCIONAR UN FINAL ----------
   // llamado desde (click)="seleccionarFinal(final)" en la card
   seleccionarFinal(final: Final): void {
     this.finalSeleccionado = final;
-    // clonamos el array de ejemplo para no mutarlo
-    this.alumnos = JSON.parse(JSON.stringify(this.alumnosEjemplo));
+
+    // Buscar el curso real correspondiente al final seleccionado
+    const cursoSeleccionado = this.cursosPorFecha.find((curso: any) =>
+      (curso.id || curso.cursoId || '') === final.id
+    );
+
+    if (cursoSeleccionado && Array.isArray(cursoSeleccionado.alumnos)) {
+      // Mapear alumnos reales del curso a la interfaz AlumnoNota
+      this.alumnos = cursoSeleccionado.alumnos.map((alumno: any) => ({
+        auth0Id: alumno.auth0Id || alumno.id || alumno.alumnoId || '',
+        nombre:
+          alumno.nombre ||
+          alumno.nombreCompleto ||
+          `${alumno.apellido ?? ''} ${alumno.nombre ?? ''}`.trim() ||
+          'Sin nombre',
+        email: alumno.email || alumno.correo || '',
+        nota: null,
+        ausente: false
+      }));
+    } else {
+      // Fallback para que la UI no quede vacía si algo raro viene del back
+      console.warn('Curso sin lista de alumnos, usando alumnosEjemplo como fallback');
+      this.alumnos = JSON.parse(JSON.stringify(this.alumnosEjemplo));
+    }
   }
 
   // ---------- MARCAR AUSENTE / PRESENTE ----------
@@ -147,19 +162,27 @@ fecha: new Date(2025, 1, 15),
 
     this.saving = true;
 
-    // Acá iría la llamada real al backend
-    console.log('Guardando notas del final:', this.finalSeleccionado.id, {
-      notas: this.alumnos.map(a => ({
-        auth0Id: a.auth0Id,
-        nota: a.ausente ? null : a.nota,
-        ausente: a.ausente
-      }))
-    });
+    const notasPayload = this.alumnos.map(a => ({
+      alumnoId: a.auth0Id,
+      descripcion: '',
+      valor: a.ausente ? null : (a.nota ?? null),
+      ausente: a.ausente
+    })) as any;
 
-    setTimeout(() => {
-      this.saving = false;
-      alert('Notas guardadas correctamente (dummy)');
-    }, 1000);
+    this.apiService.saveNotas(
+      this.finalSeleccionado.id as any, // el id del curso/final
+      notasPayload
+    ).subscribe({
+      next: () => {
+        this.saving = false;
+        alert('Notas guardadas correctamente');
+      },
+      error: (err) => {
+        console.error('Error al guardar las notas', err);
+        this.saving = false;
+        alert('Ocurrió un error al guardar las notas');
+      }
+    });
   }
 
   limpiarFecha(): void {
@@ -167,6 +190,7 @@ fecha: new Date(2025, 1, 15),
     this.finalesFiltrados = [];
     this.finalSeleccionado = null;
     this.alumnos = [];
+    this.cursosPorFecha = [];
   }
 
   trackByAuth0Id(index: number, alumno: AlumnoNota): string {
