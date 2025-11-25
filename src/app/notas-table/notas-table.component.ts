@@ -61,7 +61,7 @@ constructor(
   }
 
   // ============================================================
-  // VALIDACIÓN — NO PERMITE ESCRIBIR NADA FUERA DE 1–10
+  // VALIDACIÓN FINAL: NO PERMITE ESCRIBIR MÁS QUE 1–10
   // ============================================================
 
   soloNumeros(event: KeyboardEvent) {
@@ -71,24 +71,34 @@ constructor(
       'Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'
     ];
 
+    // permitir teclas de control
     if (teclasPermitidas.includes(tecla)) return;
 
+    // permitir solo dígitos del 1 al 9
     if (!/^[0-9]$/.test(tecla)) {
       event.preventDefault();
+      return;
     }
   }
 
   validarRango(event: any, alumno: any) {
     const valor = event.target.value;
 
-    if (valor === '' || valor === null) {
+    // bloquear pegado o caracteres no numéricos
+    if (!/^\d*$/.test(valor)) {
+      event.target.value = alumno.valor ?? '';
+      return;
+    }
+
+    // permitir borrar
+    if (valor === '') {
       alumno.valor = null;
       return;
     }
 
     const num = Number(valor);
 
-    // ❌ si no está entre 1 y 10 → NO SE ESCRIBE
+    // bloquear menor a 1 y mayor a 10
     if (num < 1 || num > 10) {
       event.target.value = alumno.valor ?? '';
       return;
