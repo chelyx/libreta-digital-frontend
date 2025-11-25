@@ -9,6 +9,7 @@
       <th>Nota</th>
     </tr>
     </thead>
+
     <tbody>
     <tr *ngFor="let alumno of alumnosPresentes">
       <td class="nombre">{{ alumno.alumnoNombre }}</td>
@@ -18,9 +19,10 @@
           <input
             matInput
             [(ngModel)]="alumno.valor"
+            placeholder="Ingrese nota (1–10)"
             [disabled]="alumno.valor === 'AUS'"
-            placeholder="Ingrese nota"
-            (input)="validarNota(alumno)"
+            (keydown)="soloNumeros($event)"
+            (input)="validarRango($event, alumno)"
           />
         </mat-form-field>
       </td>
@@ -29,7 +31,7 @@
   </table>
 
   <div class="acciones">
-    <button mat-raised-button (click)="guardarNotas()">
+    <button mat-raised-button color="primary" (click)="guardarNotas()">
       Guardar notas
     </button>
   </div>

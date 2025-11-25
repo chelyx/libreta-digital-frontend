@@ -8,9 +8,10 @@ import { WizardService } from 'src/core/service/wizard.service';
 @Component({
 selector: 'app-notas-table',
 templateUrl: './notas-table.component.html',
-styleUrls: ['./notas-table.component.scss'],
+styleUrls: ['./notas-table.component.scss']
 })
 export class NotasTableComponent implements OnInit {
+
 @Input() curso: Curso = {} as Curso;
 @Output() completed = new EventEmitter<NotaResponse[]>();
 
@@ -32,85 +33,92 @@ constructor(
 
   cargarAlumnosConNotas() {
     if (this.wizard.notas.length > 0) {
-      this.alumnosPresentes = this.wizard.notas.map((nota) => ({
+      this.alumnosPresentes = this.wizard.notas.map(nota => ({
         alumnoId: nota.alumnoId,
         alumnoNombre:
-          this.curso.alumnos.find((a) => a.auth0Id === nota.alumnoId)?.nombre ||
-          '',
-        valor: nota.valor === null ? 'AUS' : nota.valor,
+          this.curso.alumnos.find(a => a.auth0Id === nota.alumnoId)?.nombre || '',
+        valor: nota.valor === null ? 'AUS' : nota.valor
       }));
       return;
-    } else {
-      this.apiService.getAsistenciaPorCurso(this.curso.id).subscribe({
-        next: (asistencias) => {
-          this.alumnosPresentes = asistencias.map((a) => ({
-            alumnoId: a.auth0Id,
-            alumnoNombre: a.nombre,
-            valor: a.presente ? null : 'AUS',
-          }));
+    }
 
-          this.alumnosPresentes.sort((a, b) => {
-            if (a.valor === 'AUS' && b.valor !== 'AUS') return 1;
-            if (b.valor === 'AUS' && a.valor !== 'AUS') return -1;
+    this.apiService.getAsistenciaPorCurso(this.curso.id).subscribe({
+      next: asistencias => {
+        this.alumnosPresentes = asistencias.map(a => ({
+          alumnoId: a.auth0Id,
+          alumnoNombre: a.nombre,
+          valor: a.presente ? null : 'AUS'
+        }));
 
-            return a.alumnoNombre.localeCompare(b.alumnoNombre);
-          });
-        },
-        error: (err) => {
-          console.error('Error al cargar notas', err);
-        },
-      });
+        this.alumnosPresentes.sort((a, b) => {
+          if (a.valor === 'AUS' && b.valor !== 'AUS') return 1;
+          if (b.valor === 'AUS' && a.valor !== 'AUS') return -1;
+          return a.alumnoNombre.localeCompare(b.alumnoNombre);
+        });
+      },
+      error: err => console.error('Error cargando notas', err)
+    });
+  }
+
+  // ============================================================
+  // VALIDACIÓN — NO PERMITE ESCRIBIR NADA FUERA DE 1–10
+  // ============================================================
+
+  soloNumeros(event: KeyboardEvent) {
+    const tecla = event.key;
+
+    const teclasPermitidas = [
+      'Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'
+    ];
+
+    if (teclasPermitidas.includes(tecla)) return;
+
+    if (!/^[0-9]$/.test(tecla)) {
+      event.preventDefault();
     }
   }
 
-  // 🔥 VALIDACIÓN DE NOTA 1-10
-  validarNota(alumno: any) {
-    let v = alumno.valor;
+  validarRango(event: any, alumno: any) {
+    const valor = event.target.value;
 
-    if (v === null || v === '' || v === undefined) {
+    if (valor === '' || valor === null) {
       alumno.valor = null;
       return;
     }
 
-    // Si escriben letras o símbolos, lo borro
-    if (isNaN(Number(v))) {
-      alumno.valor = null;
+    const num = Number(valor);
+
+    // ❌ si no está entre 1 y 10 → NO SE ESCRIBE
+    if (num < 1 || num > 10) {
+      event.target.value = alumno.valor ?? '';
       return;
     }
 
-    v = Number(v);
-
-    if (v < 1) alumno.valor = 1;
-    else if (v > 10) alumno.valor = 10;
-    else alumno.valor = v;
+    alumno.valor = num;
   }
+
+  // ============================================================
 
   guardarNotas() {
-    if (!this.curso) {
-      console.error('No hay curso seleccionado');
-      return;
-    }
+    if (!this.curso) return;
 
-    let notas: NotaDto[] = this.alumnosPresentes.map((a) => ({
+    const notas: NotaDto[] = this.alumnosPresentes.map(a => ({
       alumnoId: a.alumnoId,
       valor: a.valor === 'AUS' ? null : a.valor,
-      descripcion: 'Final',
+      descripcion: 'Final'
     }));
 
     this.apiService.saveNotas(this.curso.id, notas).subscribe({
       next: (res: NotaResponse[]) => {
-        console.log('Notas guardadas correctamente', res);
         this.snackBar.open('✓ Notas cargadas exitosamente', 'Cerrar', {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
-          panelClass: ['success-snackbar'],
+          panelClass: ['success-snackbar']
         });
         this.completed.emit(res);
       },
-      error: (err) => {
-        console.error('Error guardando notas', err);
-      },
+      error: err => console.error('Error guardando notas', err)
     });
   }
 }
