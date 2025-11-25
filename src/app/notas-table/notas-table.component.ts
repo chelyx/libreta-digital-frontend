@@ -61,21 +61,37 @@ constructor(
   }
 
   // ============================================================
-  // VALIDACIÓN FINAL: NO PERMITE ESCRIBIR MÁS QUE 1–10
+  // VALIDACIÓN FINAL → BLOQUEA TODO LO FUERA DE 1–10
   // ============================================================
 
-  soloNumeros(event: KeyboardEvent) {
+  soloNumeros(event: KeyboardEvent, alumno?: any) {
     const tecla = event.key;
 
-    const teclasPermitidas = [
-      'Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'
-    ];
-
-    // permitir teclas de control
+    const teclasPermitidas = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'];
     if (teclasPermitidas.includes(tecla)) return;
 
-    // permitir solo dígitos del 1 al 9
+    // Solo dígitos
     if (!/^[0-9]$/.test(tecla)) {
+      event.preventDefault();
+      return;
+    }
+
+    const input = event.target as HTMLInputElement;
+    const actual = input.value ?? "";
+
+    // Si está vacío → solo permitir 1–9
+    if (actual === "") {
+      if (tecla === '0') {
+        event.preventDefault();
+        return;
+      }
+      return;
+    }
+
+    // Si ya hay un dígito → bloquear si el futuro número es >10
+    const nuevoValor = Number(actual + tecla);
+
+    if (nuevoValor < 1 || nuevoValor > 10) {
       event.preventDefault();
       return;
     }
@@ -84,13 +100,12 @@ constructor(
   validarRango(event: any, alumno: any) {
     const valor = event.target.value;
 
-    // bloquear pegado o caracteres no numéricos
+    // bloquear pegar: solo dígitos
     if (!/^\d*$/.test(valor)) {
       event.target.value = alumno.valor ?? '';
       return;
     }
 
-    // permitir borrar
     if (valor === '') {
       alumno.valor = null;
       return;
@@ -98,7 +113,7 @@ constructor(
 
     const num = Number(valor);
 
-    // bloquear menor a 1 y mayor a 10
+    // bloquear menor a 1 o mayor a 10 al pegar
     if (num < 1 || num > 10) {
       event.target.value = alumno.valor ?? '';
       return;

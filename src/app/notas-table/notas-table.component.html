@@ -21,7 +21,7 @@
             [(ngModel)]="alumno.valor"
             placeholder="Ingrese nota (1–10)"
             [disabled]="alumno.valor === 'AUS'"
-            (keydown)="soloNumeros($event)"
+            (keydown)="soloNumeros($event, alumno)"
             (input)="validarRango($event, alumno)"
           />
         </mat-form-field>
