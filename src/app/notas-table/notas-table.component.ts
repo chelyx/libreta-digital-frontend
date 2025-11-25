@@ -12,87 +12,135 @@ styleUrls: ['./notas-table.component.scss']
 })
 export class NotasTableComponent implements OnInit {
 @Input() curso: Curso = {} as Curso;
- @Output() completed = new EventEmitter<NotaResponse[]>();
-// --- existentes (no tocar) ---
-// cursoSeleccionado: Curso | null = null;
-alumnosPresentes: { alumnoId: string; alumnoNombre: string; valor: number | 'AUS' | null }[] = [];
+@Output() completed = new EventEmitter<NotaResponse[]>();
 
-constructor(private apiService: ApiService, private snackBar: MatSnackBar, private wizard: WizardService) {}
+alumnosPresentes: {
+alumnoId: string;
+alumnoNombre: string;
+valor: number | 'AUS' | null;
+}[] = [];
 
-ngOnInit(): void {
-  this. cargarAlumnosConNotas();
-}
+constructor(
+    private apiService: ApiService,
+    private snackBar: MatSnackBar,
+    private wizard: WizardService
+  ) {}
+
+  ngOnInit(): void {
+    this.cargarAlumnosConNotas();
+  }
+
   cargarAlumnosConNotas() {
     if (this.wizard.notas.length > 0) {
-      // si el wizard ya tiene notas guardadas, las usamos
       this.alumnosPresentes = this.wizard.notas.map(nota => ({
         alumnoId: nota.alumnoId,
-        alumnoNombre: this.curso.alumnos.find(a => a.auth0Id === nota.alumnoId)?.nombre || '',
+        alumnoNombre:
+          this.curso.alumnos.find(a => a.auth0Id === nota.alumnoId)?.nombre || '',
         valor: nota.valor === null ? 'AUS' : nota.valor
       }));
       return;
-    } else {
-      this.apiService.getAsistenciaPorCurso(this.curso.id).subscribe({
-        next: (asistencias) => {
-          this.alumnosPresentes = asistencias.map(a => ({
-            alumnoId: a.auth0Id,
-            alumnoNombre: a.nombre,
-            valor: a.presente ? null : 'AUS'
-          })
-         );
-         this.alumnosPresentes.sort((a, b) => {
-            // Primero AUS al final
-            if (a.valor === 'AUS' && b.valor !== 'AUS') return 1;
-            if (b.valor === 'AUS' && a.valor !== 'AUS') return -1;
-
-            // Después orden alfabético
-            return a.alumnoNombre.localeCompare(b.alumnoNombre);
-          });
-        },
-        error: (err) => {
-          console.error('Error al cargar notas', err);
-        }
-      });
     }
 
+    this.apiService.getAsistenciaPorCurso(this.curso.id).subscribe({
+      next: asistencias => {
+        this.alumnosPresentes = asistencias.map(a => ({
+          alumnoId: a.auth0Id,
+          alumnoNombre: a.nombre,
+          valor: a.presente ? null : 'AUS'
+        }));
+
+        this.alumnosPresentes.sort((a, b) => {
+          if (a.valor === 'AUS' && b.valor !== 'AUS') return 1;
+          if (b.valor === 'AUS' && a.valor !== 'AUS') return -1;
+          return a.alumnoNombre.localeCompare(b.alumnoNombre);
+        });
+      },
+      error: err => {
+        console.error('Error al cargar notas', err);
+      }
+    });
   }
+
+  // -----------------------------
+  // VALIDACIÓN
+  // -----------------------------
+
+  private esNotaValida(valor: any): boolean {
+    if (valor === null || valor === undefined || valor === '' || valor === 'AUS') {
+      return true;
+    }
+    const num = Number(valor);
+    return Number.isFinite(num) && num >= 1 && num <= 10;
+  }
+
+  onNotaChange(alumno: any, nuevoValor: any): void {
+    if (nuevoValor === '' || nuevoValor === null || nuevoValor === undefined) {
+      alumno.valor = null;
+      return;
+    }
+
+    const num = Number(nuevoValor);
+
+    if (!this.esNotaValida(num)) {
+      this.snackBar.open('La nota debe ser un número entre 1 y 10', 'Cerrar', {
+        duration: 2500,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['error-snackbar']
+      });
+      alumno.valor = null;
+    } else {
+      alumno.valor = num;
+    }
+  }
+
+  // -----------------------------
+  // GUARDAR
+  // -----------------------------
+
   guardarNotas() {
-    if(!this.curso) {
+    if (!this.curso) {
       console.error('No hay curso seleccionado');
       return;
     }
-    let notas: NotaDto[] = this.alumnosPresentes
-      .map(a => ({
-        alumnoId: a.alumnoId,
-        valor: a.valor === 'AUS' ? null : a.valor,
-        descripcion: 'Final',
-      }));
 
-    this.apiService.saveNotas( this.curso.id, notas)
-      .subscribe({
-        next: (res: NotaResponse[]) => {
-          console.log('Notas guardadas correctamente', res);
-          this.snackBar.open('✓ Notas cargadas exitosamente', 'Cerrar', {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            panelClass: ['success-snackbar']
-          });
-          this.completed.emit(res);
-        },
-        error: (err) => {
-          console.error('Error guardando notas', err);
+    const invalidos = this.alumnosPresentes.filter(
+      a => !this.esNotaValida(a.valor)
+    );
+
+    if (invalidos.length > 0) {
+      this.snackBar.open(
+        'Revisá las notas: deben ser números entre 1 y 10',
+        'Cerrar',
+        {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar']
         }
-      });
+      );
+      return;
+    }
+
+    const notas: NotaDto[] = this.alumnosPresentes.map(a => ({
+      alumnoId: a.alumnoId,
+      valor: a.valor === 'AUS' ? null : (a.valor as number | null),
+      descripcion: 'Final'
+    }));
+
+    this.apiService.saveNotas(this.curso.id, notas).subscribe({
+      next: (res: NotaResponse[]) => {
+        this.snackBar.open('✓ Notas cargadas exitosamente', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar']
+        });
+        this.completed.emit(res);
+      },
+      error: err => {
+        console.error('Error guardando notas', err);
+      }
+    });
   }
-
-  //no te importa si hay cambios o no, es la primer guardada de notas
-
-// hayCambios(): boolean {
-//   return this.alumnosConNota.some(n => n.valor !== null && n.valor !== undefined && n.valor !== 0);
-// }
-
-// getCambiosCount(): number {
-//   return this.alumnosConNota.filter(n => n.valor !== null && n.valor !== undefined && n.valor !== 0).length;
-// }
 }
