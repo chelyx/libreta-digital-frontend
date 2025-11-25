@@ -9,7 +9,6 @@
       <th>Nota</th>
     </tr>
     </thead>
-
     <tbody>
     <tr *ngFor="let alumno of alumnosPresentes">
       <td class="nombre">{{ alumno.alumnoNombre }}</td>
@@ -18,14 +17,10 @@
         <mat-form-field appearance="outline" class="nota-input">
           <input
             matInput
-            type="number"
-            min="1"
-            max="10"
-            step="1"
-            [disabled]="alumno.valor === 'AUS'"
             [(ngModel)]="alumno.valor"
-            (ngModelChange)="onNotaChange(alumno, $event)"
-            placeholder="Ingrese nota (1 a 10)"
+            [disabled]="alumno.valor === 'AUS'"
+            placeholder="Ingrese nota"
+            (input)="validarNota(alumno)"
           />
         </mat-form-field>
       </td>
