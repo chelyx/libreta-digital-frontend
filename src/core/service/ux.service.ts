@@ -71,7 +71,7 @@ constructor() {}
       case "BEDEL":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: true },
-          { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA2, main: false },
+          // { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA2, main: false },
           { label: "Gestión de Finales", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false },  // <-- SOLO PROFES/BEDELES
           { label: "Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA2, main: false },
         ]
