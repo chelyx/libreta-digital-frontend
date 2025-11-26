@@ -168,36 +168,38 @@
 .estado-chip-container {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
-
-  mat-chip {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-weight: 600;
-
-    &.chip-regular {
-      background-color: #e8f5e9;
-      color: #2e7d32;
-    }
-
-    &.chip-alerta {
-      background-color: #fff3e0;
-      color: #e65100;
-    }
-
-    &.chip-critico {
-      background-color: #ffebee;
-      color: #c62828;
-    }
-
-    mat-icon {
-      font-size: 1rem;
-      width: 1rem;
-      height: 1rem;
-    }
-  }
 }
+.estado-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.chip-regular {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.chip-alerta {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.chip-critico {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.estado-chip mat-icon {
+  font-size: 19px;
+  width: 19px;
+  height: 19px;
+}
+
 
 .detalle-asistencias {
   margin-top: 1.5rem;

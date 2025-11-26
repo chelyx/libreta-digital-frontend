@@ -64,12 +64,10 @@
         </div>
 
         <div class="estado-chip-container">
-          <mat-chip-set>
-            <mat-chip [class]="'chip-' + materia.estado" highlighted>
-              <mat-icon>{{ materia.estado === 'regular' ? 'check' : 'error' }}</mat-icon>
-              {{ materia.estado === 'regular' ? 'Regular' : 'Crítico' }}
-            </mat-chip>
-          </mat-chip-set>
+          <div class="estado-chip" [ngClass]="'chip-' + materia.estado">
+            <mat-icon>{{ materia.estado === 'regular' ? 'check' : 'error' }}</mat-icon>
+            <span>{{ materia.estado === 'regular' ? 'Regular' : 'Crítico' }}</span>
+          </div>
         </div>
 
         <div class="detalle-asistencias" *ngIf="materiaExpandida === materia.nombre">
