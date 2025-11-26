@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UUID } from 'crypto';
 import { ApiService } from 'src/core/service/api.service';
 
 interface Final {
@@ -175,5 +176,10 @@ export class BuscarFinalComponent implements OnInit {
 
   trackByAuth0Id(index: number, alumno: AlumnoNota): string {
     return alumno.auth0Id;
+  }
+
+  descargarActa(filename: string) {
+    const url = this.apiService.getActa(filename);
+    window.open(url, '_blank'); // abre la imagen/PDF en otra pestaña
   }
 }

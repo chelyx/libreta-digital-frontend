@@ -36,6 +36,7 @@
 
     <app-acta-uploader
       *ngIf="currentStep === 2"
+       [curso]="selectedCourse"
       (completed)="onActaUploaded($event)">
     </app-acta-uploader>
 

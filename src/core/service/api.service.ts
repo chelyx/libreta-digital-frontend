@@ -128,10 +128,13 @@ getCursoByFecha(fecha: string) {
     return this.getProtegido(`api/cursos/${examenId}/estado`);
   }
 
-  uploadActa(formData: FormData): Observable<string> {
-    return this.postProtegido('api/notas/upload-acta', formData);
+  uploadActa(formData: FormData, cursoId: UUID): Observable<string> {
+    return this.postProtegido(`api/notas/${cursoId}/upload-acta`, formData);
   }
 
+  getActa(cursoId: string): string{
+    return `${this.apiUrl}/actas/${cursoId}.jpg`
+  }
   getMisAsistencias(): Observable<AsistenciaResponse[]> {
     return this.getProtegido('api/asistencias/me');
   }

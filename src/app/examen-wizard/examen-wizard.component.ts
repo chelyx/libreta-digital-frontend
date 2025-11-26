@@ -60,7 +60,7 @@ export class ExamenWizardComponent implements OnInit {
             duration: 3000
           });
         this.wizard.setStep(0);
-        this.currentStep = 0;
+        //this.currentStep = 0;
         this.selectedCourse = {} as Curso;
       },
       error: (err) => {

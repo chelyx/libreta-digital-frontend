@@ -81,7 +81,13 @@
           <mat-icon>event</mat-icon>
           {{ finalSeleccionado.fecha | date:'dd/MM/yyyy' }}
         </span>
-
+        <button 
+          mat-stroked-button 
+          color="primary" 
+          *ngIf="finalSeleccionado.id"
+          (click)="descargarActa(finalSeleccionado.id)">
+          <mat-icon>download</mat-icon>&nbsp; Descargar Acta
+        </button>
       </div>
     </div>
   </div>

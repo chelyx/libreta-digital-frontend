@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Curso } from 'src/core/models/curso';
 import { ApiService } from 'src/core/service/api.service';
 
 @Component({
@@ -9,6 +10,7 @@ import { ApiService } from 'src/core/service/api.service';
 })
 export class ActaUploaderComponent {
 
+  @Input() curso: Curso = {} as Curso;
   @Output() completed = new EventEmitter<string>();
 
   @ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
@@ -107,7 +109,7 @@ export class ActaUploaderComponent {
 
     // this.http.post('http://localhost:8080/uploadActa', formData, { responseType: 'text' })
     //   .subscribe(url => this.completed.emit(url));
-    this.apiService.uploadActa(formData).subscribe(res => {
+    this.apiService.uploadActa(formData,this.curso.id).subscribe(res => {
  console.log(res)
  this.snackBar.open('Imagen cargada correctamente', 'Cerrar', {
             duration: 3000
