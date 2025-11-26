@@ -39,6 +39,10 @@
 }
 
 .navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
   background-color: #a82a19;
   color: white;
   position: sticky;
@@ -47,7 +51,7 @@
   flex-shrink: 0;
 
   .app-title {
-    flex: 1;
+
     text-align: center;
     font-weight: 600;
     font-size: 1.25rem;
@@ -152,113 +156,193 @@
   }
 }
 
-.quick-actions {
-  text-align: center;
-
-  .quick-actions-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin: 0 0 1rem 0;
-  }
-
-  button {
-    margin: 0.5rem;
-    min-width: 200px;
-
-    mat-icon {
-      margin-right: 0.5rem;
-    }
-  }
+.spacer {
+  flex: 1 1 auto;
 }
 
-.quick-actions-grid {
+.user-info {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 0px 10px;
+  height: 100%;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  font-size: 15px;
 }
 
-// Responsive
-@media (max-width: 768px) {
-  .welcome-section {
-    .logo {
-      width: 80px;
-    }
+.user-info:hover {
+  background: rgba(0,0,0,0.07);
+}
 
-    .welcome-title {
-      font-size: 1.5rem;
-    }
+.user-info .arrow {
+  font-size: 20px;
+}
 
-    .welcome-subtitle {
-      font-size: 1rem;
-    }
-  }
 
-  .cards-container {
-    grid-template-columns: 1fr;
-  }
-
-  .quick-actions button {
-    min-width: 100%;
-    margin: 0.25rem 0;
-  }
-// Quick Actions Section
+/* QUICK ACTIONS */
 .quick-actions-section {
-  width: 100%;
-  max-width: 1200px;
-  margin: 2rem auto 0;
-  padding: 2rem;
-  background: #f8f8f8;
-  border-radius: 12px;
-
-  .section-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin: 0 0 1.5rem 0;
-    text-align: center;
-  }
-
-  .quick-actions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-
-    .quick-action-button {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 1rem 1.5rem;
-      border: 2px solid #e0e0e0;
-      background: white;
-      border-radius: 8px;
-      color: #333;
-      font-size: 1rem;
-      transition: all 0.3s;
-
-      mat-icon {
-        margin-right: 0.75rem;
-        color: #a82a19;
-      }
-
-      &:hover {
-        border-color: #a82a19;
-        background-color: rgba(168, 42, 25, 0.05);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(168, 42, 25, 0.1);
-      }
-    }
-  }
+  margin-top: 40px;
+  margin-bottom: 40px;
 }
 
-// Responsive
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* FLEX layout */
+.quick-actions-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Tarjetas pequeñas estilo Material */
+.quick-action-card {
+  width: 200px;
+  height: 150px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Hover Material */
+.quick-action-card:hover {
+  border-color: #a82a19;
+  box-shadow: 0 6px 14px rgba(168, 42, 25, 0.15);
+  transform: translateY(-4px);
+}
+
+/* Icono */
+.quick-action-card mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  color: #a82a19;
+  margin-bottom: 0.75rem;
+}
+
+/* Título */
+.qa-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+
+// .quick-actions {
+//   text-align: center;
+
+//   .quick-actions-title {
+//     font-size: 1.125rem;
+//     font-weight: 600;
+//     color: #1a1a1a;
+//     margin: 0 0 1rem 0;
+//   }
+
+//   button {
+//     margin: 0.5rem;
+//     min-width: 200px;
+
+//     mat-icon {
+//       margin-right: 0.5rem;
+//     }
+//   }
+// }
+
+// .quick-actions-grid {
+//   display: flex;
+//   gap: 0.5rem;
+// }
+
+/* ======================================================
+   RESPONSIVE
+   ====================================================== */
+
 @media (max-width: 768px) {
-  .quick-actions-section {
-    padding: 1rem;
+  .quick-actions-flex {
+    justify-content: center;
+  }
 
-    .quick-actions-grid {
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-    }
+  .quick-action-card {
+    width: 100%;        /* Ocupa todo el ancho disponible */
+    height: auto;
+    padding: 1rem 0.75rem;
+    border-radius: 12px;
+  }
+
+  .quick-action-card mat-icon {
+    font-size: 34px;
+    margin-bottom: 0.5rem;
+  }
+
+  .qa-title {
+    font-size: 1rem;
   }
 }
+
+
+
+.welcome-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  img {
+    width: 100px;
+  }
+}
+
+.welcome-card h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.welcome-card p {
+  margin: 0;
+  color: #666;
+}
+
+.avatar {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+
+app-code-generator,
+app-mis-materias,
+app-toma-de-asistencia,
+app-asistencia-table,
+app-historial-notas,
+app-examen-wizard,
+app-historial-asistencia,
+app-asistencia,
+app-buscar-final {
+  width: 80%
+}
+
+
+mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

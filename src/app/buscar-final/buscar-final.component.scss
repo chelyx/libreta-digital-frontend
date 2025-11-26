@@ -2,25 +2,25 @@
 .titulo-banner {
   //background: linear-gradient(135deg, #a82a19 0%, #d32f2f 100%);
   color: black;
-  padding: 2rem;
+  // padding: 2rem;
   border-radius: 12px;
   margin-bottom: 2rem;
   text-align: start;
-  box-shadow: 0 4px 12px rgba(168, 42, 25, 0.2);
+  // box-shadow: 0 4px 12px rgba(168, 42, 25, 0.2);
 }
 
 .titulo-banner-text {
   font-size: 2rem;
   font-weight: 600;
-  margin: 0;
+  // margin: 0;
 }
 
 /* ===== PANEL DE BÚSQUEDA ===== */
 .busqueda-panel {
-  background-color: #fafafa;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  // background-color: #fafafa;
+  // border-radius: 12px;
+  // padding: 2rem;
+  // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   margin-bottom: 2rem;
 }
 
@@ -55,12 +55,6 @@
   max-width: 400px;
 }
 
-.panel-subtext {
-  font-size: 0.875rem;
-  color: #666;
-  margin-top: 0.5rem;
-  margin-bottom: 0;
-}
 
 /* ===== GRID DE FINALES ===== */
 .finales-grid {
@@ -405,11 +399,10 @@
   gap: 0.75rem;
   background-color: #e3f2fd;
   border-radius: 10px;
-  padding: 1rem 1.25rem;
+  padding: 0rem 0.25rem;
   color: #0d47a1;
   font-size: 0.95rem;
   line-height: 1.5;
-  margin-top: 1.5rem;
   box-shadow: 0 2px 8px rgba(13, 71, 161, 0.1);
   border-left: 4px solid #1976d2;
 }

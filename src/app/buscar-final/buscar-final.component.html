@@ -4,12 +4,7 @@
 </div>
 
 <!-- Panel de búsqueda por fecha -->
-<div class="busqueda-panel">
-  <div class="panel-header">
-    <div class="panel-number">1</div>
-    <div class="panel-title">Buscar Final por Fecha</div>
-  </div>
-
+<div class="busqueda-panel" *ngIf="!finalSeleccionado">
   <mat-form-field appearance="outline" class="fecha-field">
     <mat-label>Selecciona una fecha</mat-label>
     <input
@@ -32,7 +27,10 @@
     </button>
   </mat-form-field>
 
-  <p class="panel-subtext">Selecciona una fecha para ver los finales programados</p>
+  <div class="info-note" *ngIf="finalesFiltrados.length == 0">
+    <mat-icon>info</mat-icon>
+    <p>Selecciona una fecha para buscar los exámenes finales programados y gestionar las notas de los alumnos.</p>
+  </div>
 </div>
 
 <!-- Lista de finales encontrados -->
@@ -120,7 +118,7 @@
           AUSENTE
         </div>
 
-        <div class="ausente-buttons">
+        <!-- <div class="ausente-buttons">
           <button
             mat-raised-button
             class="btn-presente"
@@ -137,7 +135,7 @@
           >
             Ausente
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -156,11 +154,3 @@
   </div>
 </div>
 
-<div class="info-note" *ngIf="!finalSeleccionado">
-  <svg class="info-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="10"></circle>
-    <line x1="12" y1="16" x2="12" y2="12"></line>
-    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-  </svg>
-  <p>Selecciona una fecha para buscar los exámenes finales programados y gestionar las notas de los alumnos.</p>
-</div>

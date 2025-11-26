@@ -5,10 +5,6 @@
         <mat-icon>{{ link.icon }}</mat-icon>
         <span>{{ link.label }}</span>
       </a>
-      <a mat-list-item (click)="logout(); drawer.close()">
-        <mat-icon>logout</mat-icon>
-        <span>Salir</span>
-      </a>
     </mat-nav-list>
   </mat-drawer>
 
@@ -18,17 +14,42 @@
         <mat-icon>menu</mat-icon>
       </button>
       <span class="app-title"  (click)="navigateToPanel('')">SIRCA</span>
-      <span></span>
+
+      <!-- USUARIO LOGUEADO -->
+      <div class="user-info" [matMenuTriggerFor]="userMenu" *ngIf="usuario">
+        <img
+          class="avatar"
+         [src]="usuario.picture"
+          alt="Usuario"
+        />
+        <span>{{ usuario.nickname }}</span>
+      </div>
+
+      <mat-menu #userMenu="matMenu">
+        <!-- <button mat-menu-item (click)="navigateToPanel('perfil')">
+          <mat-icon>person</mat-icon>
+          <span>Mi Perfil</span>
+        </button> -->
+
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Cerrar sesión</span>
+        </button>
+      </mat-menu>
     </mat-toolbar>
 
     <div class="home-container">
       <!-- DASHBOARD -->
       <div class="dashboard" *ngIf="currentPanel === ''">
-        <div class="welcome-section">
-          <img src="assets/logo.png" alt="Logo SIRCA" class="logo" (click)="navigateToPanel('')">
-          <h1 class="welcome-title">Bienvenido</h1>
-          <p class="welcome-subtitle">Sistema de Gestión Académica</p>
-        </div>
+       <mat-card class="welcome-card">
+         <img  src="assets/utn-logo.png"  />
+
+        <mat-card-content>
+          <h2>Bienvenido, {{ usuario.name }}</h2>
+          <p>Accedé rápidamente a tus módulos</p>
+        </mat-card-content>
+      </mat-card>
+
 
         <!-- MAIN CARDS -->
         <div class="cards-container" *ngIf="mainCards.length > 0">
@@ -41,19 +62,21 @@
         </div>
 
         <!-- QUICK ACTIONS - Todas las opciones del menú -->
-        <div class="quick-actions-section" *ngIf="actions.length > 0">
+        <div class="quick-actions-section" *ngIf="quickActions.length > 0">
           <h3 class="section-title">Acciones Rápidas</h3>
-          <div class="quick-actions-grid">
-            <button
-              mat-stroked-button
-              *ngFor="let action of actions"
-              class="quick-action-button"
-              (click)="navigateToPanel(action.panel)">
+
+          <div class="quick-actions-flex">
+            <div
+              class="quick-action-card"
+              *ngFor="let action of quickActions"
+              (click)="navigateToPanel(action.panel)"
+            >
               <mat-icon>{{ action.icon }}</mat-icon>
-              <span>{{ action.label }}</span>
-            </button>
+              <h4 class="qa-title">{{ action.label }}</h4>
+            </div>
           </div>
         </div>
+
       </div>
 
       <!-- PANELS -->

@@ -62,16 +62,16 @@ constructor() {}
       case "PROFESOR":
         return [
           { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
-          { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
-          { label: "Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA2, main: false },
+          // { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
+          { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA2, main: false },
           { label: "Examenes Finales", icon: "school", panel: PANELES.EXAMEN_WIZARD, main: true },
           { label: "Gestion de Finales", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false }  // <-- SOLO PROFES/BEDELES
         ]
 
       case "BEDEL":
         return [
-          { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: false },
-          { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA_TABLE, main: false },
+          { label: "Toma de Asistencia", icon: "groups", panel: PANELES.ASISTENCIA, main: true },
+          { label: "Historial Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA2, main: false },
           { label: "Gestión de Finales", icon: "search", panel: PANELES.BUSCAR_FINAL, main: false },  // <-- SOLO PROFES/BEDELES
           { label: "Asistencias", icon: "table_chart", panel: PANELES.ASISTENCIA2, main: false },
         ]
@@ -98,7 +98,7 @@ constructor() {}
         return [
           {
             title: "Examenes Finales",
-            description: "Flujo guiado para gestionar finales",
+            description: "Flujo guiado para mesas de final",
             icon: "school",
             panel: PANELES.EXAMEN_WIZARD,
             buttonLabel: "Examenes Finales",

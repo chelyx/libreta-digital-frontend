@@ -31,6 +31,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatMenuModule } from '@angular/material/menu';
 
 // QR Code
 import { QRCodeModule } from 'angularx-qrcode';
@@ -116,6 +117,7 @@ MatPaginatorModule,
 MatSelectModule,
 MatDatepickerModule,
 MatNativeDateModule,
+MatMenuModule,
 MatCheckboxModule,
 MatStepperModule,
 MatProgressBarModule,

@@ -5,6 +5,7 @@ import { ApiService } from 'src/core/service/api.service';
 import { UserService, ROLES } from 'src/core/service/userService';
 import { UxService, PANELES, Actions, MainCard } from 'src/core/service/ux.service';
 import { HistorialAsistenciaComponent } from '../historial-asistencia/historial-asistencia.component';
+import { User } from 'src/core/models/user';
 
 @Component({
 selector: 'app-home',
@@ -22,15 +23,25 @@ ROLES = ROLES;
 constructor(private auth: AuthService, public userService: UserService, public ux: UxService, private apiService: ApiService ) {}
   mainCards: MainCard[] = [];
   actions: Actions[] = [];
+  quickActions: Actions[] = [];
   cursos: Curso[] = [];
+  usuario= {name: '', nickname: '', picture: ''}
   ngOnInit(): void {
     this.auth.idTokenClaims$.subscribe(claims => {
+      console.log(claims)
+      this.usuario = {
+        nickname: claims?.['nickname'] || '',
+        name: claims?.['name'] || '',
+        picture: claims?.['picture'] || ''
+      }
       this.role = claims?.[this.sircaRoles][0] || null;
       this.userService.setRole(this.role!);
       this.ux.role = this.role;
       this.actions = this.ux.getActionsByRole();
+      this.quickActions = this.actions.filter(a => !a.main);
       this.mainCards = this.ux.getMainCardsByRole();
     });
+
 
     this.ux.currentPanel().subscribe(panel => {
       this.currentPanel = panel;
@@ -50,7 +61,7 @@ constructor(private auth: AuthService, public userService: UserService, public u
   getInfoByRole() {
    this.apiService.getMisCursos().subscribe({
       next: (data) => (this.cursos = data),
-      error: (err) => console.error('Error al cargar cursos', err)
+      error: (err) => console.log('Error al cargar cursos', err)
     });
   }
 

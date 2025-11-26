@@ -5,7 +5,7 @@ interface Final {
   id: string;
   materia: string;
   codigoCurso: string;
-  fecha: Date;
+  fecha: string;
   hora: string;
   aula: string;
   cantidadAlumnos: number;
@@ -34,14 +34,11 @@ export class BuscarFinalComponent implements OnInit {
   saving = false;
 
   cursosPorFecha: any[] = [];
-
-  finalesEjemplo: Final[] = [];
   alumnosEjemplo: AlumnoNota[] = [];
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
-    this.finales = this.finalesEjemplo;
   }
 
   onFechaChange(): void {
@@ -84,7 +81,7 @@ export class BuscarFinalComponent implements OnInit {
       id: curso.id || curso.cursoId || '',
       materia: curso.nombre || curso.materia || curso.nombreCurso || 'Sin nombre',
       codigoCurso: curso.codigo || curso.codigoCurso || '',
-      fecha: curso.fecha ? new Date(curso.fecha) : (this.fechaSeleccionada ?? new Date()),
+      fecha: curso.fecha,
       hora: curso.hora || '',
       aula: curso.aula || '',
       cantidadAlumnos: curso.cantidadAlumnos ??
